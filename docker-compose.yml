@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  spring-postgres:
+    image: postgres:16
+    container_name: spring-postgres
+    environment:
+      POSTGRES_PASSWORD: postgrez
+    ports:
+      - "5432:5432"
+    networks:
+      - dev
+
+  dev-webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev-webserver
+    ports:
+      - "8080:8080"
+    networks:
+      - dev
+    depends_on:
+      - spring-postgres
+
+networks:
+  dev:
+    driver: bridge
