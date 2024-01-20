@@ -33,8 +33,5 @@ build/
 ### VS Code ###
 .vscode/
 
-### Maven ###
-.mvn/
-
 ### Java ###
 .java-version
