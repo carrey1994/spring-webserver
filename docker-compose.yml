@@ -11,11 +11,11 @@ services:
     networks:
       - dev
 
-  dev-webserver:
+  spring-webserver:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: dev-webserver
+    container_name: spring-webserver
     ports:
       - "8080:8080"
     networks:
