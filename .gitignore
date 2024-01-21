@@ -35,3 +35,9 @@ build/
 
 ### Java ###
 .java-version
+
+### Frontend ###
+frontend/node_modules
+frontend/.next/
+frontend/.swc/
+frontend/.*.env
