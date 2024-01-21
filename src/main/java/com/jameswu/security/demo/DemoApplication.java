@@ -11,11 +11,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EntityScan(basePackages = {"com.jameswu.security.demo.model"})
 @ComponentScan(
-    basePackages = {"com.jameswu.security.demo.service", "com.jameswu.security.demo.config"})
+        basePackages = {
+            "com.jameswu.security.demo.service",
+            "com.jameswu.security.demo.config",
+            "com.jameswu.security.demo.controller"
+        })
 @EnableJpaRepositories(basePackages = "com.jameswu.security.demo.repository")
 public class DemoApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(DemoApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 }

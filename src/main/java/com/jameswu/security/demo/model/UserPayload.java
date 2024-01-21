@@ -1,13 +1,13 @@
 package com.jameswu.security.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-@Builder
-@AllArgsConstructor
 @Data
 public class UserPayload {
-  private String username;
-  private String password;
+    @Size(min = 8, max = 16)
+    private String username;
+
+    @Size(min = 8, max = 16)
+    private String password;
 }
