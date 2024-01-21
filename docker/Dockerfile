@@ -1,4 +1,7 @@
 FROM azul/zulu-openjdk:17-latest AS backend
+
+### [NOTE]
+### Copy files based on root project ###
 COPY . .
 RUN ./mvnw package -DskipTests=true
 

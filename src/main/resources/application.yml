@@ -3,11 +3,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgrez
-#    For k8s
-#    url: jdbc:postgresql://postgresql-service:5432/postgres
-#    For docker
-#    url: jdbc:postgresql://spring-postgres:5432/postgres
-#    For localhost
     url: jdbc:postgresql://127.0.0.1:5432/postgres
   jpa:
     properties:

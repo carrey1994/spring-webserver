@@ -13,8 +13,12 @@ services:
 
   spring-webserver:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - type: bind
+        source: application.yml
+        target: /webserver/application.yml
     container_name: spring-webserver
     ports:
       - "8080:8080"

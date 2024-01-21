@@ -1,7 +1,10 @@
 #!/bin/bash
+echo "Running cluster"
 k3d cluster create --api-port 6550 -p "8081:80@loadbalancer" --agents 2
+kubectl create namespace dev
 
-docker build -t carrey1994/spring-webserver .
+echo "Building image"
+docker build --no-cache -t carrey1994/spring-webserver -f docker/Dockerfile .
 
 YAML_FOLDER="kubernetes"
 

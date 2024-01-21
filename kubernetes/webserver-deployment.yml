@@ -15,13 +15,13 @@ spec:
     spec:
       containers:
         - name: spring-webserver
-          image: carrey1994/spring-webserver:latest  # Update with your Docker image details
+          image: carrey1994/spring-webserver  # Update with your Docker image details
           ports:
             - containerPort: 8080  # Adjust the port if your Spring app runs on a different port
           volumeMounts:
             - name: spring-webserver-secret-volume
-              mountPath: /webserver/application.yaml  # Update with the actual path in your container
-              subPath: application.yaml
+              mountPath: /webserver/application.yml  # Update with the actual path in your container
+              subPath: application.yml
       volumes:
         - name: spring-webserver-secret-volume
           secret:
