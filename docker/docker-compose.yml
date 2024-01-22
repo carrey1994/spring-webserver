@@ -1,31 +1,66 @@
 version: '3.8'
 
 services:
-  spring-postgres:
-    image: postgres:16
-    container_name: spring-postgres
-    environment:
-      POSTGRES_PASSWORD: postgrez
-    ports:
-      - "5432:5432"
+#  spring-postgres:
+#    image: postgres:16
+#    container_name: spring-postgres
+#    environment:
+#      POSTGRES_PASSWORD: postgrez
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - dev
+
+  master:
+    image: redis
+    container_name: redis-master
+    volumes:
+      - ./data/redis-master/data:/data
     networks:
       - dev
-
-  spring-webserver:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    volumes:
-      - type: bind
-        source: application.yml
-        target: /webserver/application.yml
-    container_name: spring-webserver
     ports:
-      - "8080:8080"
+      - "6379:6379"
+  slave1:
+    image: redis
+    container_name: redis-slave1
+    volumes:
+      - ./data/redis-slave1/data:/data
+    ports:
+      - "6380:6379"
+    command: redis-server --slaveof redis-master 6379
     networks:
       - dev
     depends_on:
-      - spring-postgres
+      - master
+  slave2:
+    image: redis
+    container_name: redis-slave2
+    volumes:
+      - ./data/redis-slave2/data:/data
+    ports:
+      - "6381:6379"
+    command: redis-server --slaveof redis-master 6379
+    networks:
+      - dev
+    depends_on:
+      - master
+      - slave1
+
+#  spring-webserver:
+#    build:
+#      context: ..
+#      dockerfile: docker/Dockerfile
+#    volumes:
+#      - type: bind
+#        source: application.yml
+#        target: /webserver/application.yml
+#    container_name: spring-webserver
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - dev
+#    depends_on:
+#      - spring-postgres
 
 networks:
   dev:

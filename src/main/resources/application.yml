@@ -20,3 +20,7 @@ logging:
       hibernate:
         stat: debug
         type: trace
+
+redis:
+  host: 127.0.0.1
+  port: 6379

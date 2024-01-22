@@ -22,9 +22,9 @@ public class UserManagementService {
 
     @Transactional
     public void addUser(UserPayload userPayload) {
-        if (userRepository.findByUsername(userPayload.getUsername()) != null) {
+        userRepository.findByUsername(userPayload.getUsername()).ifPresent(gcUser -> {
             throw new IllegalArgumentException("User already exists");
-        }
+        });
         GcUser newUser = GcUser.builder()
                 .username(userPayload.getUsername())
                 .password(bCryptPasswordEncoder.encode(userPayload.getPassword()))

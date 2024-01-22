@@ -1,4 +1,4 @@
-package com.jameswu.security.demo.config;
+package com.jameswu.security.demo.service;
 
 import com.jameswu.security.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class GcUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = userRepository.findByUsername(username);
-        if (userDetails == null) throw new UsernameNotFoundException(username + " not found");
-        return userDetails;
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("%s not found", username)));
     }
 }
