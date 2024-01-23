@@ -15,9 +15,14 @@ public class HealthController {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @GetMapping
-    public String healthChecker() {
+    @GetMapping("check")
+    public String checkHealth() {
         redisTemplate.opsForValue().set("health-check-on", String.valueOf(Instant.now()));
         return HttpStatus.OK.name();
+    }
+
+    @GetMapping("read")
+    public String readHealthChecker() {
+        return redisTemplate.opsForValue().get("health-check-on");
     }
 }

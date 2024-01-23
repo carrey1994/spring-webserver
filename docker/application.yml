@@ -1,6 +1,14 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgrez
-    url: jdbc:postgresql://spring-postgres:5432/postgres
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: user
+    password: my-sql-password
+    url: jdbc:mysql://spring-mysql-master:3306/webserver
+
+redis:
+  mater:
+    host: spring-redis-master
+    port: 6379
+  slaves:
+    - host: spring-redis-slave
+      port: 6380

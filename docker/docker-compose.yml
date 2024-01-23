@@ -1,66 +1,104 @@
 version: '3.8'
 
 services:
-#  spring-postgres:
-#    image: postgres:16
-#    container_name: spring-postgres
+
+  spring-mysql-master:
+    image: bitnami/mysql:8.0
+    container_name: spring-mysql-master
+    environment:
+      MYSQL_DATABASE: webserver
+      MYSQL_PASSWORD: my-sql-password
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: my-sql-password
+    ports:
+      - "3306:3306"
+    networks:
+      - dev
+    restart: always
+    healthcheck:
+      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MYSQL_USER', '-p$$MYSQL_PASSWORD' ]
+      timeout: 20s
+      retries: 5
+
+#  spring-mysql-slave:
+#    image: bitnami/mysql:8.0
+#    container_name: spring-mysql-slave
 #    environment:
-#      POSTGRES_PASSWORD: postgrez
-#    ports:
-#      - "5432:5432"
+#      MYSQL_DATABASE: api_db
+#      MYSQL_PASSWORD: my-sql-password
+#      MYSQL_USER: user
+#      MYSQL_ALLOW_EMPTY_PASSWORD: no
+#      MYSQL_RANDOM_ROOT_PASSWORD: yes
+#      MYSQL_REPLICATION_MASTER: spring-mysql-master
+#      MYSQL_REPLICATION_MODE: slave
+#      MYSQL_MASTER_HOST: spring-mysql-master
+#      MYSQL_MASTER_PORT: 3306
+#    depends_on:
+#      - spring-mysql-master
 #    networks:
 #      - dev
 
-  master:
+  spring-redis-master:
     image: redis
-    container_name: redis-master
+    container_name: spring-redis-master
     volumes:
-      - ./data/redis-master/data:/data
+      - ./data/spring-redis-master/data:/data
     networks:
       - dev
     ports:
       - "6379:6379"
-  slave1:
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      timeout: 20s
+      retries: 5
+      start_period: 3s
+
+  spring-redis-slave:
     image: redis
-    container_name: redis-slave1
+    container_name: spring-redis-slave
     volumes:
-      - ./data/redis-slave1/data:/data
+      - ./data/spring-redis-slave/data:/data
     ports:
       - "6380:6379"
-    command: redis-server --slaveof redis-master 6379
+    command: redis-server --slaveof spring-redis-master 6379
     networks:
       - dev
     depends_on:
-      - master
-  slave2:
-    image: redis
-    container_name: redis-slave2
-    volumes:
-      - ./data/redis-slave2/data:/data
-    ports:
-      - "6381:6379"
-    command: redis-server --slaveof redis-master 6379
-    networks:
-      - dev
-    depends_on:
-      - master
-      - slave1
+      - spring-redis-master
 
-#  spring-webserver:
-#    build:
-#      context: ..
-#      dockerfile: docker/Dockerfile
-#    volumes:
-#      - type: bind
-#        source: application.yml
-#        target: /webserver/application.yml
-#    container_name: spring-webserver
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - dev
-#    depends_on:
-#      - spring-postgres
+  spring-redis-commander:
+    container_name: spring-redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    volumes:
+      - ./data/spring-redis-commander/data:/data
+    environment:
+      - REDIS_HOSTS=master:spring-redis-master,slave-1:spring-redis-slave
+    ports:
+      - "8081:8081"
+    networks:
+      - dev
+    depends_on:
+      - spring-redis-slave
+
+  spring-webserver:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - type: bind
+        source: application.yml
+        target: /webserver/application.yml
+    container_name: spring-webserver
+    ports:
+      - "8080:8080"
+    networks:
+      - dev
+    depends_on:
+      spring-mysql-master:
+        condition: service_healthy
+      spring-redis-master:
+        condition: service_healthy
 
 networks:
   dev:

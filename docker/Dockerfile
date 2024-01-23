@@ -1,7 +1,7 @@
 FROM azul/zulu-openjdk:17-latest AS backend
 
 ### [NOTE]
-### Copy files based on root project ###
+### Execute dockerfile on root project and copy files from root project ###
 COPY . .
 RUN ./mvnw package -DskipTests=true
 

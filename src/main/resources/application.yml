@@ -1,13 +1,13 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgrez
-    url: jdbc:postgresql://127.0.0.1:5432/postgres
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: user
+    password: my-sql-password
+    url: jdbc:mysql://localhost:3306/webserver
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         generate_statistics: 'true'
         format_sql: 'true'
     hibernate:
@@ -22,5 +22,9 @@ logging:
         type: trace
 
 redis:
-  host: 127.0.0.1
-  port: 6379
+  master:
+    host: localhost
+    port: 6379
+  slaves:
+    - host: localhost
+      port: 6380

@@ -25,7 +25,7 @@ public class SecurityConfig {
         http // .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(
                         authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/health-checker")
+                                .requestMatchers("/health-checker/**")
                                 .permitAll()
                                 .requestMatchers("/index/hello")
                                 .permitAll()
