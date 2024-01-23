@@ -1,10 +1,11 @@
 package com.jameswu.security.demo.config;
 
 import com.jameswu.security.demo.model.GcUser;
-import com.jameswu.security.demo.model.UserAuthority;
+import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
+import com.jameswu.security.demo.model.UserStatus;
 import com.jameswu.security.demo.repository.UserRepository;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -29,12 +30,11 @@ public class UserInitiationConfig implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        GcUser user = new GcUser(
-                UUID.randomUUID(),
-                "androidx",
-                passwordEncoder.encode("androidx"),
-                UserRole.ADMIN,
-                List.of(UserAuthority.ADMIN));
+        UUID userId = UUID.randomUUID();
+        String username = "androidx";
+        String password = passwordEncoder.encode(username);
+        UserProfile profile = new UserProfile(userId, "123@and.tail.com", "Taiwan", LocalDate.now(), null);
+        GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE);
         userRepository.save(user);
     }
 }

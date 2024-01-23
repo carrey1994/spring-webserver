@@ -1,24 +1,27 @@
 package com.jameswu.security.demo.model;
 
-import jakarta.persistence.CollectionTable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "gc_user")
@@ -29,27 +32,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class GcUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
     @Column
+    @Size(min = 8, max = 16)
     private String username;
 
     @Column
+    @NotBlank
     private String password;
 
     @Enumerated(value = EnumType.STRING)
+    @NotNull
     private UserRole userRole;
 
-    @ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "authority")
-    @Enumerated(EnumType.STRING)
-    private List<GrantedAuthority> authorities;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", table = "user_profile")
+    @NotNull
+    private UserProfile userProfile;
+
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    private UserStatus userStatus;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return userRole.getPermissions().stream().map(e -> new SimpleGrantedAuthority(e.name())).toList();
     }
 
     @Override
@@ -64,17 +73,17 @@ public class GcUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return false;
     }
 
     @Override

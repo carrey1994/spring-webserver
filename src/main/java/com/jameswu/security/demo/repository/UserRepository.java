@@ -1,8 +1,11 @@
 package com.jameswu.security.demo.repository;
 
 import com.jameswu.security.demo.model.GcUser;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<GcUser, UUID> {
 
     Optional<GcUser> findByUsername(String username);
+
+    @Override List<GcUser> findAll();
 }
