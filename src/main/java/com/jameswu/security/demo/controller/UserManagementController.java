@@ -1,10 +1,11 @@
 package com.jameswu.security.demo.controller;
 
-import com.jameswu.security.demo.model.GcUser;
+import com.jameswu.security.demo.model.Result;
 import com.jameswu.security.demo.model.UserPayload;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.service.UserManagementService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user/management")
@@ -23,8 +22,8 @@ public class UserManagementController {
     private UserManagementService userManagementService;
 
     @PostMapping("add")
-    public void addUser(@RequestBody @Valid UserPayload userPayload) {
-        userManagementService.addUser(userPayload);
+    public Result<UserProfile> addUser(@RequestBody @Valid UserPayload userPayload) {
+        return new Result<>(userManagementService.addUser(userPayload));
     }
 
     @GetMapping("all")

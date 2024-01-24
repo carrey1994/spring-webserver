@@ -12,10 +12,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.util.Collection;
 import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class GcUser implements UserDetails {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
     private UUID userId;
 
     @Column
@@ -58,7 +56,9 @@ public class GcUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRole.getPermissions().stream().map(e -> new SimpleGrantedAuthority(e.name())).toList();
+        return userRole.getPermissions().stream()
+                .map(e -> new SimpleGrantedAuthority(e.name()))
+                .toList();
     }
 
     @Override
@@ -88,6 +88,6 @@ public class GcUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userStatus.equals(UserStatus.ACTIVE);
     }
 }

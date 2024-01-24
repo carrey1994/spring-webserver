@@ -17,10 +17,14 @@ public class GcUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        GcUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("%s not found", username)));
-        return User.builder().username(username)
+        GcUser user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("%s not found", username)));
+        return User.builder()
+                .username(username)
                 .password(user.getPassword())
                 .authorities(user.getAuthorities())
-                .roles(user.getUserRole().name()).build();
+                .roles(user.getUserRole().name())
+                .build();
     }
 }

@@ -1,7 +1,3 @@
-org:
-  springframework:
-    security:
-      level: INFO
 
 spring:
   datasource:
@@ -25,6 +21,10 @@ logging:
       hibernate:
         stat: debug
         type: trace
+
+hibernate:
+  type:
+    preferred_uuid_jdbc_type: CHAR
 
 redis:
   master:
