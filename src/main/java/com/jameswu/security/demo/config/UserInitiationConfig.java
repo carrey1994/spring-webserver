@@ -5,8 +5,10 @@ import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
 import com.jameswu.security.demo.repository.UserRepository;
+import com.jameswu.security.demo.service.RedisService;
 import java.time.LocalDate;
 import java.util.UUID;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -20,6 +22,9 @@ public class UserInitiationConfig implements ApplicationRunner {
     private UserRepository userRepository;
 
     @Autowired
+    private RedisService redisService;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -30,11 +35,15 @@ public class UserInitiationConfig implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        UUID userId = UUID.randomUUID();
-        String username = "androidx";
-        String password = passwordEncoder.encode(username);
-        UserProfile profile = new UserProfile(userId, "123@and.tail.com", "Taiwan", LocalDate.now(), null);
-        GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE, 10000);
-        userRepository.save(user);
+        RLock rLock = redisService.tryLock();
+        userRepository.findByUsername("androidx").ifPresentOrElse(action -> {}, () -> {
+            UUID userId = UUID.randomUUID();
+            String username = "androidx";
+            String password = passwordEncoder.encode(username);
+            UserProfile profile = new UserProfile(userId, "123@and.tail.com", "Taiwan", LocalDate.now(), null);
+            GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE, 10000);
+            userRepository.save(user);
+        });
+        rLock.unlock();
     }
 }

@@ -18,9 +18,9 @@ spring:
 logging:
   level:
     org:
-      hibernate:
-        stat: debug
-        type: trace
+      springframework:
+        web: INFO
+      hibernate: ERROR
 
 hibernate:
   type:

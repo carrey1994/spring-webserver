@@ -8,7 +8,6 @@ import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
 import com.jameswu.security.demo.repository.UserRepository;
 import com.jameswu.security.demo.utils.GzTexts;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ public class UserManagementService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Transactional
     public int test() {
         GcUser user = userRepository.findAll().get(0);
         int updatedAmount = user.getAmount() - 100;

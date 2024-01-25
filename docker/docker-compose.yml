@@ -81,24 +81,24 @@ services:
     depends_on:
       - spring-redis-slave
 
-  spring-webserver:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    volumes:
-      - type: bind
-        source: application.yml
-        target: /webserver/application.yml
-    container_name: spring-webserver
-    ports:
-      - "8080:8080"
-    networks:
-      - dev
-    depends_on:
-      spring-mysql-master:
-        condition: service_healthy
-      spring-redis-master:
-        condition: service_healthy
+#  spring-webserver:
+#    build:
+#      context: ..
+#      dockerfile: docker/Dockerfile
+#    volumes:
+#      - type: bind
+#        source: application.yml
+#        target: /webserver/application.yml
+#    container_name: spring-webserver
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - dev
+#    depends_on:
+#      spring-mysql-master:
+#        condition: service_healthy
+#      spring-redis-master:
+#        condition: service_healthy
 
 networks:
   dev:
