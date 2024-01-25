@@ -5,7 +5,7 @@ metadata:
   namespace: dev
 spec:
   selector:
-    app: redis
+    app: redis-master
   ports:
     - protocol: TCP
       port: 6379
