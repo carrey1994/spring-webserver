@@ -54,6 +54,9 @@ public class GcUser implements UserDetails {
     @NotNull
     private UserStatus userStatus;
 
+    @Column
+    private int amount;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return userRole.getPermissions().stream()

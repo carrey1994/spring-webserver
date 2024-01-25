@@ -4,6 +4,8 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Table(indexes = {@Index(name = "user_id_index", columnList = "user_id")})
 public class UserProfile {
     @Id
     @Column(name = "user_id", nullable = false)

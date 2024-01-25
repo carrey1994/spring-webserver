@@ -31,6 +31,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.redis.om</groupId>
+            <artifactId>redis-om-spring</artifactId>
+            <version>0.3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
@@ -162,6 +167,10 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
+        </repository>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
     <pluginRepositories>

@@ -7,13 +7,14 @@ import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
 import com.jameswu.security.demo.repository.UserRepository;
+import com.jameswu.security.demo.utils.GzTexts;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserManagementService {
@@ -25,16 +26,18 @@ public class UserManagementService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
+    public int test() {
+        GcUser user = userRepository.findAll().get(0);
+        int updatedAmount = user.getAmount() - 100;
+        user.setAmount(updatedAmount);
+        return userRepository.save(user).getAmount();
+    }
+
     public UserProfile addUser(UserPayload userPayload) {
-        userRepository.findByUsername(userPayload.getUsername()).ifPresent(gcUser -> {
-            throw new UserNotFoundException("User already exists.");
-        });
-        if (userPayload.getRecommenderId() != null) {
-            userRepository.findByUserId(userPayload.getRecommenderId()).ifPresentOrElse(e -> {}, () -> {
-                throw new UserNotFoundException("The recommender not found.");
-            });
-        }
         UUID newUserId = UUID.randomUUID();
+        userRepository.findByUsername(userPayload.getUsername()).ifPresent(gcUser -> {
+            throw new UserNotFoundException(GzTexts.USER_ALREADY_EXISTS);
+        });
         UserProfile userProfile = new UserProfile(
                 newUserId,
                 userPayload.getEmail(),

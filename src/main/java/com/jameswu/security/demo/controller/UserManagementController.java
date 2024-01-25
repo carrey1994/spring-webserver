@@ -3,10 +3,12 @@ package com.jameswu.security.demo.controller;
 import com.jameswu.security.demo.model.Result;
 import com.jameswu.security.demo.model.UserPayload;
 import com.jameswu.security.demo.model.UserProfile;
+import com.jameswu.security.demo.service.RelationService;
 import com.jameswu.security.demo.service.UserManagementService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +23,20 @@ public class UserManagementController {
     @Autowired
     private UserManagementService userManagementService;
 
+    @Autowired
+    private RelationService relationService;
+
     @PostMapping("add")
+    @Transactional
     public Result<UserProfile> addUser(@RequestBody @Valid UserPayload userPayload) {
-        return new Result<>(userManagementService.addUser(userPayload));
+        UserProfile newUserProfile = userManagementService.addUser(userPayload);
+        relationService.addRelation(userPayload.getRecommenderId(), newUserProfile.getUserId());
+        return new Result<>(newUserProfile);
     }
 
     @GetMapping("all")
-    public List<UserProfile> allUserProfiles() {
-        return userManagementService.allUsers();
+    @Transactional
+    public Result<List<UserProfile>> allUserProfiles() {
+        return new Result<>(userManagementService.allUsers());
     }
 }

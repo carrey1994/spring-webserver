@@ -34,7 +34,7 @@ public class UserInitiationConfig implements ApplicationRunner {
         String username = "androidx";
         String password = passwordEncoder.encode(username);
         UserProfile profile = new UserProfile(userId, "123@and.tail.com", "Taiwan", LocalDate.now(), null);
-        GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE);
+        GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE, 10000);
         userRepository.save(user);
     }
 }
