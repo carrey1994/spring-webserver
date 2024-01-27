@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @SpringBootApplication
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
             "com.jameswu.security.demo.service"
         })
 @EnableJpaRepositories(basePackages = "com.jameswu.security.demo.repository")
+@EnableTransactionManagement
 public class DemoApplication {
 
     public static void main(String[] args) {

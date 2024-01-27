@@ -38,6 +38,7 @@ build/
 
 ### Frontend ###
 frontend/node_modules
+frontend/out
 frontend/.next/
 frontend/.swc/
 frontend/.*.env

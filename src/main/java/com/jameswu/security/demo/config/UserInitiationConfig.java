@@ -4,22 +4,31 @@ import com.jameswu.security.demo.model.GcUser;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
+import com.jameswu.security.demo.repository.CompanyRepository;
+import com.jameswu.security.demo.repository.RelationRepository;
 import com.jameswu.security.demo.repository.UserRepository;
 import com.jameswu.security.demo.service.RedisService;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import lombok.Data;
 import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
-public class UserInitiationConfig implements ApplicationRunner {
+@Configuration
+@ConfigurationProperties(prefix = "init")
+@Data
+public class UserInitiationConfig {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RelationRepository relationRepository;
 
     @Autowired
     private RedisService redisService;
@@ -28,22 +37,35 @@ public class UserInitiationConfig implements ApplicationRunner {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserInitiationConfig(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    private CompanyRepository companyRepository;
+
+    private List<InitUserData> users;
+
+    @Data
+    static class InitUserData {
+        private UUID id;
+        private String username;
+        private String password;
+        private UUID recommenderId;
+        private UserRole role;
     }
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        RLock rLock = redisService.tryLock();
-        userRepository.findByUsername("androidx").ifPresentOrElse(action -> {}, () -> {
-            UUID userId = UUID.randomUUID();
-            String username = "androidx";
-            String password = passwordEncoder.encode(username);
-            UserProfile profile = new UserProfile(userId, "123@and.tail.com", "Taiwan", LocalDate.now(), null);
-            GcUser user = new GcUser(userId, username, password, UserRole.ADMIN, profile, UserStatus.ACTIVE, 10000);
-            userRepository.save(user);
-        });
-        rLock.unlock();
+    @Bean
+    public void initUsers() {
+        RLock lock = redisService.tryLock("init-user");
+        List<GcUser> gcUsers = users.stream()
+                .map(user -> GcUser.builder()
+                        .userId(user.id)
+                        .userStatus(UserStatus.ACTIVE)
+                        .userRole(user.role)
+                        .username(user.username)
+                        .password(passwordEncoder.encode(user.password))
+                        .amount(0)
+                        .userProfile(new UserProfile(
+                                user.id, user.username + "@gc.mail", "Taipei", LocalDate.now(), user.recommenderId))
+                        .build())
+                .toList();
+        userRepository.saveAll(gcUsers);
+        redisService.unlock(lock);
     }
 }

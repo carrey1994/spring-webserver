@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,14 +20,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity(name = "gc_user")
+@Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "gc_user")
 public class GcUser implements UserDetails {
 
     @Id
@@ -59,9 +60,7 @@ public class GcUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRole.getPermissions().stream()
-                .map(e -> new SimpleGrantedAuthority(e.name()))
-                .toList();
+        return userRole.getAuthorities();
     }
 
     @Override
@@ -76,17 +75,17 @@ public class GcUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

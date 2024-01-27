@@ -7,6 +7,8 @@ import com.jameswu.security.demo.service.RelationService;
 import com.jameswu.security.demo.service.UserManagementService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user/management")
+@RequestMapping("/api/v1/user/management")
 @Validated
 public class UserManagementController {
     @Autowired
@@ -26,9 +28,12 @@ public class UserManagementController {
     @Autowired
     private RelationService relationService;
 
+    private Logger logger = LoggerFactory.getLogger(UserManagementController.class);
+
     @PostMapping("add")
     @Transactional
     public Result<UserProfile> addUser(@RequestBody @Valid UserPayload userPayload) {
+        logger.info("--- ADD NEW USER ---");
         UserProfile newUserProfile = userManagementService.addUser(userPayload);
         relationService.addRelation(userPayload.getRecommenderId(), newUserProfile.getUserId());
         return new Result<>(newUserProfile);

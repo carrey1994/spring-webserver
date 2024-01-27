@@ -6,11 +6,13 @@ import com.jameswu.security.demo.model.UserPayload;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
+import com.jameswu.security.demo.repository.CompanyRepository;
 import com.jameswu.security.demo.repository.UserRepository;
 import com.jameswu.security.demo.utils.GzTexts;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,14 +24,13 @@ public class UserManagementService {
     private UserRepository userRepository;
 
     @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public int test() {
-        GcUser user = userRepository.findAll().get(0);
-        int updatedAmount = user.getAmount() - 100;
-        user.setAmount(updatedAmount);
-        return userRepository.save(user).getAmount();
-    }
+    @Autowired
+    private static final Logger logger = Logger.getLogger(UserManagementService.class.getName());
 
     public UserProfile addUser(UserPayload userPayload) {
         UUID newUserId = UUID.randomUUID();

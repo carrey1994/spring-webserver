@@ -2,6 +2,16 @@ version: '3.8'
 
 services:
 
+  spring-postgres:
+    image: postgres:16
+    container_name: spring-postgres
+    environment:
+      POSTGRES_PASSWORD: postgrez
+    ports:
+      - "5432:5432"
+    networks:
+      - dev
+
   spring-mysql-master:
     image: bitnami/mysql:8.0
     container_name: spring-mysql-master
@@ -17,7 +27,8 @@ services:
     restart: always
     healthcheck:
       test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MYSQL_USER', '-p$$MYSQL_PASSWORD' ]
-      timeout: 20s
+      timeout: 30s
+      interval: 5s
       retries: 5
 
 #  spring-mysql-slave:
@@ -49,9 +60,9 @@ services:
       - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-      timeout: 20s
+      timeout: 30s
+      interval: 5s
       retries: 5
-      start_period: 3s
 
   spring-redis-slave:
     image: redis
@@ -65,6 +76,11 @@ services:
       - dev
     depends_on:
       - spring-redis-master
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      timeout: 30s
+      interval: 5s
+      retries: 5
 
   spring-redis-commander:
     container_name: spring-redis-commander
