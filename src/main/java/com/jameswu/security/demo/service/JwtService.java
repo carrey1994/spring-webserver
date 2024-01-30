@@ -29,7 +29,7 @@ public class JwtService {
 
         Claims claims = Jwts.claims()
                 .add("user_id", user.getUserId().toString())
-                .expiration(new Date(System.currentTimeMillis() + 24 * 1000 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 10 * 1000 * 60))
                 .issuedAt(new Date((System.currentTimeMillis())))
                 .issuer(KEY)
                 .build();
@@ -45,5 +45,17 @@ public class JwtService {
         JwtParser parser = Jwts.parser().verifyWith(secretKey).build();
         Claims claims = parser.parseSignedClaims(token).getPayload();
         return claims.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public void removeToken(String token) {
+        String userId = parseToken(token).get("user_id").toString();
+        redisService.deleteByKey(userId);
+    }
+
+    public void checkToken(String token) {
+        String userId = parseToken(token).get("user_id").toString();
+        redisService.getValueByKey(userId).ifPresentOrElse(e -> {}, () -> {
+            throw new IllegalArgumentException("token not found");
+        });
     }
 }

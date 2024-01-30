@@ -28,12 +28,12 @@ public class RedisService {
         redisson.getBucket(key).set(value);
     }
 
-    public void deleteKey(String key) {
+    public void deleteByKey(String key) {
         redisson.getBucket(key).getAndDelete();
     }
 
     public <T> Optional<T> getValueByKey(String key) {
-        RBucket<T> data = redisson.getBucket("");
+        RBucket<T> data = redisson.getBucket(key);
         Optional<T> result = Optional.of(data.get());
         return result;
     }

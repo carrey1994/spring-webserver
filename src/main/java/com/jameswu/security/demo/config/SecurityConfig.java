@@ -3,9 +3,11 @@ package com.jameswu.security.demo.config;
 import com.jameswu.security.demo.filter.JwtAuthenticationFilter;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.repository.UserRepository;
+import com.jameswu.security.demo.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +34,9 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private JwtService jwtService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String[] publicRouter = new String[] {
@@ -49,8 +54,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout.logoutUrl("/api/v1/logout")
-                        .logoutSuccessHandler(
-                                (request, response, authentication) -> SecurityContextHolder.clearContext()));
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            jwtService.removeToken(
+                                    request.getHeader(HttpHeaders.AUTHORIZATION).replace("Bearer ", ""));
+                            SecurityContextHolder.clearContext();
+                        }));
         return http.build();
     }
 }

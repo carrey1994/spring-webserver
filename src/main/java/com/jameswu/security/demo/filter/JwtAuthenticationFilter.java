@@ -42,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader != null) {
             String accessToken = authHeader.replace("Bearer ", "");
+            jwtService.checkToken(accessToken);
             Map<String, Object> claims = jwtService.parseToken(accessToken);
             UUID id = UUID.fromString(claims.get("user_id").toString());
             GcUser user = userRepository.findByUserId(id).get();

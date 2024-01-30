@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class LoginController {
+public class IndexController {
     @Autowired
     private UserRepository userRepository;
 
@@ -35,7 +35,7 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("login")
-    public Result<Map<String, String>> getLogin(@RequestBody LoginPayload payload) {
+    public Result<Map<String, String>> login(@RequestBody LoginPayload payload) {
         Result<Map<String, String>> result = new Result<>();
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
@@ -45,4 +45,15 @@ public class LoginController {
         result.setMessage(map);
         return result;
     }
+
+    //    @GetMapping("logout")
+    //    public Result<String> logout() {
+    //        Result<Map<String, String>> result = new Result<>();
+    ////        Authentication authentication = authenticationManager.authenticate(new
+    // UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
+    ////        String jwt = jwtService.removeTokenByUserId((GcUser) authentication.getPrincipal());
+    ////        SecurityContextHolder.getContext().getAuthentication();
+    ////        jwtService.removeTokenByUserId();
+    //        return new Result<>("token removed");
+    //    }
 }
