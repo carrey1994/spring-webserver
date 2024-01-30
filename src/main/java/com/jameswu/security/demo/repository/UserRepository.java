@@ -14,6 +14,8 @@ public interface UserRepository extends CrudRepository<GcUser, UUID> {
 
     Optional<GcUser> findByUserId(UUID userId);
 
+    List<GcUser> findByUserIdIn(List<UUID> userIds);
+
     @Override
     List<GcUser> findAll();
 }

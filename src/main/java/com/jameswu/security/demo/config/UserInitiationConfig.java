@@ -1,6 +1,7 @@
 package com.jameswu.security.demo.config;
 
 import com.jameswu.security.demo.model.GcUser;
+import com.jameswu.security.demo.model.Relation;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
@@ -66,6 +67,35 @@ public class UserInitiationConfig {
                         .build())
                 .toList();
         userRepository.saveAll(gcUsers);
+
+        List<Relation> relationList = List.of(
+                new Relation(userById(1).id, userById(1).id, 0),
+                new Relation(userById(1).id, userById(2).id, 1),
+                new Relation(userById(1).id, userById(3).id, 1),
+                new Relation(userById(1).id, userById(4).id, 2),
+                new Relation(userById(1).id, userById(5).id, 2),
+                new Relation(userById(1).id, userById(6).id, 2),
+                new Relation(userById(1).id, userById(7).id, 2),
+                new Relation(userById(2).id, userById(2).id, 0),
+                new Relation(userById(2).id, userById(4).id, 1),
+                new Relation(userById(2).id, userById(5).id, 1),
+                new Relation(userById(3).id, userById(3).id, 0),
+                new Relation(userById(3).id, userById(6).id, 1),
+                new Relation(userById(3).id, userById(7).id, 1),
+                new Relation(userById(4).id, userById(4).id, 0),
+                new Relation(userById(5).id, userById(5).id, 0),
+                new Relation(userById(6).id, userById(6).id, 0),
+                new Relation(userById(7).id, userById(7).id, 0));
+
+        relationRepository.saveAll(relationList);
         redisService.unlock(lock);
     }
+
+    private InitUserData userById(int id) {
+        return users.get(id - 1);
+    }
 }
+
+// #         1
+// #      2    3
+// #  4   5    6   7

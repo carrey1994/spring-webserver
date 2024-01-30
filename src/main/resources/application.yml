@@ -73,7 +73,7 @@ init:
       username: testuser7
       password: testuser7
       recommenderId: 7e1983a2-96cf-47f5-be91-0b4110f8828a
-      role: USER
+      role: ADMIN
 
 
 #         1
