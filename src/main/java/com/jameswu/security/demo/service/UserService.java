@@ -1,19 +1,16 @@
 package com.jameswu.security.demo.service;
 
 import com.jameswu.security.demo.model.GcProfileTreeNode;
-import com.jameswu.security.demo.model.GcUser;
-import com.jameswu.security.demo.model.GcUserTreeNode;
-import com.jameswu.security.demo.model.Relation;
+import com.jameswu.security.demo.model.GcProfileWithRelation;
 import com.jameswu.security.demo.model.UserProfile;
+import com.jameswu.security.demo.repository.GcProfileWithRelationRepository;
 import com.jameswu.security.demo.repository.RelationRepository;
 import com.jameswu.security.demo.repository.UserRepository;
-import jakarta.persistence.EntityManagerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -21,62 +18,50 @@ public class UserService {
     private RelationRepository relationRepository;
 
     @Autowired
+    private GcProfileWithRelationRepository gcProfileWithRelationRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     public GcProfileTreeNode diagram(UUID userId) {
-        GcUserTreeNode root = new GcUserTreeNode(userId, new ArrayList<>());
-        UserProfile userProfile =
-                userRepository.findByUserId(root.getAncestorId()).get().getUserProfile();
+        return queryByUserIdAndLevel(userId, Integer.MAX_VALUE);
+    }
+
+    public GcProfileTreeNode onlyOneGenerationChild(UUID userId) {
+        return queryByUserIdAndLevel(userId, 1);
+    }
+
+    public GcProfileTreeNode queryByUserIdAndLevel(UUID userId, int level) {
+        List<GcProfileWithRelation> gcProfileWithRelations =
+                gcProfileWithRelationRepository.queryDescendants(userId, level);
+        // todo: get profile from jwt/cache
+        UserProfile userProfile = userRepository.findById(userId).get().getUserProfile();
         GcProfileTreeNode gcProfileTreeNode = new GcProfileTreeNode(userProfile, new ArrayList<>());
-        treeNode(root);
-        treeProfile(root, gcProfileTreeNode);
+        makeTreeDiagram(gcProfileTreeNode, gcProfileWithRelations);
         return gcProfileTreeNode;
     }
 
-    public GcProfileTreeNode direct(UUID userId) {
-        List<Relation> relationList = relationRepository.findByRelationIdAncestorId(userId);
-        List<UUID> descendantIds = relationList.stream()
-                .map(relation -> relation.getRelationId().getDescendantId())
+    public void makeTreeDiagram(
+            GcProfileTreeNode gcProfileTreeNode, List<GcProfileWithRelation> gcProfileWithRelations) {
+        List<GcProfileWithRelation> children = gcProfileWithRelations.stream()
+                .filter(gcProfileWithRelation ->
+                        gcProfileTreeNode.getUserProfile().getUserId().equals(gcProfileWithRelation.getAncestorId()))
                 .toList();
-        UserProfile userProfile = userRepository.findByUserId(userId).get().getUserProfile();
-        List<GcProfileTreeNode> descendantProfiles = userRepository.findByUserIdIn(descendantIds).stream()
-                .map(user -> new GcProfileTreeNode(user.getUserProfile(), new ArrayList<>()))
+        List<GcProfileTreeNode> childrenTree = children.stream()
+                .map(gcProfileWithRelation -> new GcProfileTreeNode(
+                        new UserProfile(
+                                gcProfileWithRelation.getUserId(),
+                                gcProfileWithRelation.getEmail(),
+                                gcProfileWithRelation.getAddress(),
+                                gcProfileWithRelation.getEnrollmentDate(),
+                                gcProfileWithRelation.getRecommender_id()),
+                        new ArrayList<>()))
                 .toList();
-        return new GcProfileTreeNode(userProfile, descendantProfiles);
-    }
-
-    private void treeNode(GcUserTreeNode node) {
-        List<Relation> relationList = relationRepository.findByRelationIdAncestorId(node.getAncestorId());
-        List<GcUserTreeNode> descendantTreeNodes = relationList.stream()
-                .map(e -> new GcUserTreeNode(e.getRelationId().getDescendantId(), new ArrayList<>()))
-                .toList();
-        node.setDescendants(descendantTreeNodes);
-        for (GcUserTreeNode child : descendantTreeNodes) {
-            treeNode(child);
-        }
-    }
-
-    private void treeProfile(GcUserTreeNode node, GcProfileTreeNode gcProfileTreeNode) {
-        UserProfile userProfile =
-                userRepository.findByUserId(node.getAncestorId()).get().getUserProfile();
-        gcProfileTreeNode.setUserProfile(userProfile);
-        List<UUID> descendantIds = node.getDescendants().stream()
-                .map(GcUserTreeNode::getAncestorId)
-                .toList();
-        List<UserProfile> descendantProfiles = userRepository.findByUserIdIn(descendantIds).stream()
-                .map(GcUser::getUserProfile)
-                .toList();
-        List<GcProfileTreeNode> descendantsProfileTree = descendantProfiles.stream()
-                .map(e -> new GcProfileTreeNode(e, new ArrayList<>()))
-                .toList();
-        gcProfileTreeNode.setDescendantProfiles(descendantsProfileTree);
-        for (GcUserTreeNode descendant : node.getDescendants()) {
-            UUID descendantId = descendant.getAncestorId();
-            GcProfileTreeNode descendantProfile = descendantsProfileTree.stream()
-                    .filter(p -> p.getUserProfile().getUserId().equals(descendantId))
-                    .findFirst()
-                    .get();
-            treeProfile(descendant, descendantProfile);
+        gcProfileTreeNode.setDescendantProfiles(childrenTree);
+        List<GcProfileWithRelation> subNextChildren = new ArrayList<>(List.copyOf(gcProfileWithRelations));
+        subNextChildren.removeAll(children);
+        for (GcProfileTreeNode childTreeNode : childrenTree) {
+            makeTreeDiagram(childTreeNode, subNextChildren);
         }
     }
 }

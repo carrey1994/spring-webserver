@@ -21,12 +21,3 @@ public class Relation {
         relationId = new RelationId(ancestorId, descendantId);
     }
 }
-
-/**
- * Example
- *
- * @user1(1,1,0)
- * @user2(2,1,1) invited by user1
- * @user3(3,2,2) invited by user2
- * @user4(4,1,1) invited by user1
- */

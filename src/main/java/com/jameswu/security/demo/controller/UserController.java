@@ -26,6 +26,6 @@ public class UserController {
 
     @GetMapping("direct")
     public Result<GcProfileTreeNode> direct(@RequestParam("id") UUID userId) {
-        return new Result<>(userService.direct(userId));
+        return new Result<>(userService.onlyOneGenerationChild(userId));
     }
 }
