@@ -1,6 +1,8 @@
 package com.jameswu.security.demo.config;
 
 import com.jameswu.security.demo.repository.UserRepository;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,4 +40,5 @@ public class BeansConfig {
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
 }

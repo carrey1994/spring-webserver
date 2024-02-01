@@ -24,7 +24,6 @@ public class HealthController {
 
     @GetMapping("check")
     public Result<String> checkHealth() {
-        healthService.checkHealth();
         return new Result<>(healthService.checkHealth());
     }
 }

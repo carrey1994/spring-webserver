@@ -7,11 +7,13 @@ import com.jameswu.security.demo.model.Relation;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.repository.RelationRepository;
 import com.jameswu.security.demo.repository.UserRepository;
+import jakarta.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -32,7 +34,7 @@ public class UserService {
     }
 
     public GcProfileTreeNode direct(UUID userId) {
-        List<Relation> relationList = relationRepository.findByRelationIdAncestorIdAndDistance(userId, 1);
+        List<Relation> relationList = relationRepository.findByRelationIdAncestorId(userId);
         List<UUID> descendantIds = relationList.stream()
                 .map(relation -> relation.getRelationId().getDescendantId())
                 .toList();
@@ -44,7 +46,7 @@ public class UserService {
     }
 
     private void treeNode(GcUserTreeNode node) {
-        List<Relation> relationList = relationRepository.findByRelationIdAncestorIdAndDistance(node.getAncestorId(), 1);
+        List<Relation> relationList = relationRepository.findByRelationIdAncestorId(node.getAncestorId());
         List<GcUserTreeNode> descendantTreeNodes = relationList.stream()
                 .map(e -> new GcUserTreeNode(e.getRelationId().getDescendantId(), new ArrayList<>()))
                 .toList();

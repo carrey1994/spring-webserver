@@ -1,6 +1,5 @@
 package com.jameswu.security.demo.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import java.util.UUID;
@@ -18,12 +17,8 @@ public class Relation {
     private RelationId relationId;
 
     /* distance between each other */
-    @Column(nullable = false)
-    private int distance;
-
-    public Relation(UUID ancestorId, UUID descendantId, int distance) {
+    public Relation(UUID ancestorId, UUID descendantId) {
         relationId = new RelationId(ancestorId, descendantId);
-        this.distance = distance;
     }
 }
 

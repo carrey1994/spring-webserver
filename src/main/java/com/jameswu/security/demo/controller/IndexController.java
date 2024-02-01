@@ -45,15 +45,4 @@ public class IndexController {
         result.setMessage(map);
         return result;
     }
-
-    //    @GetMapping("logout")
-    //    public Result<String> logout() {
-    //        Result<Map<String, String>> result = new Result<>();
-    ////        Authentication authentication = authenticationManager.authenticate(new
-    // UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
-    ////        String jwt = jwtService.removeTokenByUserId((GcUser) authentication.getPrincipal());
-    ////        SecurityContextHolder.getContext().getAuthentication();
-    ////        jwtService.removeTokenByUserId();
-    //        return new Result<>("token removed");
-    //    }
 }

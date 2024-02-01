@@ -13,9 +13,13 @@ spec:
       labels:
         app: spring-webserver
     spec:
+      serviceAccountName: vault-auth
       containers:
         - name: spring-webserver
           image: carrey1994/spring-webserver  # Update with your Docker image details
+          env:
+            - name: VAULT_ADDR
+              value: "http://$EXTERNAL_VAULT_ADDR:8200"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080  # Adjust the port if your Spring app runs on a different port

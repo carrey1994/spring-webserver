@@ -2,6 +2,16 @@ version: '3.8'
 
 services:
 
+  vault:
+    image: hashicorp/vault
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=myroot
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    networks:
+      - dev
+
   spring-postgres:
     image: postgres:16
     container_name: spring-postgres
@@ -101,6 +111,7 @@ services:
 #    build:
 #      context: ..
 #      dockerfile: docker/Dockerfile
+#    image: carrey1994/spring-webserver:latest
 #    volumes:
 #      - type: bind
 #        source: application.yml
@@ -114,6 +125,8 @@ services:
 #      spring-mysql-master:
 #        condition: service_healthy
 #      spring-redis-master:
+#        condition: service_healthy
+#      spring-redis-slave:
 #        condition: service_healthy
 
 networks:
