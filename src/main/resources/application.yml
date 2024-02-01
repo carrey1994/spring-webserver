@@ -37,6 +37,17 @@ server:
   error:
     include-message: always
 
+mail:
+  host: localhost
+  port: 1025
+  address: admin@gc.com
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: user
+  password: my-rabbitmq
+
 init:
   users:
     - id: c17881a1-41bc-4b4b-9274-5b3f30e96aee
@@ -74,9 +85,3 @@ init:
       password: testuser7
       recommenderId: 7e1983a2-96cf-47f5-be91-0b4110f8828a
       role: ADMIN
-
-
-#         1
-#      2    3
-#  4   5    6   7
-

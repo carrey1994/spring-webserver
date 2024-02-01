@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
             "com.jameswu.security.demo.controller",
             "com.jameswu.security.demo.exception",
             "com.jameswu.security.demo.filter",
-            "com.jameswu.security.demo.service"
+            "com.jameswu.security.demo.service",
+            "com.jameswu.security.demo.notification"
         })
 @EnableJpaRepositories(basePackages = "com.jameswu.security.demo.repository")
 @EnableTransactionManagement

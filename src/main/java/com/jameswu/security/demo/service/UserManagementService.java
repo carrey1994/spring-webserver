@@ -1,11 +1,14 @@
 package com.jameswu.security.demo.service;
 
+import static com.jameswu.security.demo.notification.mail.QueueTag.NEW_USER_TAG;
+
 import com.jameswu.security.demo.exception.UserNotFoundException;
 import com.jameswu.security.demo.model.GcUser;
 import com.jameswu.security.demo.model.UserPayload;
 import com.jameswu.security.demo.model.UserProfile;
 import com.jameswu.security.demo.model.UserRole;
 import com.jameswu.security.demo.model.UserStatus;
+import com.jameswu.security.demo.notification.NotificationCenter;
 import com.jameswu.security.demo.repository.CompanyRepository;
 import com.jameswu.security.demo.repository.UserRepository;
 import com.jameswu.security.demo.utils.GzTexts;
@@ -16,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserManagementService {
@@ -30,8 +34,15 @@ public class UserManagementService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
+    private RelationService relationService;
+
+    @Autowired
+    private NotificationCenter notificationCenter;
+
+    @Autowired
     private static final Logger logger = Logger.getLogger(UserManagementService.class.getName());
 
+    @Transactional
     public UserProfile addUser(UserPayload userPayload) {
         UUID newUserId = UUID.randomUUID();
         userRepository.findByUsername(userPayload.getUsername()).ifPresent(gcUser -> {
@@ -52,6 +63,9 @@ public class UserManagementService {
                 .userProfile(userProfile)
                 .build();
         userRepository.save(newUser);
+        relationService.addRelation(userPayload.getRecommenderId(), newUser.getUserId());
+        //        notificationCenter.startNotification();
+        notificationCenter.putQueue(NEW_USER_TAG.name(), userProfile);
         return userProfile;
     }
 

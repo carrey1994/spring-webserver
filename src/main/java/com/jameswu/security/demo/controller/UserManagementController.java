@@ -3,7 +3,6 @@ package com.jameswu.security.demo.controller;
 import com.jameswu.security.demo.model.Result;
 import com.jameswu.security.demo.model.UserPayload;
 import com.jameswu.security.demo.model.UserProfile;
-import com.jameswu.security.demo.service.RelationService;
 import com.jameswu.security.demo.service.UserManagementService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,17 +24,12 @@ public class UserManagementController {
     @Autowired
     private UserManagementService userManagementService;
 
-    @Autowired
-    private RelationService relationService;
-
     private Logger logger = LoggerFactory.getLogger(UserManagementController.class);
 
     @PostMapping("add")
-    @Transactional
     public Result<UserProfile> addUser(@RequestBody @Valid UserPayload userPayload) {
         logger.info("--- ADD NEW USER ---");
         UserProfile newUserProfile = userManagementService.addUser(userPayload);
-        relationService.addRelation(userPayload.getRecommenderId(), newUserProfile.getUserId());
         return new Result<>(newUserProfile);
     }
 

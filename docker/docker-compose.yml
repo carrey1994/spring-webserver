@@ -2,6 +2,39 @@ version: '3.8'
 
 services:
 
+  spring-rabbitmq:
+    image: rabbitmq:management
+    container_name: spring-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=my-rabbitmq
+    networks:
+      - dev
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  spring-mailhog:
+    image: mailhog/mailhog:latest
+    container_name: spring-mailhog
+    ports:
+      - "1025:1025"   # SMTP port
+      - "8025:8025"   # UI port
+    environment:
+      - MH_HOSTNAME=spring-mailhog
+    networks:
+      - dev
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "127.0.0.1", "8025"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
   vault:
     image: hashicorp/vault
     cap_add:
@@ -80,14 +113,14 @@ services:
     volumes:
       - ./data/spring-redis-slave/data:/data
     ports:
-      - "6380:6379"
-    command: redis-server --slaveof spring-redis-master 6379
+      - "6380:6380"
+    command: --port 6380 --slaveof spring-redis-master 6379
     networks:
       - dev
     depends_on:
       - spring-redis-master
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "6380", "ping" ]
       timeout: 30s
       interval: 5s
       retries: 5
@@ -107,27 +140,31 @@ services:
     depends_on:
       - spring-redis-slave
 
-#  spring-webserver:
-#    build:
-#      context: ..
-#      dockerfile: docker/Dockerfile
-#    image: carrey1994/spring-webserver:latest
-#    volumes:
-#      - type: bind
-#        source: application.yml
-#        target: /webserver/application.yml
-#    container_name: spring-webserver
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - dev
-#    depends_on:
-#      spring-mysql-master:
-#        condition: service_healthy
-#      spring-redis-master:
-#        condition: service_healthy
-#      spring-redis-slave:
-#        condition: service_healthy
+  spring-webserver:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: carrey1994/spring-webserver:latest
+    volumes:
+      - type: bind
+        source: application.yml
+        target: /webserver/application.yml
+    container_name: spring-webserver
+    ports:
+      - "8080:8080"
+    networks:
+      - dev
+    depends_on:
+      spring-mysql-master:
+        condition: service_healthy
+      spring-redis-master:
+        condition: service_healthy
+      spring-redis-slave:
+        condition: service_healthy
+      spring-rabbitmq:
+        condition: service_healthy
+      spring-mailhog:
+        condition: service_healthy
 
 networks:
   dev:
