@@ -1,0 +1,370 @@
+springdoc:
+  api-docs:
+    path: /api/v1/api-docs
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: my-rabbitmq
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: user
+    password: my-sql-password
+    url: jdbc:mysql://localhost:3306/webserver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        generate_statistics: true
+        format_sql: true
+    hibernate:
+      show-sql: false
+      ddl-auto: create
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
+      hibernate: ERROR
+
+hibernate:
+  type:
+    preferred_uuid_jdbc_type: CHAR
+
+redis:
+  master:
+    host: localhost
+    port: 6379
+  slaves:
+    - host: localhost
+      port: 6380
+
+server:
+  error:
+    include-message: always
+
+mail:
+  host: localhost
+  port: 1025
+  address: admin@gc.com
+
+init:
+  users:
+    - id: 1
+      username: testuser1
+      password: testuser1
+      recommenderId: null
+      role: ADMIN
+    - id: 2
+      username: testuser2
+      password: testuser2
+      recommenderId: 1
+      role: ADMIN
+    - id: 3
+      username: testuser3
+      password: testuser3
+      recommenderId: 1
+      role: ADMIN
+    - id: 4
+      username: testuser4
+      password: testuser4
+      recommenderId: 2
+      role: ADMIN
+    - id: 5
+      username: testuser5
+      password: testuser5
+      recommenderId: 2
+      role: ADMIN
+    - id: 6
+      username: testuser6
+      password: testuser6
+      recommenderId: 3
+      role: ADMIN
+    - id: 7
+      username: testuser7
+      password: testuser7
+      recommenderId: 3
+      role: ADMIN
+    - id: 8
+      username: testuser8
+      password: testuser8
+      recommenderId: 4
+      role: ADMIN
+    - id: 9
+      username: testuser9
+      password: testuser9
+      recommenderId: 4
+      role: ADMIN
+    - id: 10
+      username: testuser10
+      password: testuser10
+      recommenderId: 5
+      role: ADMIN
+    - id: 11
+      username: testuser11
+      password: testuser11
+      recommenderId: 5
+      role: ADMIN
+    - id: 12
+      username: testuser12
+      password: testuser12
+      recommenderId: 6
+      role: ADMIN
+    - id: 13
+      username: testuser13
+      password: testuser13
+      recommenderId: 6
+      role: ADMIN
+    - id: 14
+      username: testuser14
+      password: testuser14
+      recommenderId: 7
+      role: ADMIN
+    - id: 15
+      username: testuser15
+      password: testuser15
+      recommenderId: 7
+      role: ADMIN
+    - id: 16
+      username: testuser16
+      password: testuser16
+      recommenderId: 8
+      role: ADMIN
+    - id: 17
+      username: testuser17
+      password: testuser17
+      recommenderId: 8
+      role: ADMIN
+    - id: 18
+      username: testuser18
+      password: testuser18
+      recommenderId: 9
+      role: ADMIN
+    - id: 19
+      username: testuser19
+      password: testuser19
+      recommenderId: 9
+      role: ADMIN
+    - id: 20
+      username: testuser20
+      password: testuser20
+      recommenderId: 10
+      role: ADMIN
+    - id: 21
+      username: testuser21
+      password: testuser21
+      recommenderId: 10
+      role: ADMIN
+    - id: 22
+      username: testuser22
+      password: testuser22
+      recommenderId: 11
+      role: ADMIN
+    - id: 23
+      username: testuser23
+      password: testuser23
+      recommenderId: 11
+      role: ADMIN
+    - id: 24
+      username: testuser24
+      password: testuser24
+      recommenderId: 12
+      role: ADMIN
+    - id: 25
+      username: testuser25
+      password: testuser25
+      recommenderId: 12
+      role: ADMIN
+    - id: 26
+      username: testuser26
+      password: testuser26
+      recommenderId: 13
+      role: ADMIN
+    - id: 27
+      username: testuser27
+      password: testuser27
+      recommenderId: 13
+      role: ADMIN
+    - id: 28
+      username: testuser28
+      password: testuser28
+      recommenderId: 14
+      role: ADMIN
+    - id: 29
+      username: testuser29
+      password: testuser29
+      recommenderId: 14
+      role: ADMIN
+    - id: 30
+      username: testuser30
+      password: testuser30
+      recommenderId: 15
+      role: ADMIN
+    - id: 31
+      username: testuser31
+      password: testuser31
+      recommenderId: 15
+      role: ADMIN
+    - id: 32
+      username: testuser32
+      password: testuser32
+      recommenderId: 16
+      role: ADMIN
+    - id: 33
+      username: testuser33
+      password: testuser33
+      recommenderId: 16
+      role: ADMIN
+    - id: 34
+      username: testuser34
+      password: testuser34
+      recommenderId: 17
+      role: ADMIN
+    - id: 35
+      username: testuser35
+      password: testuser35
+      recommenderId: 17
+      role: ADMIN
+    - id: 36
+      username: testuser36
+      password: testuser36
+      recommenderId: 18
+      role: ADMIN
+    - id: 37
+      username: testuser37
+      password: testuser37
+      recommenderId: 18
+      role: ADMIN
+    - id: 38
+      username: testuser38
+      password: testuser38
+      recommenderId: 19
+      role: ADMIN
+    - id: 39
+      username: testuser39
+      password: testuser39
+      recommenderId: 19
+      role: ADMIN
+    - id: 40
+      username: testuser40
+      password: testuser40
+      recommenderId: 20
+      role: ADMIN
+    - id: 41
+      username: testuser41
+      password: testuser41
+      recommenderId: 20
+      role: ADMIN
+    - id: 42
+      username: testuser42
+      password: testuser42
+      recommenderId: 21
+      role: ADMIN
+    - id: 43
+      username: testuser43
+      password: testuser43
+      recommenderId: 21
+      role: ADMIN
+    - id: 44
+      username: testuser44
+      password: testuser44
+      recommenderId: 22
+      role: ADMIN
+    - id: 45
+      username: testuser45
+      password: testuser45
+      recommenderId: 22
+      role: ADMIN
+    - id: 46
+      username: testuser46
+      password: testuser46
+      recommenderId: 23
+      role: ADMIN
+    - id: 47
+      username: testuser47
+      password: testuser47
+      recommenderId: 23
+      role: ADMIN
+    - id: 48
+      username: testuser48
+      password: testuser48
+      recommenderId: 24
+      role: ADMIN
+    - id: 49
+      username: testuser49
+      password: testuser49
+      recommenderId: 24
+      role: ADMIN
+    - id: 50
+      username: testuser50
+      password: testuser50
+      recommenderId: 25
+      role: ADMIN
+    - id: 51
+      username: testuser51
+      password: testuser51
+      recommenderId: 25
+      role: ADMIN
+    - id: 52
+      username: testuser52
+      password: testuser52
+      recommenderId: 26
+      role: ADMIN
+    - id: 53
+      username: testuser53
+      password: testuser53
+      recommenderId: 26
+      role: ADMIN
+    - id: 54
+      username: testuser54
+      password: testuser54
+      recommenderId: 27
+      role: ADMIN
+    - id: 55
+      username: testuser55
+      password: testuser55
+      recommenderId: 27
+      role: ADMIN
+    - id: 56
+      username: testuser56
+      password: testuser56
+      recommenderId: 28
+      role: ADMIN
+    - id: 57
+      username: testuser57
+      password: testuser57
+      recommenderId: 28
+      role: ADMIN
+    - id: 58
+      username: testuser58
+      password: testuser58
+      recommenderId: 29
+      role: ADMIN
+    - id: 59
+      username: testuser59
+      password: testuser59
+      recommenderId: 29
+      role: ADMIN
+    - id: 60
+      username: testuser60
+      password: testuser60
+      recommenderId: 30
+      role: ADMIN
+    - id: 61
+      username: testuser61
+      password: testuser61
+      recommenderId: 30
+      role: ADMIN
+    - id: 62
+      username: testuser62
+      password: testuser62
+      recommenderId: 31
+      role: ADMIN
+    - id: 63
+      username: testuser63
+      password: testuser63
+      recommenderId: 31
+      role: ADMIN

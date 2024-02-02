@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dev
+  name: spring-webserver-deployment
+spec:
+  replicas: 2  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: spring-webserver
+  template:
+    metadata:
+      labels:
+        app: spring-webserver
+    spec:
+      containers:
+        - name: spring-webserver
+          image: carrey1994/spring-webserver  # Update with your Docker image details
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080  # Adjust the port if your Spring app runs on a different port
+          volumeMounts:
+            - name: spring-webserver-secret-volume
+              mountPath: /webserver/application.yml  # Update with the actual path in your container
+              subPath: application.yml
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: spring-webserver-secret-volume
+          secret:
+            secretName: spring-webserver-secret
+      securityContext:
+        fsGroup: 472
+        runAsGroup: 472
+        runAsNonRoot: true
+        runAsUser: 472

@@ -1,0 +1,24 @@
+spring:
+  rabbitmq:
+    host: spring-rabbitmq
+    port: 5672
+    username: user
+    password: my-rabbitmq
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: user
+    password: my-sql-password
+    url: jdbc:mysql://spring-mysql-master:3306/webserver
+
+redis:
+  master:
+    host: spring-redis-master
+    port: 6379
+  slaves:
+    - host: spring-redis-slave
+      port: 6380
+
+mail:
+  host: spring-mailhog
+  port: 1025
+  address: admin@gc.com

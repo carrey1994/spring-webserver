@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-mailhog
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-mailhog
+  template:
+    metadata:
+      labels:
+        app: spring-mailhog
+    spec:
+      containers:
+        - name: spring-mailhog
+          image: mailhog/mailhog:latest
+          env:
+            - name: MH_HOSTNAME
+              value: mailhog-service
+          ports:
+            - containerPort: 1025  # SMTP
+              name: smtp
+            - containerPort: 8025  # HTTP
+              name: ui

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-rabbitmq-service
+  namespace: dev
+spec:
+  selector:
+    app: spring-rabbitmq
+  ports:
+    - protocol: TCP
+      port: 5672
+      targetPort: 5672
+      name: message-queue
+    - protocol: TCP
+      port: 15672
+      targetPort: 15672
+      name: ui
+  type: ClusterIP
