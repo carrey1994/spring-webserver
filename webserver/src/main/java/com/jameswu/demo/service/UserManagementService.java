@@ -35,7 +35,7 @@ public class UserManagementService {
     private final NotificationService notificationService;
 
     @Transactional
-    public UserProfile addUser(UserPayload userPayload) {
+    public UserProfile register(UserPayload userPayload) {
         userRepository.findByUsername(userPayload.username()).ifPresent(gcUser -> {
             throw new UserException(GzTexts.USER_ALREADY_EXISTS);
         });

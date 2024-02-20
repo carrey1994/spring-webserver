@@ -1,33 +1,45 @@
 package com.jameswu.demo.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
+import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@NamedEntityGraph(
+        name = "insurance_graph",
+        attributeNodes = {@NamedAttributeNode("order")})
 @Entity(name = "insurance")
 @Table
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Insurance implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long insuranceId;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
-    private InsuranceOrder insuranceOrder;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "insurance")
+    private Set<InsuranceOrder> order;
+
+    public Insurance(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }

@@ -16,6 +16,6 @@ public interface UserRepository extends CrudRepository<GcUser, Long> {
 
     Optional<GcUser> findByUserId(Long userId);
 
-    @EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.LOAD)
     Page<GcUser> findByUserStatus(UserStatus status, Pageable pageable);
 }

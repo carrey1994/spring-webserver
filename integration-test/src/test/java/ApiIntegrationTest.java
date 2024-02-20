@@ -71,12 +71,12 @@ class ApiIntegrationTest {
 
     @SneakyThrows
     @Test
-    void addUserApi() {
+    void registerUserApi() {
         String accessToken = loginApi();
         Map<String, String> payload = getNewUser(0, 64);
         RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:8080/api/v1/user/management/add")
+                .url("http://127.0.0.1:8080/api/v1/user/management/register")
                 .method(HttpMethod.POST.name(), body)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -104,7 +104,7 @@ class ApiIntegrationTest {
                 Map<String, String> payload = getNewUser(increasedId, 65);
                 RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
                 Request request = new Request.Builder()
-                        .url("http://127.0.0.1:8080/api/v1/user/management/add")
+                        .url("http://127.0.0.1:8080/api/v1/user/management/register")
                         .method(HttpMethod.POST.name(), body)
                         .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .addHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -116,6 +116,28 @@ class ApiIntegrationTest {
         }
         cachedThreadPool.shutdown();
         cachedThreadPool.awaitTermination(1, TimeUnit.MINUTES);
+    }
+
+    @SneakyThrows
+    @Test
+    void createOrderApi() {
+        String accessToken = loginApi();
+        Map<String, Object> payload = Map.ofEntries(Map.entry("insuranceId", 1), Map.entry("userId", 1));
+        RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
+        Request request = new Request.Builder()
+                .url("http://127.0.0.1:8080/api/v1/order/create")
+                .method(HttpMethod.POST.name(), body)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .build();
+
+        Response response = doRequest(request);
+        Assertions.assertEquals(HttpStatus.OK.value(), response.code());
+
+        JsonNode resultNode = objectMapper.readTree(response.body().string());
+        Assertions.assertEquals(
+                1, resultNode.get("message").get("insurance").get("insuranceId").asLong());
+        Assertions.assertTrue(resultNode.get("ok").asBoolean());
     }
 
     @SneakyThrows

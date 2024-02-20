@@ -35,12 +35,12 @@ public class UserManagementController {
         this.redisService = redisService;
     }
 
-    @PostMapping("add")
+    @PostMapping("register")
     @Transactional
-    public Result<UserProfile> addUser(@RequestBody @Valid UserPayload userPayload) {
+    public Result<UserProfile> register(@RequestBody @Valid UserPayload userPayload) {
         try {
             redisService.tryPartialLock(RedisKey.PREFIX_ADD_USER, userPayload.username());
-            UserProfile newUserProfile = userManagementService.addUser(userPayload);
+            UserProfile newUserProfile = userManagementService.register(userPayload);
             return new SuccessResult<>(newUserProfile);
         } finally {
             redisService.tryPartialUnlock(RedisKey.PREFIX_ADD_USER, userPayload.username());
