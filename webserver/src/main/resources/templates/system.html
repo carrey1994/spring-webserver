@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+    <meta charset="UTF-8" />
+<!--    <link th:href="@{/css/styles.css}" rel="stylesheet">-->
+</head>
+<body>
+<div th:fragment="header">
+    <h1>Thymeleaf Fragments sample</h1>
+</div>
+<p>Go to the next page to see fragments in action</p>
+<aside>
+    <div>This is a sidebar</div>
+</aside>
+<div class="another">This is another sidebar</div>
+<table border="1">
+    <tr>
+        <td><label th:text="${id}" /></td>
+    </tr>
+    <tr>
+        <td><label th:text="${name}" /></td>
+    </tr>
+    <div>our system is going to update on 2024/02/23.</div>
+</table>
+</body>
+</html>

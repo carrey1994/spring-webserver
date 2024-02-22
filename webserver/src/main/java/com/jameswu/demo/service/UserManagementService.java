@@ -61,12 +61,17 @@ public class UserManagementService {
                 .build();
 
         userRepository.save(newUser);
-        notificationService.putQueue(QueueTag.NEW_USER_TAG.name(), userProfile);
+        notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
         return newUser.getProfile();
     }
 
     public Page<UserProfile> activeUsers(Pageable pageable) {
         /* Don't use user repo calling findAll to get user profiles, it makes n+1 queries. */
         return userRepository.findByUserStatus(UserStatus.ACTIVE, pageable).map(GcUser::getProfile);
+    }
+
+    public Boolean systemBroadCast() {
+        userRepository.findAll().forEach(gcUser -> notificationService.putQueue(QueueTag.SYSTEM, gcUser.getProfile()));
+        return true;
     }
 }

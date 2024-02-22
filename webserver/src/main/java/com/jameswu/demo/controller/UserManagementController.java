@@ -51,4 +51,9 @@ public class UserManagementController {
     public Result<List<UserProfile>> activeUsers(Pageable pageable) {
         return new SuccessResult<>(userManagementService.activeUsers(pageable).getContent());
     }
+
+    @GetMapping("system")
+    public Result<Boolean> systemBroadcast() {
+        return new SuccessResult<>(userManagementService.systemBroadCast());
+    }
 }

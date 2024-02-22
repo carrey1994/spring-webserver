@@ -1,6 +1,7 @@
 package com.jameswu.demo.notification;
 
 import com.jameswu.demo.notification.mail.BaseMail;
+import com.jameswu.demo.notification.mail.QueueTag;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.SneakyThrows;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private final List<NotificationQueue<?, ? extends BaseMail>> notificationQueues;
+    private final List<NotificationQueue<? extends BaseMail>> notificationQueues;
 
     private final RabbitAdmin rabbitAdmin;
 
     @Autowired
     public NotificationService(
-            List<NotificationQueue<?, ? extends BaseMail>> notificationQueues, RabbitAdmin rabbitAdmin) {
+            List<NotificationQueue<? extends BaseMail>> notificationQueues, RabbitAdmin rabbitAdmin) {
         this.notificationQueues = notificationQueues;
         this.rabbitAdmin = rabbitAdmin;
     }
@@ -30,9 +31,9 @@ public class NotificationService {
     }
 
     @SneakyThrows
-    public <T> void putQueue(String queue, T payload) {
+    public <T> void putQueue(QueueTag queue, T payload) {
         notificationQueues.stream()
-                .filter(q -> q.queueTag().name().equals(queue))
+                .filter(q -> q.queueTag().equals(queue))
                 .findFirst()
                 .ifPresentOrElse(q -> q.publish(payload), () -> {
                     throw new IllegalArgumentException(String.format("%1s not found", queue));
