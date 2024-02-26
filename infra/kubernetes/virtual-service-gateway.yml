@@ -21,7 +21,7 @@ metadata:
   namespace: dev
 spec:
   hosts:
-    - "127.0.0.1"
+    - "*"
   gateways:
     - webserver-gateway
   http:
