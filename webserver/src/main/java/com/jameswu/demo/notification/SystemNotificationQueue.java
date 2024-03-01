@@ -10,20 +10,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SystemNotificationQueue extends NotificationQueue<SystemMail> {
+public class SystemNotificationQueue extends NotificationQueue<UserProfile, SystemMail> {
 
     private Logger logger = LoggerFactory.getLogger(SystemNotificationQueue.class);
 
     @Override
-    protected BaseMail formatHtml(Object t) {
-        if (t instanceof UserProfile userProfile) {
-            return new SystemMail(
-                    String.valueOf(userProfile.getUserId()),
-                    userProfile.getEmail(),
-                    userProfile.getEmail(),
-                    "1.0.0-rc1");
-        }
-        throw new IllegalArgumentException("Wrong payload class in SystemNotificationQueue.");
+    protected BaseMail formatHtml(UserProfile t) {
+        return new SystemMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail(), "1.0.0-rc1");
     }
 
     @Override

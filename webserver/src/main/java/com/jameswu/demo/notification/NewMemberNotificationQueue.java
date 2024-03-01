@@ -10,17 +10,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NewMemberNotificationQueue extends NotificationQueue<NewMemberMail> {
+public class NewMemberNotificationQueue extends NotificationQueue<UserProfile, NewMemberMail> {
 
     private Logger logger = LoggerFactory.getLogger(NewMemberNotificationQueue.class);
 
     @Override
-    protected BaseMail formatHtml(Object t) {
-        if (t instanceof UserProfile userProfile) {
-            return new NewMemberMail(
-                    String.valueOf(userProfile.getUserId()), userProfile.getEmail(), userProfile.getEmail());
-        }
-        throw new IllegalArgumentException("Wrong payload class in NewMemberNotificationQueue.");
+    protected BaseMail formatHtml(UserProfile t) {
+        return new NewMemberMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail());
     }
 
     @Override

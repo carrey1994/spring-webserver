@@ -1,11 +1,16 @@
 package com.jameswu.demo.service;
 
+import com.jameswu.demo.model.RedisMessage;
+import com.jameswu.demo.model.RedisMessageTopic;
+import com.jameswu.demo.model.RedisUserMessage;
 import com.jameswu.demo.utils.GzTexts;
 import com.jameswu.demo.utils.RedisKey;
+import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class RedisService {
 
     @Autowired
-    public RedisService(RedissonClient redisson) {
+    public RedisService(RedissonClient redisson, CacheService cacheService) {
         this.redisson = redisson;
+        this.cacheService = cacheService;
     }
 
+    private final CacheService cacheService;
     private final RedissonClient redisson;
 
     public void trySystemLock(RedisKey systemKey) {
@@ -72,5 +79,22 @@ public class RedisService {
     public <T> Optional<T> getValueByKey(String key) {
         RBucket<T> data = redisson.getBucket(key);
         return Optional.of(data.get());
+    }
+
+    @PostConstruct
+    public void subscribe() {
+        RTopic rTopic = redisson.getTopic(RedisMessageTopic.USER.name());
+        rTopic.addListener(RedisUserMessage.class, (channel, msg) -> {
+            if (msg.isAdd()) {
+                cacheService.retrieveOrLoadUser(msg.getUserProfile().getUserId());
+            } else {
+                cacheService.removeIdFromUserCache(msg.getUserProfile().getUserId());
+            }
+        });
+    }
+
+    public void publish(RedisMessageTopic topic, RedisMessage redisMessage) {
+        RTopic lTopic = redisson.getTopic(topic.name());
+        lTopic.publish(redisMessage);
     }
 }

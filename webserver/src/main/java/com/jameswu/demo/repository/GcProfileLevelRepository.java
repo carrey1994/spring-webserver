@@ -2,7 +2,7 @@ package com.jameswu.demo.repository;
 
 import com.jameswu.demo.model.entity.GcProfileLevel;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class GcProfileLevelRepository {
                         (long) result[0],
                         (String) result[1],
                         (String) result[2],
-                        LocalDate.parse(result[3].toString()),
+                        Instant.parse(result[3].toString()),
                         (Long) result[4],
                         Integer.parseInt(result[5].toString())))
                 .toList();

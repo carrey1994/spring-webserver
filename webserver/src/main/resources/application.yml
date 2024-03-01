@@ -51,6 +51,9 @@ mail:
   port: 1025
   address: admin@gc.com
 
+jwt:
+  refresh-time: 600000
+
 init:
   users:
     - id: 1

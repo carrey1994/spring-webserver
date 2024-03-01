@@ -141,6 +141,43 @@ class ApiIntegrationTest {
     }
 
     @SneakyThrows
+    @Test
+    void systemApi() {
+
+        String accessToken = loginApi();
+        Request request = new Request.Builder()
+                .url("http://127.0.0.1:8080/api/v1/user/management/system")
+                .get()
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .build();
+        Response response = client.newCall(request).execute();
+        JsonNode resultNode = objectMapper.readTree(response.body().string());
+        Assertions.assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @SneakyThrows
+    @Test
+    void multipleTest() {
+        String accessToken = loginApi();
+        Map<String, Object> payload = Map.ofEntries(Map.entry("insuranceId", 1), Map.entry("userId", 1));
+        RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
+        Request request = new Request.Builder()
+                .url("http://127.0.0.1:8080/api/v1/order/create")
+                .method(HttpMethod.POST.name(), body)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .build();
+
+        Response response = doRequest(request);
+        Assertions.assertEquals(HttpStatus.OK.value(), response.code());
+
+        JsonNode resultNode = objectMapper.readTree(response.body().string());
+        Assertions.assertEquals(
+                1, resultNode.get("message").get("insurance").get("insuranceId").asLong());
+        Assertions.assertTrue(resultNode.get("ok").asBoolean());
+    }
+
+    @SneakyThrows
     public Response doRequest(Request request) {
         return client.newCall(request).execute();
     }

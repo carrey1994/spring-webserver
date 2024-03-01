@@ -1,6 +1,6 @@
 package com.jameswu.demo.model.entity;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ public class GcProfileLevel {
     private long userId;
     private String email;
     private String address;
-    private LocalDate enrollmentDate;
+    private Instant enrollmentDate;
     private Long recommenderId;
     private int level;
 

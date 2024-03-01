@@ -11,7 +11,7 @@ import com.jameswu.demo.repository.InsuranceRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
 import com.jameswu.demo.utils.RedisKey;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 import lombok.Data;
@@ -70,7 +70,7 @@ public class UserInitiationConfig {
                             .username(user.username)
                             .password(passwordEncoder.encode(user.password))
                             .profile(new UserProfile(
-                                    user.id, user.username + "@gc.mail", "Taipei", LocalDate.now(), user.recommenderId))
+                                    user.id, user.username + "@gc.mail", "Taipei", Instant.now(), user.recommenderId))
                             .build())
                     .toList();
             var users = userRepository.saveAll(gcUsers);

@@ -1,8 +1,13 @@
 package com.jameswu.demo.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jameswu.demo.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +20,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class BeansConfig {
+
+    @Bean
+    @Primary
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper =
+                JsonMapper.builder().addModule(new JavaTimeModule()).build();
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
+        return objectMapper;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
