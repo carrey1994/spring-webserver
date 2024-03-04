@@ -9,6 +9,10 @@ spring:
     username: user
     password: my-sql-password
     url: jdbc:mysql://spring-mysql-master:3306/webserver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
 redis:
   master:

@@ -2,6 +2,7 @@ package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.model.response.SuccessResult;
+import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.HealthService;
 import com.jameswu.demo.utils.GzTexts;
 import io.jsonwebtoken.lang.Strings;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublicController {
 
     @Autowired
-    public PublicController(HealthService healthService, GitProperties gitProperties) {
+    public PublicController(HealthService healthService, GitProperties gitProperties, UserRepository userRepository) {
         this.healthService = healthService;
         this.gitProperties = gitProperties;
     }

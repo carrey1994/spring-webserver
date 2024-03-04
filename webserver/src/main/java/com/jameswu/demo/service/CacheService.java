@@ -1,6 +1,5 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.exception.UserException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.repository.UserRepository;
 import java.util.Map;
@@ -20,8 +19,9 @@ public class CacheService {
         if (userCache.containsKey(userId)) {
             return userCache.get(userId);
         } else {
-            GcUser user =
-                    userRepository.findByUserId(userId).orElseThrow(() -> new UserException("the user not found"));
+            GcUser user = userRepository
+                    .findByUserId(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("the user not found"));
             userCache.put(userId, user);
             return user;
         }

@@ -1,6 +1,5 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.exception.UserException;
 import com.jameswu.demo.model.UserPayload;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
@@ -37,11 +36,11 @@ public class UserManagementService {
     @Transactional
     public UserProfile register(UserPayload userPayload) {
         userRepository.findByUsername(userPayload.username()).ifPresent(gcUser -> {
-            throw new UserException(GzTexts.USER_ALREADY_EXISTS);
+            throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
         });
         if (userPayload.recommenderId() != null) {
             userRepository.findById(userPayload.recommenderId()).ifPresentOrElse(action -> {}, () -> {
-                throw new UserException(GzTexts.USER_NOT_FOUND);
+                throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
             });
         }
 

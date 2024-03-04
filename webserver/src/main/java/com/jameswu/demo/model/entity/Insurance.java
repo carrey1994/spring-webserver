@@ -12,17 +12,20 @@ import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NamedEntityGraph(
         name = "insurance_graph",
         attributeNodes = {@NamedAttributeNode("order")})
 @Entity(name = "insurance")
 @Table
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class Insurance implements Serializable {
 
     @Id
@@ -41,5 +44,21 @@ public class Insurance implements Serializable {
     public Insurance(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Insurance insurance = (Insurance) object;
+        return insuranceId == insurance.insuranceId
+                && Objects.equals(title, insurance.title)
+                && Objects.equals(description, insurance.description)
+                && Objects.equals(order, insurance.order);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(insuranceId, title, description, order);
     }
 }

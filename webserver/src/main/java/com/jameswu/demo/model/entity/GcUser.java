@@ -23,11 +23,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -38,8 +40,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder
 @Table(indexes = {@Index(name = "idx_username", columnList = "username", unique = true)})
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Data
 public class GcUser implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,5 +105,24 @@ public class GcUser implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return userStatus.equals(UserStatus.ACTIVE);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        GcUser gcUser = (GcUser) object;
+        return userId == gcUser.userId
+                && Objects.equals(username, gcUser.username)
+                && Objects.equals(password, gcUser.password)
+                && userRole == gcUser.userRole
+                && Objects.equals(profile, gcUser.profile)
+                && userStatus == gcUser.userStatus
+                && Objects.equals(orders, gcUser.orders);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, password, userRole, profile, userStatus, orders);
     }
 }

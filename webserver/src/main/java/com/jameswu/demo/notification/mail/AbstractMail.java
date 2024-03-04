@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public abstract class BaseMail {
+public abstract class AbstractMail {
     String template;
     String subject;
     String receiver;

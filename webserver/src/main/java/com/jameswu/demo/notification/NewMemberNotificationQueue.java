@@ -1,7 +1,7 @@
 package com.jameswu.demo.notification;
 
 import com.jameswu.demo.model.entity.UserProfile;
-import com.jameswu.demo.notification.mail.BaseMail;
+import com.jameswu.demo.notification.mail.AbstractMail;
 import com.jameswu.demo.notification.mail.NewMemberMail;
 import com.jameswu.demo.notification.mail.QueueTag;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ public class NewMemberNotificationQueue extends NotificationQueue<UserProfile, N
     private Logger logger = LoggerFactory.getLogger(NewMemberNotificationQueue.class);
 
     @Override
-    protected BaseMail formatHtml(UserProfile t) {
+    protected AbstractMail formatHtml(UserProfile t) {
         return new NewMemberMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail());
     }
 

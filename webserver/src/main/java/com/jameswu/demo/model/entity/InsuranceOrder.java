@@ -13,7 +13,7 @@ import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import lombok.Data;
+import java.util.Objects;
 import lombok.NoArgsConstructor;
 
 @NamedEntityGraph(
@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
         attributeNodes = {@NamedAttributeNode("user"), @NamedAttributeNode("insurance")})
 @Entity(name = "insurance_order")
 @Table
-@Data
 @NoArgsConstructor
 public class InsuranceOrder implements Serializable {
     @Id
@@ -44,5 +43,21 @@ public class InsuranceOrder implements Serializable {
     public InsuranceOrder(GcUser user, Insurance insurance) {
         this.user = user;
         this.insurance = insurance;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        InsuranceOrder order = (InsuranceOrder) object;
+        return orderId == order.orderId
+                && cartId == order.cartId
+                && Objects.equals(user, order.user)
+                && Objects.equals(insurance, order.insurance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, user, insurance, cartId);
     }
 }

@@ -1,6 +1,5 @@
 package com.jameswu.demo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -19,9 +18,48 @@ class TreeYamlTest {
     @SneakyThrows
     @Test
     void initTree() {
-        List<Map<String, Object>> rootYaml = new ArrayList<>();
-        createUserOrderByBFS(rootYaml);
-        generateYaml(rootYaml);
+        //        List<Map<String, Object>> rootYaml = new ArrayList<>();
+        //        createUserOrderByBFS(rootYaml);
+        //        generateYaml(rootYaml);
+        System.out.println(removeDuplicates(new int[] {1, 1, 2}));
+    }
+
+    /*
+     * reverse-in-place function
+     * */
+    public void reverseInPlace(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left < right) {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            System.out.println(nums[i]);
+        }
+    }
+
+    public int removeDuplicates(int[] nums) {
+        int p1 = 0;
+        int p2 = 1;
+        int count = 1;
+        while (p1 < nums.length && p2 < nums.length) {
+            if (nums[p1] == nums[p2]) {
+                p2++;
+            } else {
+                count++;
+                nums[count - 1] = nums[p2];
+                p1 = p2;
+            }
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            System.out.println(nums[i]);
+        }
+        return count;
     }
 
     void createUserOrderByBFS(List<Map<String, Object>> rootYaml) {

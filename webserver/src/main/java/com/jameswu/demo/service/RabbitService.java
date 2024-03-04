@@ -1,7 +1,7 @@
 package com.jameswu.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jameswu.demo.notification.mail.BaseMail;
+import com.jameswu.demo.notification.mail.AbstractMail;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class RabbitService {
     }
 
     @SneakyThrows
-    public void sendMessage(String queueTagName, BaseMail payload) {
+    public void sendMessage(String queueTagName, AbstractMail payload) {
         Message message = new Message(objectMapper.writeValueAsBytes(payload), messageProperties);
         rabbitTemplate.send(queueTagName, message);
     }

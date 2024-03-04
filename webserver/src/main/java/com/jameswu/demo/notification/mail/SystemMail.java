@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SystemMail extends BaseMail {
+public class SystemMail extends AbstractMail {
     private String id;
     private String name;
     private String version;

@@ -3,7 +3,7 @@ package com.jameswu.demo.notification;
 import static jodd.util.StringPool.UTF_8;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jameswu.demo.notification.mail.BaseMail;
+import com.jameswu.demo.notification.mail.AbstractMail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Map;
@@ -39,8 +39,9 @@ public class NotificationSender {
     private String address;
 
     @Async
-    public void sendNotification(BaseMail mail) {
+    public void sendNotification(AbstractMail mail) {
         try {
+            logger.info(String.format("ID -> %s", Thread.currentThread().getId()));
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, UTF_8);
             String htmlMsg = renderedHTML(mail);
@@ -56,7 +57,7 @@ public class NotificationSender {
         }
     }
 
-    public String renderedHTML(BaseMail mail) {
+    public String renderedHTML(AbstractMail mail) {
         Context ctx = new Context();
         ctx.setVariables(objectMapper.convertValue(mail, Map.class));
         return templateEngine.process(mail.getTemplate(), ctx);

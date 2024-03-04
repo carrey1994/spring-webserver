@@ -1,6 +1,6 @@
 package com.jameswu.demo.notification;
 
-import com.jameswu.demo.notification.mail.BaseMail;
+import com.jameswu.demo.notification.mail.AbstractMail;
 import com.jameswu.demo.notification.mail.QueueTag;
 import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private final List<NotificationQueue<?, ? extends BaseMail>> notificationQueues;
-    private final Map<QueueTag, NotificationQueue<?, ? extends BaseMail>> queueMap = new HashMap<>();
+    private final List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues;
+    private final Map<QueueTag, NotificationQueue<?, ? extends AbstractMail>> queueMap = new HashMap<>();
 
     private final RabbitAdmin rabbitAdmin;
 
     @Autowired
     public NotificationService(
-            List<NotificationQueue<?, ? extends BaseMail>> notificationQueues, RabbitAdmin rabbitAdmin) {
+            List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues, RabbitAdmin rabbitAdmin) {
         this.notificationQueues = notificationQueues;
         this.rabbitAdmin = rabbitAdmin;
     }

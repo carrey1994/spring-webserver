@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewMemberMail extends BaseMail {
+public class NewMemberMail extends AbstractMail {
     private String id;
     private String name;
 
