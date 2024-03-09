@@ -26,11 +26,7 @@ public abstract class NotificationQueue<T, M extends AbstractMail> {
         notificationSender.sendNotification(mail);
     }
 
-    protected AbstractMail formatHtml(T t) {
-        throw new IllegalArgumentException("you need to transfer payload to html");
-    }
+    abstract AbstractMail formatHtml(T t);
 
-    protected QueueTag queueTag() {
-        throw new IllegalArgumentException("missed queue tag");
-    }
+    abstract QueueTag queueTag();
 }

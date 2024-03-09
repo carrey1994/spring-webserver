@@ -3,7 +3,7 @@ ARG VERSION=0.0.1-SNAPSHOT
 WORKDIR backend
 COPY . .
 RUN mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$VERSION
-RUN mvn clean package -DskipTests=true
+RUN mvn clean package -DskipTests=true --quiet
 
 FROM node:21-alpine AS frontend
 COPY frontend frontend
