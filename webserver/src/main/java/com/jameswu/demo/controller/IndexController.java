@@ -6,7 +6,7 @@ import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.model.response.SuccessResult;
 import com.jameswu.demo.service.JwtService;
 import com.jameswu.demo.utils.GzTexts;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,8 +31,7 @@ public class IndexController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("login")
-    @Transactional
-    public Result<Map<String, String>> login(@RequestBody LoginPayload payload) {
+    public Result<Map<String, String>> login(@Valid @RequestBody LoginPayload payload) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(payload.username(), payload.password()));
         String jwt = jwtService.generateToken((GcUser) authentication.getPrincipal());

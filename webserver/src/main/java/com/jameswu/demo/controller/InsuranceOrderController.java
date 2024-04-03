@@ -5,7 +5,6 @@ import com.jameswu.demo.model.entity.InsuranceOrder;
 import com.jameswu.demo.model.response.SuccessResult;
 import com.jameswu.demo.service.OrderService;
 import com.jameswu.demo.service.RedisService;
-import com.jameswu.demo.utils.RedisKey;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +28,6 @@ public class InsuranceOrderController {
     @PostMapping("create")
     @Transactional
     public SuccessResult<InsuranceOrder> createOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
-        try {
-            redisService.tryPartialLock(RedisKey.PREFIX_CREATE_ORDER, String.valueOf(newOrderPayload.userId()));
-            return new SuccessResult<>(orderService.createOrder(newOrderPayload));
-        } finally {
-            redisService.tryPartialUnlock(RedisKey.PREFIX_CREATE_ORDER, String.valueOf(newOrderPayload.userId()));
-        }
+        return new SuccessResult<>(orderService.createOrder(newOrderPayload));
     }
 }

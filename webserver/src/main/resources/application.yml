@@ -47,6 +47,7 @@ redis:
 
 server:
   error:
+    include-binding-errors: always
     include-message: always
 
 mail:

@@ -66,12 +66,4 @@ public class JwtService {
                 String.valueOf(parsePayload(token, JWT_USER, UserProfile.class).getUserId());
         redisService.deleteByKey(userId);
     }
-
-    public void checkToken(String token) {
-        String userId =
-                String.valueOf(parsePayload(token, JWT_USER, UserProfile.class).getUserId());
-        redisService.getValueByKey(userId).ifPresentOrElse(e -> {}, () -> {
-            throw new IllegalArgumentException("token not found");
-        });
-    }
 }

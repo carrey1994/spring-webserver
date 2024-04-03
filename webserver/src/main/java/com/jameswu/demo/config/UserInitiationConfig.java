@@ -10,7 +10,6 @@ import com.jameswu.demo.repository.InsuranceOrderRepository;
 import com.jameswu.demo.repository.InsuranceRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
-import com.jameswu.demo.utils.RedisKey;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
@@ -54,32 +53,26 @@ public class UserInitiationConfig {
 
     @Bean
     public void initUsers() {
-        try {
-            Insurance a = new Insurance("A Ins.", "AA");
-            Insurance b = new Insurance("B Ins.", "BB");
-            Insurance c = new Insurance("C Ins.", "CC");
-            var insurances = List.of(a, b, c);
-            insuranceRepository.saveAll(List.of(a, b, c));
-            redisService.trySystemLock(RedisKey.LOCK_INIT_USERS);
-
-            List<GcUser> gcUsers = users.stream()
-                    .map(user -> GcUser.builder()
-                            .userId(user.id)
-                            .userStatus(UserStatus.ACTIVE)
-                            .userRole(user.role)
-                            .username(user.username)
-                            .password(passwordEncoder.encode(user.password))
-                            .profile(new UserProfile(
-                                    user.id, user.username + "@gc.mail", "Taipei", Instant.now(), user.recommenderId))
-                            .build())
-                    .toList();
-            var users = userRepository.saveAll(gcUsers);
-            for (GcUser user : users) {
-                var order = new InsuranceOrder(user, insurances.get(new Random().nextInt(3)));
-                insuranceOrderRepository.save(order);
-            }
-        } finally {
-            redisService.trySystemUnlock(RedisKey.LOCK_INIT_USERS);
+        Insurance a = new Insurance("A Ins.", "AA");
+        Insurance b = new Insurance("B Ins.", "BB");
+        Insurance c = new Insurance("C Ins.", "CC");
+        var insurances = List.of(a, b, c);
+        insuranceRepository.saveAll(List.of(a, b, c));
+        List<GcUser> gcUsers = users.stream()
+                .map(user -> GcUser.builder()
+                        .userId(user.id)
+                        .userStatus(UserStatus.ACTIVE)
+                        .userRole(user.role)
+                        .username(user.username)
+                        .password(passwordEncoder.encode(user.password))
+                        .profile(new UserProfile(
+                                user.id, user.username + "@gc.mail", "Taipei", Instant.now(), user.recommenderId))
+                        .build())
+                .toList();
+        var users = userRepository.saveAll(gcUsers);
+        for (GcUser user : users) {
+            var order = new InsuranceOrder(user, insurances.get(new Random().nextInt(3)));
+            insuranceOrderRepository.save(order);
         }
     }
 }
