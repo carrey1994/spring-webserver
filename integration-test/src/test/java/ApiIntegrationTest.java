@@ -56,7 +56,6 @@ class ApiIntegrationTest {
         Response response = client.newCall(request).execute();
         JsonNode resultNode = objectMapper.readTree(response.body().string());
         Assertions.assertEquals(HttpStatus.OK.value(), response.code());
-
         long userId = resultNode
                 .get("message")
                 .get("childrenProfiles")
@@ -73,10 +72,10 @@ class ApiIntegrationTest {
     @Test
     void registerUserApi() {
         String accessToken = loginApi();
-        Map<String, String> payload = getNewUser(0, 64);
+        Map<String, String> payload = getNewUser(0, 65);
         RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:8080/api/v1/user/management/register")
+                .url("http://127.0.0.1:8080/api/v1/public/register")
                 .method(HttpMethod.POST.name(), body)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -104,7 +103,7 @@ class ApiIntegrationTest {
                 Map<String, String> payload = getNewUser(increasedId, 65);
                 RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
                 Request request = new Request.Builder()
-                        .url("http://127.0.0.1:8080/api/v1/user/management/register")
+                        .url("http://127.0.0.1:8080/api/v1/public/register")
                         .method(HttpMethod.POST.name(), body)
                         .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .addHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -189,12 +188,13 @@ class ApiIntegrationTest {
 
     private Map<String, String> getNewUser(int increasedId, int baseId) {
         int id = increasedId + baseId;
+        System.out.println(id);
         return Map.ofEntries(
                 Map.entry("username", "testuser" + id),
                 Map.entry("password", "testuser" + id),
                 Map.entry("email", "testuser" + id + "@gmail.com"),
                 Map.entry("address", "Taipei"),
-                Map.entry("date", "2024-01-23"),
+                Map.entry("date", "2017-08-14 12:17:47"),
                 Map.entry("recommenderId", "1"));
     }
 }

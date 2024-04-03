@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null) {
+        if (!request.getServletPath().contains("/api/v1/public") && authHeader != null) {
             String accessToken = authHeader.replace(GzTexts.BEARER_PREFIX, "");
             try {
                 long id = jwtService
@@ -68,6 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (ExpiredJwtException | SignatureException e) {
                 resolver.resolveException(request, response, null, e);
+                return;
             }
         }
         filterChain.doFilter(request, response);

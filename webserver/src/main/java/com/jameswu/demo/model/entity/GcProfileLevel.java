@@ -1,5 +1,6 @@
 package com.jameswu.demo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,10 @@ public class GcProfileLevel implements Serializable {
     private long userId;
     private String email;
     private String address;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant enrollmentDate;
+
     private Long recommenderId;
     private int level;
 

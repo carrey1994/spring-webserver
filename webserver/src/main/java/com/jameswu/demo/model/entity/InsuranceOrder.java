@@ -14,7 +14,9 @@ import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NamedEntityGraph(
         name = "insurance_order_graph",
@@ -22,6 +24,8 @@ import lombok.NoArgsConstructor;
 @Entity(name = "insurance_order")
 @Table
 @NoArgsConstructor
+@Getter
+@Setter
 public class InsuranceOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -39,7 +39,7 @@ public class UserProfile implements Serializable {
     private String address;
 
     @Column(nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER, without = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant enrollmentDate;
 
     /* If member joins by himself, recommenderId assigned null. */
