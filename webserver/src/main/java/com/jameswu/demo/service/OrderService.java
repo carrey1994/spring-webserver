@@ -2,10 +2,10 @@ package com.jameswu.demo.service;
 
 import com.jameswu.demo.model.NewOrderPayload;
 import com.jameswu.demo.model.entity.GcUser;
-import com.jameswu.demo.model.entity.Insurance;
-import com.jameswu.demo.model.entity.InsuranceOrder;
-import com.jameswu.demo.repository.InsuranceOrderRepository;
-import com.jameswu.demo.repository.InsuranceRepository;
+import com.jameswu.demo.model.entity.Order;
+import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.repository.OrderRepository;
+import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,21 +14,22 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     @Autowired
-    private InsuranceOrderRepository insuranceOrderRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private InsuranceRepository insuranceRepository;
+    private ProductRepository productRepository;
 
-    public InsuranceOrder createOrder(NewOrderPayload payload) {
+    public Order createOrder(NewOrderPayload payload) {
         GcUser gcUser = userRepository
                 .findByUserId(payload.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Insurance insurance = insuranceRepository
-                .findById(payload.insuranceId())
-                .orElseThrow(() -> new IllegalArgumentException("Insurance not found"));
-        return insuranceOrderRepository.save(new InsuranceOrder(gcUser, insurance));
+        Product product = productRepository
+                .findById(payload.productId())
+                .orElseThrow(() -> new IllegalArgumentException("product not found"));
+        //        return productOrderRepository.save(new Order(gcUser, product));
+        return null;
     }
 }

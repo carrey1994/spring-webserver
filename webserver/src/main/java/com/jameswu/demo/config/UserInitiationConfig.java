@@ -1,18 +1,23 @@
 package com.jameswu.demo.config;
 
 import com.jameswu.demo.model.entity.GcUser;
-import com.jameswu.demo.model.entity.Insurance;
-import com.jameswu.demo.model.entity.InsuranceOrder;
+import com.jameswu.demo.model.entity.Order;
+import com.jameswu.demo.model.entity.OrderDetail;
+import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
-import com.jameswu.demo.repository.InsuranceOrderRepository;
-import com.jameswu.demo.repository.InsuranceRepository;
+import com.jameswu.demo.repository.OrderDetailRepository;
+import com.jameswu.demo.repository.OrderRepository;
+import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,35 +34,38 @@ public class UserInitiationConfig {
     @Autowired
     public UserInitiationConfig(
             UserRepository userRepository,
-            InsuranceRepository insuranceRepository,
+            ProductRepository productRepository,
             RedisService redisService,
             BCryptPasswordEncoder passwordEncoder,
             List<InitUserData> users,
-            InsuranceOrderRepository insuranceOrderRepository) {
+            OrderRepository orderRepository,
+            OrderDetailRepository orderDetailRepository) {
         this.userRepository = userRepository;
-        this.insuranceRepository = insuranceRepository;
-        this.insuranceOrderRepository = insuranceOrderRepository;
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
         this.redisService = redisService;
         this.passwordEncoder = passwordEncoder;
         this.users = users;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     private UserRepository userRepository;
-    private InsuranceRepository insuranceRepository;
+    private ProductRepository productRepository;
     private RedisService redisService;
     private BCryptPasswordEncoder passwordEncoder;
     private List<InitUserData> users;
-    private InsuranceOrderRepository insuranceOrderRepository;
+    private OrderRepository orderRepository;
+    private OrderDetailRepository orderDetailRepository;
 
     record InitUserData(long id, String username, String password, Long recommenderId, UserRole role) {}
 
     @Bean
     public void initUsers() {
-        Insurance a = new Insurance("A Ins.", "AA");
-        Insurance b = new Insurance("B Ins.", "BB");
-        Insurance c = new Insurance("C Ins.", "CC");
-        var insurances = List.of(a, b, c);
-        insuranceRepository.saveAll(List.of(a, b, c));
+        Product a = new Product("A Ins.", "AA", BigDecimal.valueOf(100L), 100);
+        Product b = new Product("B Ins.", "BB", BigDecimal.valueOf(200L), 200);
+        Product c = new Product("C Ins.", "CC", BigDecimal.valueOf(300L), 300);
+        var products = List.of(a, b, c);
+        productRepository.saveAll(List.of(a, b, c));
         List<GcUser> gcUsers = users.stream()
                 .map(user -> GcUser.builder()
                         .userId(user.id)
@@ -71,8 +79,14 @@ public class UserInitiationConfig {
                 .toList();
         var users = userRepository.saveAll(gcUsers);
         for (GcUser user : users) {
-            var order = new InsuranceOrder(user, insurances.get(new Random().nextInt(3)));
-            insuranceOrderRepository.save(order);
+            Order order = new Order(user, Set.of());
+            var updatedOrder = orderRepository.save(order);
+            orderDetailRepository.save(new OrderDetail(
+                    products.get(new Random().nextInt(3)),
+                    updatedOrder,
+                    100,
+                    BigDecimal.valueOf(100L),
+                    UUID.randomUUID()));
         }
     }
 }

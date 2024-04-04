@@ -1,7 +1,7 @@
 package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.NewOrderPayload;
-import com.jameswu.demo.model.entity.InsuranceOrder;
+import com.jameswu.demo.model.entity.Order;
 import com.jameswu.demo.model.response.SuccessResult;
 import com.jameswu.demo.service.OrderService;
 import com.jameswu.demo.service.RedisService;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/order")
 @Validated
-public class InsuranceOrderController {
+public class OrderController {
 
     @Autowired
     private OrderService orderService;
@@ -27,7 +27,7 @@ public class InsuranceOrderController {
 
     @PostMapping("create")
     @Transactional
-    public SuccessResult<InsuranceOrder> createOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
+    public SuccessResult<Order> createOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
         return new SuccessResult<>(orderService.createOrder(newOrderPayload));
     }
 }

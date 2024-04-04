@@ -15,7 +15,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +23,6 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,9 +66,6 @@ public class GcUser implements UserDetails, Serializable {
     @Enumerated(value = EnumType.STRING)
     @NotNull
     private UserStatus userStatus;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
-    private Set<InsuranceOrder> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -117,12 +112,11 @@ public class GcUser implements UserDetails, Serializable {
                 && Objects.equals(password, gcUser.password)
                 && userRole == gcUser.userRole
                 && Objects.equals(profile, gcUser.profile)
-                && userStatus == gcUser.userStatus
-                && Objects.equals(orders, gcUser.orders);
+                && userStatus == gcUser.userStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, password, userRole, profile, userStatus, orders);
+        return Objects.hash(userId, username, password, userRole, profile, userStatus);
     }
 }

@@ -121,7 +121,7 @@ class ApiIntegrationTest {
     @Test
     void createOrderApi() {
         String accessToken = loginApi();
-        Map<String, Object> payload = Map.ofEntries(Map.entry("insuranceId", 1), Map.entry("userId", 1));
+        Map<String, Object> payload = Map.ofEntries(Map.entry("productId", 1), Map.entry("userId", 1));
         RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
         Request request = new Request.Builder()
                 .url("http://127.0.0.1:8080/api/v1/order/create")
@@ -135,7 +135,7 @@ class ApiIntegrationTest {
 
         JsonNode resultNode = objectMapper.readTree(response.body().string());
         Assertions.assertEquals(
-                1, resultNode.get("message").get("insurance").get("insuranceId").asLong());
+                1, resultNode.get("message").get("product").get("productId").asLong());
         Assertions.assertTrue(resultNode.get("ok").asBoolean());
     }
 
@@ -158,7 +158,7 @@ class ApiIntegrationTest {
     @Test
     void multipleTest() {
         String accessToken = loginApi();
-        Map<String, Object> payload = Map.ofEntries(Map.entry("insuranceId", 1), Map.entry("userId", 1));
+        Map<String, Object> payload = Map.ofEntries(Map.entry("productId", 1), Map.entry("userId", 1));
         RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
         Request request = new Request.Builder()
                 .url("http://127.0.0.1:8080/api/v1/order/create")
@@ -172,7 +172,7 @@ class ApiIntegrationTest {
 
         JsonNode resultNode = objectMapper.readTree(response.body().string());
         Assertions.assertEquals(
-                1, resultNode.get("message").get("insurance").get("insuranceId").asLong());
+                1, resultNode.get("message").get("product").get("productId").asLong());
         Assertions.assertTrue(resultNode.get("ok").asBoolean());
     }
 

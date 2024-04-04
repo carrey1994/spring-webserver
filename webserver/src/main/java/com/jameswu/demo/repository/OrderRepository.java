@@ -1,8 +1,8 @@
 package com.jameswu.demo.repository;
 
-import com.jameswu.demo.model.entity.Insurance;
+import com.jameswu.demo.model.entity.Order;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InsuranceRepository extends CrudRepository<Insurance, Long> {}
+public interface OrderRepository extends CrudRepository<Order, Long> {}

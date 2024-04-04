@@ -1,6 +1,7 @@
 package com.jameswu.demo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,59 +10,52 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NamedEntityGraph(
-        name = "insurance_order_graph",
-        attributeNodes = {@NamedAttributeNode("user"), @NamedAttributeNode("insurance")})
-@Entity(name = "insurance_order")
-@Table
+@Entity(name = "gc_order")
+@Table(name = "gc_order")
 @NoArgsConstructor
 @Getter
 @Setter
-public class InsuranceOrder implements Serializable {
+public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private long orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private GcUser user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "insurance_id")
-    private Insurance insurance;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
+    @JsonIgnore
+    private Set<OrderDetail> orderDetails;
 
-    @Column(name = "cart_id", nullable = false)
-    private long cartId;
-
-    public InsuranceOrder(GcUser user, Insurance insurance) {
+    public Order(GcUser user, Set<OrderDetail> orderDetails) {
         this.user = user;
-        this.insurance = insurance;
+        this.orderDetails = orderDetails;
     }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        InsuranceOrder order = (InsuranceOrder) object;
+        Order order = (Order) object;
         return orderId == order.orderId
-                && cartId == order.cartId
                 && Objects.equals(user, order.user)
-                && Objects.equals(insurance, order.insurance);
+                && Objects.equals(orderDetails, order.orderDetails);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, user, insurance, cartId);
+        return Objects.hash(orderId, user, orderDetails);
     }
 }
