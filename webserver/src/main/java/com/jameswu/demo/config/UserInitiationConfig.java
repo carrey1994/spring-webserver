@@ -1,8 +1,6 @@
 package com.jameswu.demo.config;
 
 import com.jameswu.demo.model.entity.GcUser;
-import com.jameswu.demo.model.entity.Order;
-import com.jameswu.demo.model.entity.OrderDetail;
 import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
@@ -15,9 +13,6 @@ import com.jameswu.demo.service.RedisService;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -57,7 +52,7 @@ public class UserInitiationConfig {
     private OrderRepository orderRepository;
     private OrderDetailRepository orderDetailRepository;
 
-    record InitUserData(long id, String username, String password, Long recommenderId, UserRole role) {}
+    record InitUserData(int id, String username, String password, Integer recommenderId, UserRole role) {}
 
     @Bean
     public void initUsers() {
@@ -78,15 +73,15 @@ public class UserInitiationConfig {
                         .build())
                 .toList();
         var users = userRepository.saveAll(gcUsers);
-        for (GcUser user : users) {
-            Order order = new Order(user, Set.of());
-            var updatedOrder = orderRepository.save(order);
-            orderDetailRepository.save(new OrderDetail(
-                    products.get(new Random().nextInt(3)),
-                    updatedOrder,
-                    100,
-                    BigDecimal.valueOf(100L),
-                    UUID.randomUUID()));
-        }
+        //        for (GcUser user : users) {
+        //            Order order = new Order(user, Set.of());
+        //            var updatedOrder = orderRepository.save(order);
+        //            orderDetailRepository.save(new OrderDetail(
+        //                    products.get(new Random().nextInt(3)),
+        //                    updatedOrder,
+        //                    100,
+        //                    BigDecimal.valueOf(100L),
+        //                    UUID.randomUUID()));
+        //        }
     }
 }

@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GcProfileLevel implements Serializable {
-    private long userId;
+    private int userId;
     private String email;
     private String address;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Instant enrollmentDate;
 
-    private Long recommenderId;
+    private Integer recommenderId;
     private int level;
 
     public UserProfile toUserProfile() {

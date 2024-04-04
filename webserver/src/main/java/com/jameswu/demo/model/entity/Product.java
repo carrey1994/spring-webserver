@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "product")
-@Table
+@Table(indexes = {@Index(name = "idx_price", columnList = "price", unique = true)})
 @NoArgsConstructor
 @Getter
 @Setter
@@ -22,7 +24,8 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productId;
+    @Column(name = "product_id", nullable = false)
+    private int productId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -30,7 +33,8 @@ public class Product implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "price", precision = 10, scale = 4, nullable = false)
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    @DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0.00")
     private BigDecimal price;
 
     @Column(name = "quantity", nullable = false)

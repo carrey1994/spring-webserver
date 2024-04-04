@@ -1,14 +1,18 @@
 package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.NewOrderPayload;
+import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.Order;
-import com.jameswu.demo.model.response.SuccessResult;
+import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.OrderService;
 import com.jameswu.demo.service.RedisService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +30,13 @@ public class OrderController {
     private RedisService redisService;
 
     @PostMapping("create")
-    @Transactional
-    public SuccessResult<Order> createOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
-        return new SuccessResult<>(orderService.createOrder(newOrderPayload));
+    public Result<Order> createOrder(
+            Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
+        return Result.success(orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
+    }
+
+    @GetMapping("specials/create")
+    public Result<List<Product>> createSpecialsOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
+        return Result.success(orderService.createSpecialsOrder(newOrderPayload));
     }
 }

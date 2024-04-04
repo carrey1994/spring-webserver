@@ -29,7 +29,7 @@ public class UserProfile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    private long userId;
+    private int userId;
 
     @Column
     @Email
@@ -45,7 +45,7 @@ public class UserProfile implements Serializable {
     /* If member joins by himself, recommenderId assigned null. */
     @Column
     @Nullable
-    private Long recommenderId;
+    private Integer recommenderId;
 
     @Override
     public boolean equals(Object object) {

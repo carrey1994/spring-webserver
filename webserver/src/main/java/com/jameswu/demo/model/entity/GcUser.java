@@ -45,7 +45,7 @@ public class GcUser implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long userId;
+    private int userId;
 
     @Column
     @Size(min = 8, max = 16)

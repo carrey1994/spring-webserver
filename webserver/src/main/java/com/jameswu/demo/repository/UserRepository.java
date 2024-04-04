@@ -10,11 +10,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CrudRepository<GcUser, Long> {
+public interface UserRepository extends CrudRepository<GcUser, Integer> {
 
     Optional<GcUser> findByUsername(String username);
 
-    Optional<GcUser> findByUserId(Long userId);
+    Optional<GcUser> findByUserId(int userId);
 
     @EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.LOAD)
     Page<GcUser> findByUserStatus(UserStatus status, Pageable pageable);

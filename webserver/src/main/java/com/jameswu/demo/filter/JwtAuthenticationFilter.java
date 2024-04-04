@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (!request.getServletPath().contains("/api/v1/public") && authHeader != null) {
             String accessToken = authHeader.replace(GzTexts.BEARER_PREFIX, "");
             try {
-                long id = jwtService
+                int id = jwtService
                         .parsePayload(accessToken, JwtService.JWT_USER, UserProfile.class)
                         .getUserId();
                 GcUser user = cacheService.retrieveOrLoadUser(id);

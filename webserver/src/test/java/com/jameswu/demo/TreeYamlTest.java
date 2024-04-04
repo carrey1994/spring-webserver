@@ -73,7 +73,7 @@ class TreeYamlTest {
             entry.put("username", "testuser" + order);
             entry.put("password", "testuser" + order);
             entry.put("role", "ADMIN");
-            long recommenderId = order / 2;
+            int recommenderId = order / 2;
             if (recommenderId == 0) {
                 entry.put("recommenderId", null);
             } else {

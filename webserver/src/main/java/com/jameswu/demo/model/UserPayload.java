@@ -13,5 +13,5 @@ public record UserPayload(
         @Email(message = "Invalid Email", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$") String email,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") Instant date,
         @Size(max = 25) String address,
-        @Nullable Long recommenderId)
+        @Nullable Integer recommenderId)
         implements Serializable {}

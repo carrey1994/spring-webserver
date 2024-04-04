@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class JwtService {
 
     @Value("${jwt.refresh-time}")
-    private long refreshTime;
+    private int refreshTime;
 
     private static final String JWT_KEY = "xVcqqzLRUSnYUKgAciPKnAqgrHGpDLmnEiuLXHeHqBiFHJpQ";
     public static final String JWT_USER = "USER";

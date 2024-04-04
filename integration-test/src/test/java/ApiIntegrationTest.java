@@ -64,7 +64,7 @@ class ApiIntegrationTest {
                 .get(0)
                 .get("userProfile")
                 .get("userId")
-                .asLong();
+                .asInt();
         Assertions.assertEquals(4L, userId);
     }
 
@@ -90,6 +90,32 @@ class ApiIntegrationTest {
         Assertions.assertEquals(
                 "1", resultNode.get("message").get("recommenderId").asText());
         Assertions.assertTrue(resultNode.get("ok").asBoolean());
+    }
+
+    @SneakyThrows
+    @Test
+    void addProductApi() {
+        String accessToken = loginApi();
+        Map<String, Object> payload = Map.ofEntries(
+                Map.entry("title", "A Product"),
+                Map.entry("description", "A product des."),
+                Map.entry("price", 1000.0),
+                Map.entry("quantity", 1));
+        RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
+        Request request = new Request.Builder()
+                .url("http://127.0.0.1:8080/api/v1/product/management/add")
+                .method(HttpMethod.POST.name(), body)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .build();
+
+        Response response = doRequest(request);
+        Assertions.assertEquals(HttpStatus.OK.value(), response.code());
+
+        JsonNode resultNode = objectMapper.readTree(response.body().string());
+        Assertions.assertNotEquals(0, resultNode.get("message").get("productId").asInt());
+        Assertions.assertNotEquals(
+                "A Product", resultNode.get("message").get("title").asInt());
     }
 
     @SneakyThrows

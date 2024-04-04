@@ -14,7 +14,7 @@ public class GcProfileLevelRepository {
     @Autowired
     private EntityManager entityManager;
 
-    public List<GcProfileLevel> queryChildren(@Param("user_id") Long userId, @Param("level") int level) {
+    public List<GcProfileLevel> queryChildren(@Param("user_id") int userId, @Param("level") int level) {
         Session session = entityManager.unwrap(Session.class);
         List<Object[]> results = session.createNativeQuery(
                         """
@@ -56,11 +56,11 @@ public class GcProfileLevelRepository {
 
         return results.stream()
                 .map((result) -> new GcProfileLevel(
-                        (long) result[0],
+                        (int) result[0],
                         (String) result[1],
                         (String) result[2],
                         ((Timestamp) result[3]).toInstant(),
-                        (Long) result[4],
+                        (Integer) result[4],
                         Integer.parseInt(result[5].toString())))
                 .toList();
     }

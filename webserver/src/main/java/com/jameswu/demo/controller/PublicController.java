@@ -3,7 +3,6 @@ package com.jameswu.demo.controller;
 import com.jameswu.demo.model.UserPayload;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.response.Result;
-import com.jameswu.demo.model.response.SuccessResult;
 import com.jameswu.demo.service.HealthService;
 import com.jameswu.demo.service.UserManagementService;
 import com.jameswu.demo.utils.GzTexts;
@@ -37,13 +36,12 @@ public class PublicController {
 
     @PostMapping("register")
     public Result<UserProfile> register(@RequestBody @Valid UserPayload userPayload) {
-        UserProfile newUserProfile = userManagementService.register(userPayload);
-        return new SuccessResult<>(newUserProfile);
+        return Result.success(userManagementService.register(userPayload));
     }
 
     @GetMapping("health")
     public Result<String> checkHealth() {
-        return new SuccessResult<>(healthService.checkHealth());
+        return Result.success((healthService.checkHealth()));
     }
 
     @GetMapping("version")
@@ -51,6 +49,6 @@ public class PublicController {
         String commitId = gitProperties.getCommitId();
         String[] tags = Optional.ofNullable(Strings.split(gitProperties.get("tags"), ","))
                 .orElse(new String[] {GzTexts.NONE});
-        return new SuccessResult<>(Map.of("id", commitId, "tag", tags[tags.length - 1]));
+        return Result.success((Map.of("id", commitId, "tag", tags[tags.length - 1])));
     }
 }
