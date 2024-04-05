@@ -1,7 +1,7 @@
 package com.jameswu.demo.controller;
 
-import com.jameswu.demo.model.UserPayload;
 import com.jameswu.demo.model.entity.UserProfile;
+import com.jameswu.demo.model.payload.UserPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.HealthService;
 import com.jameswu.demo.service.UserManagementService;

@@ -1,12 +1,12 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.UserPayload;
 import com.jameswu.demo.model.entity.GcProfileLevel;
 import com.jameswu.demo.model.entity.GcProfileTreeNode;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
+import com.jameswu.demo.model.payload.UserPayload;
 import com.jameswu.demo.notification.NotificationService;
 import com.jameswu.demo.notification.mail.QueueTag;
 import com.jameswu.demo.repository.GcProfileLevelRepository;
@@ -89,7 +89,7 @@ public class UserManagementService {
     }
 
     public GcProfileTreeNode searchingChildren(int userId) {
-        return queryByUserIdAndLevel(userId, 1);
+        return queryByUserIdAndLevel(userId, 2);
     }
 
     private GcProfileTreeNode queryByUserIdAndLevel(int userId, int level) {

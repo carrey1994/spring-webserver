@@ -1,7 +1,7 @@
 package com.jameswu.demo.controller;
 
-import com.jameswu.demo.model.Specials;
 import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.payload.SpecialsPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.ProductService;
 import jakarta.websocket.server.PathParam;
@@ -29,12 +29,12 @@ public class ProductController {
     }
 
     @GetMapping("specials/all")
-    public Result<List<Specials>> specials() {
+    public Result<List<SpecialsPayload>> specials() {
         return Result.success(productService.specials());
     }
 
     @GetMapping("specials")
-    public Result<Specials> specialsById(@PathParam("productId") int productId) {
+    public Result<SpecialsPayload> specialsById(@PathParam("productId") int productId) {
         return Result.success(productService.specialsById(productId));
     }
 }

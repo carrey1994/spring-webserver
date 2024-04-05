@@ -1,11 +1,11 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.BuyingProductPayload;
-import com.jameswu.demo.model.NewOrderPayload;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.Order;
 import com.jameswu.demo.model.entity.OrderDetail;
 import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.payload.BuyingProductPayload;
+import com.jameswu.demo.model.payload.NewOrderPayload;
 import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;

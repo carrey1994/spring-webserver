@@ -1,9 +1,9 @@
 package com.jameswu.demo.controller;
 
-import com.jameswu.demo.model.NewOrderPayload;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.Order;
 import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.payload.NewOrderPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.OrderService;
 import com.jameswu.demo.service.RedisService;

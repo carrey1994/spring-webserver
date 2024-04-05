@@ -1,6 +1,6 @@
 package com.jameswu.demo.controller;
 
-import com.jameswu.demo.model.LoginPayload;
+import com.jameswu.demo.model.payload.LoginPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.IndexService;
 import jakarta.validation.Valid;

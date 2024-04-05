@@ -1,10 +1,11 @@
 package com.jameswu.demo.controller;
 
-import com.jameswu.demo.model.UserProfilePayload;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
+import com.jameswu.demo.model.payload.UserProfilePayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +29,7 @@ public class UserController {
 
     @PutMapping("update")
     public Result<UserProfile> updateUserProfile(
-            Authentication authentication, @RequestBody UserProfilePayload userProfile) {
+            Authentication authentication, @Valid @RequestBody UserProfilePayload userProfile) {
         return Result.success(
                 userService.updateUserProfile(((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
     }

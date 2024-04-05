@@ -1,8 +1,8 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.ProductPayload;
-import com.jameswu.demo.model.Specials;
 import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.payload.ProductPayload;
+import com.jameswu.demo.model.payload.SpecialsPayload;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.utils.RedisKey;
 import org.redisson.api.RMap;
@@ -28,7 +28,8 @@ public class ProductManagementService {
                 new Product(payload.title(), payload.description(), payload.price(), payload.quantity()));
     }
 
-    public RMap<String, String> addSpecials(Specials payload) {
-        return redisService.setHashMap(RedisKey.withProductPrefix(payload.productId()), payload.specialsDetail());
+    public RMap<String, String> addSpecials(SpecialsPayload payload) {
+        return redisService.setHashMap(
+                RedisKey.withProductPrefix(payload.productId()), payload.specialsDetailPayload());
     }
 }

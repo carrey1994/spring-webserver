@@ -1,7 +1,7 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.LoginPayload;
 import com.jameswu.demo.model.entity.GcUser;
+import com.jameswu.demo.model.payload.LoginPayload;
 import com.jameswu.demo.utils.GzTexts;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

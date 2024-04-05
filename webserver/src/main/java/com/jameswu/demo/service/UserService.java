@@ -1,7 +1,7 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.UserProfilePayload;
 import com.jameswu.demo.model.entity.UserProfile;
+import com.jameswu.demo.model.payload.UserProfilePayload;
 import com.jameswu.demo.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

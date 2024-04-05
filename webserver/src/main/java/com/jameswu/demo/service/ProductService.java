@@ -1,8 +1,8 @@
 package com.jameswu.demo.service;
 
-import com.jameswu.demo.model.Specials;
-import com.jameswu.demo.model.SpecialsDetail;
 import com.jameswu.demo.model.entity.Product;
+import com.jameswu.demo.model.payload.SpecialsDetailPayload;
+import com.jameswu.demo.model.payload.SpecialsPayload;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.utils.RedisKey;
 import java.util.List;
@@ -28,13 +28,14 @@ public class ProductService {
         return productRepository.findAll(pageable).getContent();
     }
 
-    public List<Specials> specials() {
+    public List<SpecialsPayload> specials() {
         // todo: cache table
         return List.of();
     }
 
-    public Specials specialsById(int productId) {
-        return new Specials(
-                productId, redisService.getHashClass(RedisKey.withProductPrefix(productId), SpecialsDetail.class));
+    public SpecialsPayload specialsById(int productId) {
+        return new SpecialsPayload(
+                productId,
+                redisService.getHashClass(RedisKey.withProductPrefix(productId), SpecialsDetailPayload.class));
     }
 }
