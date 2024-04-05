@@ -15,85 +15,85 @@ import org.yaml.snakeyaml.Yaml;
 
 class TreeYamlTest {
 
-    @SneakyThrows
-    @Test
-    void initTree() {
-        //        List<Map<String, Object>> rootYaml = new ArrayList<>();
-        //        createUserOrderByBFS(rootYaml);
-        //        generateYaml(rootYaml);
-        System.out.println(removeDuplicates(new int[] {1, 1, 2}));
-    }
+	@SneakyThrows
+	@Test
+	void initTree() {
+		//        List<Map<String, Object>> rootYaml = new ArrayList<>();
+		//        createUserOrderByBFS(rootYaml);
+		//        generateYaml(rootYaml);
+		System.out.println(removeDuplicates(new int[] {1, 1, 2}));
+	}
 
-    /*
-     * reverse-in-place function
-     * */
-    public void reverseInPlace(int[] nums) {
-        int left = 0;
-        int right = nums.length - 1;
-        while (left < right) {
-            int temp = nums[left];
-            nums[left] = nums[right];
-            nums[right] = temp;
-            left++;
-            right--;
-        }
-        for (int i = 0; i < nums.length; i++) {
-            System.out.println(nums[i]);
-        }
-    }
+	/*
+	 * reverse-in-place function
+	 * */
+	public void reverseInPlace(int[] nums) {
+		int left = 0;
+		int right = nums.length - 1;
+		while (left < right) {
+			int temp = nums[left];
+			nums[left] = nums[right];
+			nums[right] = temp;
+			left++;
+			right--;
+		}
+		for (int i = 0; i < nums.length; i++) {
+			System.out.println(nums[i]);
+		}
+	}
 
-    public int removeDuplicates(int[] nums) {
-        int p1 = 0;
-        int p2 = 1;
-        int count = 1;
-        while (p1 < nums.length && p2 < nums.length) {
-            if (nums[p1] == nums[p2]) {
-                p2++;
-            } else {
-                count++;
-                nums[count - 1] = nums[p2];
-                p1 = p2;
-            }
-        }
+	public int removeDuplicates(int[] nums) {
+		int p1 = 0;
+		int p2 = 1;
+		int count = 1;
+		while (p1 < nums.length && p2 < nums.length) {
+			if (nums[p1] == nums[p2]) {
+				p2++;
+			} else {
+				count++;
+				nums[count - 1] = nums[p2];
+				p1 = p2;
+			}
+		}
 
-        for (int i = 0; i < nums.length; i++) {
-            System.out.println(nums[i]);
-        }
-        return count;
-    }
+		for (int i = 0; i < nums.length; i++) {
+			System.out.println(nums[i]);
+		}
+		return count;
+	}
 
-    void createUserOrderByBFS(List<Map<String, Object>> rootYaml) {
-        Queue<Long> queue = new LinkedList<>();
-        queue.add(1L);
-        int order = 1;
-        while (!queue.isEmpty()) {
-            queue.poll();
-            HashMap<String, Object> entry = new LinkedHashMap<>();
-            entry.put("id", order);
-            entry.put("username", "testuser" + order);
-            entry.put("password", "testuser" + order);
-            entry.put("role", "ADMIN");
-            int recommenderId = order / 2;
-            if (recommenderId == 0) {
-                entry.put("recommenderId", null);
-            } else {
-                entry.put("recommenderId", recommenderId);
-            }
-            rootYaml.add(entry);
-            order++;
-            queue.addAll(List.of(1L, 1L));
-            if (order > 63) break;
-        }
-    }
+	void createUserOrderByBFS(List<Map<String, Object>> rootYaml) {
+		Queue<Long> queue = new LinkedList<>();
+		queue.add(1L);
+		int order = 1;
+		while (!queue.isEmpty()) {
+			queue.poll();
+			HashMap<String, Object> entry = new LinkedHashMap<>();
+			entry.put("id", order);
+			entry.put("username", "testuser" + order);
+			entry.put("password", "testuser" + order);
+			entry.put("role", "ADMIN");
+			int recommenderId = order / 2;
+			if (recommenderId == 0) {
+				entry.put("recommenderId", null);
+			} else {
+				entry.put("recommenderId", recommenderId);
+			}
+			rootYaml.add(entry);
+			order++;
+			queue.addAll(List.of(1L, 1L));
+			if (order > 63) break;
+		}
+	}
 
-    void generateYaml(List<Map<String, Object>> yamlUsers) {
-        Map<String, Object> yamlRoot = new LinkedHashMap<>();
-        Map<String, Object> init = new LinkedHashMap<>();
-        init.put("users", yamlUsers);
-        yamlRoot.put("init", init);
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        Yaml yaml = new Yaml(options);
-        Assertions.assertFalse(Strings.isNullOrEmpty(yaml.dump(yamlRoot)));
-    }
+	void generateYaml(List<Map<String, Object>> yamlUsers) {
+		Map<String, Object> yamlRoot = new LinkedHashMap<>();
+		Map<String, Object> init = new LinkedHashMap<>();
+		init.put("users", yamlUsers);
+		yamlRoot.put("init", init);
+		DumperOptions options = new DumperOptions();
+		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		Yaml yaml = new Yaml(options);
+		Assertions.assertFalse(Strings.isNullOrEmpty(yaml.dump(yamlRoot)));
+	}
 }

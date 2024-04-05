@@ -15,29 +15,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private final List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues;
-    private final Map<QueueTag, NotificationQueue<?, ? extends AbstractMail>> queueMap = new HashMap<>();
+	private final List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues;
+	private final Map<QueueTag, NotificationQueue<?, ? extends AbstractMail>> queueMap =
+			new HashMap<>();
 
-    private final RabbitAdmin rabbitAdmin;
+	private final RabbitAdmin rabbitAdmin;
 
-    @Autowired
-    public NotificationService(
-            List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues, RabbitAdmin rabbitAdmin) {
-        this.notificationQueues = notificationQueues;
-        this.rabbitAdmin = rabbitAdmin;
-    }
+	@Autowired
+	public NotificationService(
+			List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues,
+			RabbitAdmin rabbitAdmin) {
+		this.notificationQueues = notificationQueues;
+		this.rabbitAdmin = rabbitAdmin;
+	}
 
-    @PostConstruct
-    public void initQueues() {
-        notificationQueues.forEach(queue -> {
-            rabbitAdmin.declareQueue(new Queue(queue.queueTag().name()));
-            queueMap.put(queue.queueTag(), queue);
-        });
-    }
+	@PostConstruct
+	public void initQueues() {
+		notificationQueues.forEach(
+				queue -> {
+					rabbitAdmin.declareQueue(new Queue(queue.queueTag().name()));
+					queueMap.put(queue.queueTag(), queue);
+				});
+	}
 
-    @SneakyThrows
-    public <T> void putQueue(QueueTag queue, T payload) {
-        NotificationQueue notificationQueue = queueMap.get(queue);
-        notificationQueue.publish(payload);
-    }
+	@SneakyThrows
+	public <T> void putQueue(QueueTag queue, T payload) {
+		NotificationQueue notificationQueue = queueMap.get(queue);
+		notificationQueue.publish(payload);
+	}
 }

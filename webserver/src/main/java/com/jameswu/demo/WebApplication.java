@@ -15,22 +15,22 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EntityScan(basePackages = {"com.jameswu.demo.model"})
 @ComponentScan(
-        basePackages = {
-            "com.jameswu.demo.config",
-            "com.jameswu.demo.controller",
-            "com.jameswu.demo.exception",
-            "com.jameswu.demo.filter",
-            "com.jameswu.demo.service",
-            "com.jameswu.demo.notification",
-            "com.jameswu.demo.repository"
-        })
+		basePackages = {
+			"com.jameswu.demo.config",
+			"com.jameswu.demo.controller",
+			"com.jameswu.demo.exception",
+			"com.jameswu.demo.filter",
+			"com.jameswu.demo.service",
+			"com.jameswu.demo.notification",
+			"com.jameswu.demo.repository"
+		})
 @Import(RestControllerAdvice.class)
 @EnableJpaRepositories(basePackages = "com.jameswu.demo.repository")
 @EnableTransactionManagement
 @EnableAsync
 public class WebApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(WebApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(WebApplication.class, args);
+	}
 }

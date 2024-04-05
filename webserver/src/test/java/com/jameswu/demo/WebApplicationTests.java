@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 @Disabled
 class WebApplicationTests {
 
-    @Test
-    void contextLoads() {
-        Assertions.assertEquals(2, 1 + 1);
-    }
+	@Test
+	void contextLoads() {
+		Assertions.assertEquals(2, 1 + 1);
+	}
 }

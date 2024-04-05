@@ -20,22 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class UserController {
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	@Autowired
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @PutMapping("update")
-    public Result<UserProfile> updateUserProfile(
-            Authentication authentication, @Valid @RequestBody UserProfilePayload userProfile) {
-        return Result.success(
-                userService.updateUserProfile(((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
-    }
+	@PutMapping("update")
+	public Result<UserProfile> updateUserProfile(
+			Authentication authentication, @Valid @RequestBody UserProfilePayload userProfile) {
+		return Result.success(
+				userService.updateUserProfile(
+						((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
+	}
 
-    @GetMapping("me")
-    public Result<UserProfile> userProfile(Authentication authentication) {
-        return Result.success(((GcUser) authentication.getPrincipal()).getProfile());
-    }
+	@GetMapping("me")
+	public Result<UserProfile> userProfile(Authentication authentication) {
+		return Result.success(((GcUser) authentication.getPrincipal()).getProfile());
+	}
 }

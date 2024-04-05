@@ -23,20 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+	@Autowired private OrderService orderService;
 
-    @Autowired
-    private RedisService redisService;
+	@Autowired private RedisService redisService;
 
-    @PostMapping("create")
-    public Result<Order> createOrder(
-            Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
-        return Result.success(orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
-    }
+	@PostMapping("create")
+	public Result<Order> createOrder(
+			Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
+		return Result.success(
+				orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
+	}
 
-    @GetMapping("specials/create")
-    public Result<List<Product>> createSpecialsOrder(@RequestBody @Valid NewOrderPayload newOrderPayload) {
-        return Result.success(orderService.createSpecialsOrder(newOrderPayload));
-    }
+	@GetMapping("specials/create")
+	public Result<List<Product>> createSpecialsOrder(
+			@RequestBody @Valid NewOrderPayload newOrderPayload) {
+		return Result.success(orderService.createSpecialsOrder(newOrderPayload));
+	}
 }

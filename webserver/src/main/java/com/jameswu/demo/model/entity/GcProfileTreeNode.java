@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GcProfileTreeNode implements Serializable {
-    private UserProfile userProfile;
-    private List<GcProfileTreeNode> childrenProfiles;
+	private UserProfile userProfile;
+	private List<GcProfileTreeNode> childrenProfiles;
 }

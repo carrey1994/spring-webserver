@@ -21,45 +21,47 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Service
 public class NotificationSender {
 
-    private Logger logger = LoggerFactory.getLogger(NotificationSender.class);
+	private Logger logger = LoggerFactory.getLogger(NotificationSender.class);
 
-    @Autowired
-    public NotificationSender(
-            JavaMailSender javaMailSender, SpringTemplateEngine templateEngine, ObjectMapper objectMapper) {
-        this.javaMailSender = javaMailSender;
-        this.templateEngine = templateEngine;
-        this.objectMapper = objectMapper;
-    }
+	@Autowired
+	public NotificationSender(
+			JavaMailSender javaMailSender,
+			SpringTemplateEngine templateEngine,
+			ObjectMapper objectMapper) {
+		this.javaMailSender = javaMailSender;
+		this.templateEngine = templateEngine;
+		this.objectMapper = objectMapper;
+	}
 
-    private final JavaMailSender javaMailSender;
-    private final SpringTemplateEngine templateEngine;
-    private final ObjectMapper objectMapper;
+	private final JavaMailSender javaMailSender;
+	private final SpringTemplateEngine templateEngine;
+	private final ObjectMapper objectMapper;
 
-    @Value("${mail.address}")
-    private String address;
+	@Value("${mail.address}")
+	private String address;
 
-    @Async
-    public void sendNotification(AbstractMail mail) {
-        try {
-            logger.info(String.format("ID -> %s", Thread.currentThread().getId()));
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, UTF_8);
-            String htmlMsg = renderedHTML(mail);
-            helper.setText(htmlMsg, true);
-            helper.setTo(mail.getReceiver());
-            helper.setSubject(mail.getSubject());
-            helper.setFrom(address);
-            javaMailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            logger.info("Sending message failed.");
-            logger.info(e.getMessage());
-            throw new IllegalArgumentException(e);
-        }
-    }
+	@Async
+	public void sendNotification(AbstractMail mail) {
+		try {
+			logger.info(String.format("ID -> %s", Thread.currentThread().getId()));
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, UTF_8);
+			String htmlMsg = renderedHTML(mail);
+			helper.setText(htmlMsg, true);
+			helper.setTo(mail.getReceiver());
+			helper.setSubject(mail.getSubject());
+			helper.setFrom(address);
+			javaMailSender.send(mimeMessage);
+		} catch (MessagingException e) {
+			logger.info("Sending message failed.");
+			logger.info(e.getMessage());
+			throw new IllegalArgumentException(e);
+		}
+	}
 
-    public String renderedHTML(AbstractMail mail) {
-        Context ctx = new Context();
-        ctx.setVariables(objectMapper.convertValue(mail, Map.class));
-        return templateEngine.process(mail.getTemplate(), ctx);
-    }
+	public String renderedHTML(AbstractMail mail) {
+		Context ctx = new Context();
+		ctx.setVariables(objectMapper.convertValue(mail, Map.class));
+		return templateEngine.process(mail.getTemplate(), ctx);
+	}
 }

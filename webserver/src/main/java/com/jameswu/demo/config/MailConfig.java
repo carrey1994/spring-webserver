@@ -14,30 +14,30 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Data
 public class MailConfig {
 
-    private int port;
-    private String host;
-    private String username;
-    private String password;
+	private int port;
+	private String host;
+	private String username;
+	private String password;
 
-    @Bean
-    public JavaMailSender mailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(host);
-        mailSender.setPort(port);
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
-        return mailSender;
-    }
+	@Bean
+	public JavaMailSender mailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost(host);
+		mailSender.setPort(port);
+		mailSender.setUsername(username);
+		mailSender.setPassword(password);
+		return mailSender;
+	}
 
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
-        templateResolver.setCacheable(false);
-        templateResolver.setSuffix(".html");
-        templateResolver.setForceTemplateMode(true);
-        templateEngine.setTemplateResolver(templateResolver);
-        return templateEngine;
-    }
+	@Bean
+	public SpringTemplateEngine templateEngine() {
+		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setPrefix("templates/");
+		templateResolver.setCacheable(false);
+		templateResolver.setSuffix(".html");
+		templateResolver.setForceTemplateMode(true);
+		templateEngine.setTemplateResolver(templateResolver);
+		return templateEngine;
+	}
 }

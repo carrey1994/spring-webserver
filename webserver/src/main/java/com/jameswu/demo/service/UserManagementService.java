@@ -26,107 +26,128 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserManagementService {
 
-    @Autowired
-    public UserManagementService(
-            UserRepository userRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder,
-            NotificationService notificationService,
-            GcProfileLevelRepository gcProfileLevelRepository) {
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.notificationService = notificationService;
-        this.gcProfileLevelRepository = gcProfileLevelRepository;
-    }
+	@Autowired
+	public UserManagementService(
+			UserRepository userRepository,
+			BCryptPasswordEncoder bCryptPasswordEncoder,
+			NotificationService notificationService,
+			GcProfileLevelRepository gcProfileLevelRepository) {
+		this.userRepository = userRepository;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.notificationService = notificationService;
+		this.gcProfileLevelRepository = gcProfileLevelRepository;
+	}
 
-    private final GcProfileLevelRepository gcProfileLevelRepository;
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final NotificationService notificationService;
+	private final GcProfileLevelRepository gcProfileLevelRepository;
+	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final NotificationService notificationService;
 
-    @Transactional
-    public UserProfile register(UserPayload userPayload) {
-        userRepository.findByUsername(userPayload.username()).ifPresent(gcUser -> {
-            throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
-        });
-        if (userPayload.recommenderId() != null) {
-            userRepository.findById(userPayload.recommenderId()).ifPresentOrElse(action -> {}, () -> {
-                throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
-            });
-        }
+	@Transactional
+	public UserProfile register(UserPayload userPayload) {
+		userRepository
+				.findByUsername(userPayload.username())
+				.ifPresent(
+						gcUser -> {
+							throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
+						});
+		if (userPayload.recommenderId() != null) {
+			userRepository
+					.findById(userPayload.recommenderId())
+					.ifPresentOrElse(
+							action -> {},
+							() -> {
+								throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
+							});
+		}
 
-        UserProfile userProfile = UserProfile.builder()
-                .email(userPayload.email())
-                .address(userPayload.address())
-                .enrollmentDate(userPayload.date())
-                .recommenderId(userPayload.recommenderId())
-                .build();
+		UserProfile userProfile =
+				UserProfile.builder()
+						.email(userPayload.email())
+						.address(userPayload.address())
+						.enrollmentDate(userPayload.date())
+						.recommenderId(userPayload.recommenderId())
+						.build();
 
-        GcUser newUser = GcUser.builder()
-                .username(userPayload.username())
-                .password(bCryptPasswordEncoder.encode(userPayload.password()))
-                .userRole(UserRole.USER)
-                .userStatus(UserStatus.ACTIVE)
-                .profile(userProfile)
-                .build();
+		GcUser newUser =
+				GcUser.builder()
+						.username(userPayload.username())
+						.password(bCryptPasswordEncoder.encode(userPayload.password()))
+						.userRole(UserRole.USER)
+						.userStatus(UserStatus.ACTIVE)
+						.profile(userProfile)
+						.build();
 
-        userRepository.save(newUser);
-        notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
-        return newUser.getProfile();
-    }
+		userRepository.save(newUser);
+		notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
+		return newUser.getProfile();
+	}
 
-    public Page<UserProfile> activeUsers(Pageable pageable) {
-        /* Don't use user repo calling findAll to get user profiles, it makes n+1 queries. */
-        return userRepository.findByUserStatus(UserStatus.ACTIVE, pageable).map(GcUser::getProfile);
-    }
+	public Page<UserProfile> activeUsers(Pageable pageable) {
+		/* Don't use user repo calling findAll to get user profiles, it makes n+1 queries. */
+		return userRepository.findByUserStatus(UserStatus.ACTIVE, pageable).map(GcUser::getProfile);
+	}
 
-    public Boolean systemBroadCast() {
-        userRepository.findAll().forEach(gcUser -> notificationService.putQueue(QueueTag.SYSTEM, gcUser.getProfile()));
-        return true;
-    }
+	public Boolean systemBroadCast() {
+		userRepository
+				.findAll()
+				.forEach(
+						gcUser ->
+								notificationService.putQueue(QueueTag.SYSTEM, gcUser.getProfile()));
+		return true;
+	}
 
-    public GcProfileTreeNode searchingDiagram(int userId) {
-        return queryByUserIdAndLevel(userId, 4);
-    }
+	public GcProfileTreeNode searchingDiagram(int userId) {
+		return queryByUserIdAndLevel(userId, 4);
+	}
 
-    public GcProfileTreeNode searchingChildren(int userId) {
-        return queryByUserIdAndLevel(userId, 2);
-    }
+	public GcProfileTreeNode searchingChildren(int userId) {
+		return queryByUserIdAndLevel(userId, 2);
+	}
 
-    private GcProfileTreeNode queryByUserIdAndLevel(int userId, int level) {
-        List<GcProfileLevel> gcProfileLevelList = gcProfileLevelRepository.queryChildren(userId, level);
-        if (gcProfileLevelList.size() == 1) {
-            // no any child, return user only.
-            return new GcProfileTreeNode(gcProfileLevelList.get(0).toUserProfile(), new ArrayList<>());
-        }
-        return mappingChildren(gcProfileLevelList, userId);
-    }
+	private GcProfileTreeNode queryByUserIdAndLevel(int userId, int level) {
+		List<GcProfileLevel> gcProfileLevelList =
+				gcProfileLevelRepository.queryChildren(userId, level);
+		if (gcProfileLevelList.size() == 1) {
+			// no any child, return user only.
+			return new GcProfileTreeNode(
+					gcProfileLevelList.get(0).toUserProfile(), new ArrayList<>());
+		}
+		return mappingChildren(gcProfileLevelList, userId);
+	}
 
-    private GcProfileTreeNode mappingChildren(List<GcProfileLevel> gcProfileLevelList, int userId) {
-        GcProfileLevel rootProfileLevel = gcProfileLevelList.stream()
-                .filter((profileLevel) -> profileLevel.getUserId() == userId)
-                .toList()
-                .get(0);
-        Map<Integer, List<GcProfileLevel>> collect = gcProfileLevelList.stream()
-                .filter(e -> e.getRecommenderId() != null)
-                .collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
-        List<GcProfileTreeNode> children = collect.get(userId).stream()
-                .map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
-                .toList();
-        GcProfileTreeNode rootNode = new GcProfileTreeNode(rootProfileLevel.toUserProfile(), children);
-        createTreeDiagram(collect, rootNode);
-        return rootNode;
-    }
+	private GcProfileTreeNode mappingChildren(List<GcProfileLevel> gcProfileLevelList, int userId) {
+		GcProfileLevel rootProfileLevel =
+				gcProfileLevelList.stream()
+						.filter((profileLevel) -> profileLevel.getUserId() == userId)
+						.toList()
+						.get(0);
+		Map<Integer, List<GcProfileLevel>> collect =
+				gcProfileLevelList.stream()
+						.filter(e -> e.getRecommenderId() != null)
+						.collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
+		List<GcProfileTreeNode> children =
+				collect.get(userId).stream()
+						.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
+						.toList();
+		GcProfileTreeNode rootNode =
+				new GcProfileTreeNode(rootProfileLevel.toUserProfile(), children);
+		createTreeDiagram(collect, rootNode);
+		return rootNode;
+	}
 
-    private void createTreeDiagram(Map<Integer, List<GcProfileLevel>> collect, GcProfileTreeNode node) {
-        if (collect.get(node.getUserProfile().getUserId()) == null) {
-            return;
-        }
-        List<GcProfileTreeNode> children = collect.get(node.getUserProfile().getUserId()).stream()
-                .map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
-                .toList();
-        node.setChildrenProfiles(children);
-        for (GcProfileTreeNode child : children) {
-            createTreeDiagram(collect, child);
-        }
-    }
+	private void createTreeDiagram(
+			Map<Integer, List<GcProfileLevel>> collect, GcProfileTreeNode node) {
+		if (collect.get(node.getUserProfile().getUserId()) == null) {
+			return;
+		}
+		List<GcProfileTreeNode> children =
+				collect.get(node.getUserProfile().getUserId()).stream()
+						.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
+						.toList();
+		node.setChildrenProfiles(children);
+		for (GcProfileTreeNode child : children) {
+			createTreeDiagram(collect, child);
+		}
+	}
 }

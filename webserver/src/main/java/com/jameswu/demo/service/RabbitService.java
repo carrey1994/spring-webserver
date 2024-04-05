@@ -14,22 +14,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitService {
 
-    private final Logger logger = LoggerFactory.getLogger(RabbitService.class);
-    private final RabbitTemplate rabbitTemplate;
-    private final ObjectMapper objectMapper;
-    private final MessageProperties messageProperties;
+	private final Logger logger = LoggerFactory.getLogger(RabbitService.class);
+	private final RabbitTemplate rabbitTemplate;
+	private final ObjectMapper objectMapper;
+	private final MessageProperties messageProperties;
 
-    @Autowired
-    public RabbitService(
-            RabbitTemplate rabbitTemplate, ObjectMapper objectMapper, MessageProperties messageProperties) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.objectMapper = objectMapper;
-        this.messageProperties = messageProperties;
-    }
+	@Autowired
+	public RabbitService(
+			RabbitTemplate rabbitTemplate,
+			ObjectMapper objectMapper,
+			MessageProperties messageProperties) {
+		this.rabbitTemplate = rabbitTemplate;
+		this.objectMapper = objectMapper;
+		this.messageProperties = messageProperties;
+	}
 
-    @SneakyThrows
-    public void sendMessage(String queueTagName, AbstractMail payload) {
-        Message message = new Message(objectMapper.writeValueAsBytes(payload), messageProperties);
-        rabbitTemplate.send(queueTagName, message);
-    }
+	@SneakyThrows
+	public void sendMessage(String queueTagName, AbstractMail payload) {
+		Message message = new Message(objectMapper.writeValueAsBytes(payload), messageProperties);
+		rabbitTemplate.send(queueTagName, message);
+	}
 }

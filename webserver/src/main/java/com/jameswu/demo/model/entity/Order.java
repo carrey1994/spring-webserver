@@ -27,24 +27,24 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class Order implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private int orderId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "order_id")
+	private int orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    @EqualsAndHashCode.Exclude
-    private GcUser user;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "user_id", nullable = false)
+	@JsonBackReference
+	@EqualsAndHashCode.Exclude
+	private GcUser user;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
-    @JsonManagedReference
-    @EqualsAndHashCode.Exclude
-    private Set<OrderDetail> orderDetails;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
+	@JsonManagedReference
+	@EqualsAndHashCode.Exclude
+	private Set<OrderDetail> orderDetails;
 
-    public Order(GcUser user, Set<OrderDetail> orderDetails) {
-        this.user = user;
-        this.orderDetails = orderDetails;
-    }
+	public Order(GcUser user, Set<OrderDetail> orderDetails) {
+		this.user = user;
+		this.orderDetails = orderDetails;
+	}
 }

@@ -11,13 +11,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class GcProfileLevelRepository {
-    @Autowired
-    private EntityManager entityManager;
+	@Autowired private EntityManager entityManager;
 
-    public List<GcProfileLevel> queryChildren(@Param("user_id") int userId, @Param("level") int level) {
-        Session session = entityManager.unwrap(Session.class);
-        List<Object[]> results = session.createNativeQuery(
-                        """
+	public List<GcProfileLevel> queryChildren(
+			@Param("user_id") int userId, @Param("level") int level) {
+		Session session = entityManager.unwrap(Session.class);
+		List<Object[]> results =
+				session.createNativeQuery(
+								"""
 						WITH RECURSIVE userhierarchy AS (
 								SELECT
 										up.user_id,
@@ -49,19 +50,21 @@ public class GcProfileLevelRepository {
 						FROM
 								userhierarchy;
 				""")
-                .setParameter("user_id", userId)
-                .setParameter("level", level)
-                .list();
-        session.close();
+						.setParameter("user_id", userId)
+						.setParameter("level", level)
+						.list();
+		session.close();
 
-        return results.stream()
-                .map((result) -> new GcProfileLevel(
-                        (int) result[0],
-                        (String) result[1],
-                        (String) result[2],
-                        ((Timestamp) result[3]).toInstant(),
-                        (Integer) result[4],
-                        Integer.parseInt(result[5].toString())))
-                .toList();
-    }
+		return results.stream()
+				.map(
+						(result) ->
+								new GcProfileLevel(
+										(int) result[0],
+										(String) result[1],
+										(String) result[2],
+										((Timestamp) result[3]).toInstant(),
+										(Integer) result[4],
+										Integer.parseInt(result[5].toString())))
+				.toList();
+	}
 }

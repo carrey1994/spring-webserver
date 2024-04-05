@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Permission {
-    READ_PRIVILEGE("READ_PRIVILEGE"),
-    WRITE_PRIVILEGE("WRITE_PRIVILEGE");
+	READ_PRIVILEGE("READ_PRIVILEGE"),
+	WRITE_PRIVILEGE("WRITE_PRIVILEGE");
 
-    private final String privilege;
+	private final String privilege;
 }

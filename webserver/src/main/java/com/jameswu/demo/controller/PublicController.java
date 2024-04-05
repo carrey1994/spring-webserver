@@ -22,33 +22,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/public")
 public class PublicController {
 
-    @Autowired
-    public PublicController(
-            HealthService healthService, GitProperties gitProperties, UserManagementService userManagementService1) {
-        this.healthService = healthService;
-        this.gitProperties = gitProperties;
-        this.userManagementService = userManagementService1;
-    }
+	@Autowired
+	public PublicController(
+			HealthService healthService,
+			GitProperties gitProperties,
+			UserManagementService userManagementService1) {
+		this.healthService = healthService;
+		this.gitProperties = gitProperties;
+		this.userManagementService = userManagementService1;
+	}
 
-    private final HealthService healthService;
-    private final GitProperties gitProperties;
-    private final UserManagementService userManagementService;
+	private final HealthService healthService;
+	private final GitProperties gitProperties;
+	private final UserManagementService userManagementService;
 
-    @PostMapping("register")
-    public Result<UserProfile> register(@RequestBody @Valid UserPayload userPayload) {
-        return Result.success(userManagementService.register(userPayload));
-    }
+	@PostMapping("register")
+	public Result<UserProfile> register(@RequestBody @Valid UserPayload userPayload) {
+		return Result.success(userManagementService.register(userPayload));
+	}
 
-    @GetMapping("health")
-    public Result<String> checkHealth() {
-        return Result.success((healthService.checkHealth()));
-    }
+	@GetMapping("health")
+	public Result<String> checkHealth() {
+		return Result.success((healthService.checkHealth()));
+	}
 
-    @GetMapping("version")
-    public Result<Map<String, String>> version() {
-        String commitId = gitProperties.getCommitId();
-        String[] tags = Optional.ofNullable(Strings.split(gitProperties.get("tags"), ","))
-                .orElse(new String[] {GzTexts.NONE});
-        return Result.success((Map.of("id", commitId, "tag", tags[tags.length - 1])));
-    }
+	@GetMapping("version")
+	public Result<Map<String, String>> version() {
+		String commitId = gitProperties.getCommitId();
+		String[] tags =
+				Optional.ofNullable(Strings.split(gitProperties.get("tags"), ","))
+						.orElse(new String[] {GzTexts.NONE});
+		return Result.success((Map.of("id", commitId, "tag", tags[tags.length - 1])));
+	}
 }

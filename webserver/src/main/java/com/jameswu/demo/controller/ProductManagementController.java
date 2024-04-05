@@ -19,16 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class ProductManagementController {
 
-    @Autowired
-    private ProductManagementService productManagementService;
+	@Autowired private ProductManagementService productManagementService;
 
-    @PostMapping("add")
-    public Result<Product> add(@Valid @RequestBody ProductPayload payload) {
-        return Result.success(productManagementService.add(payload));
-    }
+	@PostMapping("add")
+	public Result<Product> add(@Valid @RequestBody ProductPayload payload) {
+		return Result.success(productManagementService.add(payload));
+	}
 
-    @PostMapping("specials/add")
-    public Result<RMap<String, String>> addSpecials(@Valid @RequestBody SpecialsPayload payload) {
-        return Result.success(productManagementService.addSpecials(payload));
-    }
+	@PostMapping("specials/add")
+	public Result<RMap<String, String>> addSpecials(@Valid @RequestBody SpecialsPayload payload) {
+		return Result.success(productManagementService.addSpecials(payload));
+	}
 }

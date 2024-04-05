@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemMail extends AbstractMail {
-    private String id;
-    private String name;
-    private String version;
+	private String id;
+	private String name;
+	private String version;
 
-    public SystemMail(String id, String name, String receiver, String version) {
-        super("system", "System notification!", receiver);
-        this.id = id;
-        this.name = name;
-        this.version = version;
-    }
+	public SystemMail(String id, String name, String receiver, String version) {
+		super("system", "System notification!", receiver);
+		this.id = id;
+		this.name = name;
+		this.version = version;
+	}
 }

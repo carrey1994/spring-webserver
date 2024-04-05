@@ -13,23 +13,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductManagementService {
 
-    private final ProductRepository productRepository;
-    private final RedisService redisService;
+	private final ProductRepository productRepository;
+	private final RedisService redisService;
 
-    @Autowired
-    public ProductManagementService(ProductRepository productRepository, RedisService redisService) {
-        this.productRepository = productRepository;
-        this.redisService = redisService;
-    }
+	@Autowired
+	public ProductManagementService(
+			ProductRepository productRepository, RedisService redisService) {
+		this.productRepository = productRepository;
+		this.redisService = redisService;
+	}
 
-    @Transactional
-    public Product add(ProductPayload payload) {
-        return productRepository.save(
-                new Product(payload.title(), payload.description(), payload.price(), payload.quantity()));
-    }
+	@Transactional
+	public Product add(ProductPayload payload) {
+		return productRepository.save(
+				new Product(
+						payload.title(),
+						payload.description(),
+						payload.price(),
+						payload.quantity()));
+	}
 
-    public RMap<String, String> addSpecials(SpecialsPayload payload) {
-        return redisService.setHashMap(
-                RedisKey.withProductPrefix(payload.productId()), payload.specialsDetailPayload());
-    }
+	public RMap<String, String> addSpecials(SpecialsPayload payload) {
+		return redisService.setHashMap(
+				RedisKey.withProductPrefix(payload.productId()), payload.specialsDetailPayload());
+	}
 }

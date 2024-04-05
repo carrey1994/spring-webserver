@@ -27,34 +27,34 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class SalesEvent implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sales_event_id", nullable = false)
-    private int salesEventId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "sales_event_id", nullable = false)
+	private int salesEventId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+	@Column(name = "name", nullable = false)
+	private String name;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+	@Column(name = "description", nullable = false)
+	private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "product_sales_event",
-            joinColumns = {@JoinColumn(name = "sales_event_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")})
-    @EqualsAndHashCode.Exclude
-    private Set<Product> products;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@JoinTable(
+			name = "product_sales_event",
+			joinColumns = {@JoinColumn(name = "sales_event_id")},
+			inverseJoinColumns = {@JoinColumn(name = "product_id")})
+	@EqualsAndHashCode.Exclude
+	private Set<Product> products;
 
-    @Column(name = "discount", precision = 10, scale = 2, nullable = false)
-    @DecimalMin(value = "0.00", message = "Discount must be greater than or equal to 0.00")
-    private BigDecimal discount;
+	@Column(name = "discount", precision = 10, scale = 2, nullable = false)
+	@DecimalMin(value = "0.00", message = "Discount must be greater than or equal to 0.00")
+	private BigDecimal discount;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-    @Column(name = "start_day", nullable = false)
-    private Instant startDay;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+	@Column(name = "start_day", nullable = false)
+	private Instant startDay;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-    @Column(name = "end_day", nullable = false)
-    private Instant endDay;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+	@Column(name = "end_day", nullable = false)
+	private Instant endDay;
 }

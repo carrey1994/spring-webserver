@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-    //    @EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.LOAD)
-    Page<Product> findAll(Pageable pageable);
+	//    @EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.LOAD)
+	Page<Product> findAll(Pageable pageable);
 }

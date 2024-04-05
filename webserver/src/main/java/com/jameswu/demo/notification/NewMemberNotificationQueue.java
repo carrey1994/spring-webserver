@@ -12,21 +12,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewMemberNotificationQueue extends NotificationQueue<UserProfile, NewMemberMail> {
 
-    private Logger logger = LoggerFactory.getLogger(NewMemberNotificationQueue.class);
+	private Logger logger = LoggerFactory.getLogger(NewMemberNotificationQueue.class);
 
-    @Override
-    protected AbstractMail formatHtml(UserProfile t) {
-        return new NewMemberMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail());
-    }
+	@Override
+	protected AbstractMail formatHtml(UserProfile t) {
+		return new NewMemberMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail());
+	}
 
-    @Override
-    @RabbitListener(queues = "NEW_USER_TAG")
-    protected void consume(NewMemberMail mail) {
-        super.consume(mail);
-    }
+	@Override
+	@RabbitListener(queues = "NEW_USER_TAG")
+	protected void consume(NewMemberMail mail) {
+		super.consume(mail);
+	}
 
-    @Override
-    protected QueueTag queueTag() {
-        return QueueTag.NEW_USER_TAG;
-    }
+	@Override
+	protected QueueTag queueTag() {
+		return QueueTag.NEW_USER_TAG;
+	}
 }

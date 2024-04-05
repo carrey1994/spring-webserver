@@ -11,18 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
+	@Bean
+	public MessageConverter jsonMessageConverter() {
+		return new Jackson2JsonMessageConverter();
+	}
 
-    @Bean
-    public MessageProperties messageProperties() {
-        return new MessageProperties();
-    }
+	@Bean
+	public MessageProperties messageProperties() {
+		return new MessageProperties();
+	}
 
-    @Bean
-    public RabbitAdmin rabbitAdmin(RabbitTemplate rabbitTemplate) {
-        return new RabbitAdmin(rabbitTemplate);
-    }
+	@Bean
+	public RabbitAdmin rabbitAdmin(RabbitTemplate rabbitTemplate) {
+		return new RabbitAdmin(rabbitTemplate);
+	}
 }

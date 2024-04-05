@@ -22,45 +22,45 @@ import lombok.Setter;
 @Setter
 public class Product implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", nullable = false)
-    private int productId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "product_id", nullable = false)
+	private int productId;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+	@Column(name = "title", nullable = false)
+	private String title;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+	@Column(name = "description", nullable = false)
+	private String description;
 
-    @Column(name = "price", precision = 10, scale = 2, nullable = false)
-    @DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0.00")
-    private BigDecimal price;
+	@Column(name = "price", precision = 10, scale = 2, nullable = false)
+	@DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0.00")
+	private BigDecimal price;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
+	@Column(name = "quantity", nullable = false)
+	private int quantity;
 
-    public Product(String title, String description, BigDecimal price, int quantity) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.quantity = quantity;
-    }
+	public Product(String title, String description, BigDecimal price, int quantity) {
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.quantity = quantity;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Product product = (Product) object;
-        return productId == product.productId
-                && quantity == product.quantity
-                && Objects.equals(title, product.title)
-                && Objects.equals(description, product.description)
-                && Objects.equals(price, product.price);
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (object == null || getClass() != object.getClass()) return false;
+		Product product = (Product) object;
+		return productId == product.productId
+				&& quantity == product.quantity
+				&& Objects.equals(title, product.title)
+				&& Objects.equals(description, product.description)
+				&& Objects.equals(price, product.price);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(productId, title, description, price, quantity);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(productId, title, description, price, quantity);
+	}
 }

@@ -26,41 +26,37 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProfile implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id", nullable = false)
+	private int userId;
 
-    @Column
-    @Email
-    private String email;
+	@Column @Email private String email;
 
-    @Column(nullable = false)
-    private String address;
+	@Column(nullable = false)
+	private String address;
 
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-    private Instant enrollmentDate;
+	@Column(nullable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+	private Instant enrollmentDate;
 
-    /* If member joins by himself, recommenderId assigned null. */
-    @Column
-    @Nullable
-    private Integer recommenderId;
+	/* If member joins by himself, recommenderId assigned null. */
+	@Column @Nullable private Integer recommenderId;
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        UserProfile that = (UserProfile) object;
-        return userId == that.userId
-                && Objects.equals(email, that.email)
-                && Objects.equals(address, that.address)
-                && Objects.equals(enrollmentDate, that.enrollmentDate)
-                && Objects.equals(recommenderId, that.recommenderId);
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (object == null || getClass() != object.getClass()) return false;
+		UserProfile that = (UserProfile) object;
+		return userId == that.userId
+				&& Objects.equals(email, that.email)
+				&& Objects.equals(address, that.address)
+				&& Objects.equals(enrollmentDate, that.enrollmentDate)
+				&& Objects.equals(recommenderId, that.recommenderId);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, email, address, enrollmentDate, recommenderId);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId, email, address, enrollmentDate, recommenderId);
+	}
 }

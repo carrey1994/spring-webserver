@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class IndexController {
 
-    @Autowired
-    public IndexController(IndexService indexService) {
-        this.indexService = indexService;
-    }
+	@Autowired
+	public IndexController(IndexService indexService) {
+		this.indexService = indexService;
+	}
 
-    private final IndexService indexService;
+	private final IndexService indexService;
 
-    @PostMapping("login")
-    public Result<Map<String, String>> login(@Valid @RequestBody LoginPayload payload) {
-        return Result.success(indexService.login(payload));
-    }
+	@PostMapping("login")
+	public Result<Map<String, String>> login(@Valid @RequestBody LoginPayload payload) {
+		return Result.success(indexService.login(payload));
+	}
 }

@@ -123,7 +123,7 @@
         <dependency>
             <groupId>com.google.googlejavaformat</groupId>
             <artifactId>google-java-format</artifactId>
-            <version>1.15.0</version>
+            <version>1.19.2</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -183,7 +183,14 @@
                         <googleJavaFormat>
                             <version>1.19.2</version>
                             <style>AOSP</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
                         </googleJavaFormat>
+                        <formatAnnotations/>
+                        <indent>
+                            <tabs>true</tabs>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
                         <replaceRegex>
                             <name>Remove wildcard imports</name>
                             <searchRegex>import\s+[^\*\s]+\*;(\r\n|\r|\n)</searchRegex>
@@ -192,14 +199,7 @@
                         <importOrder/>
                         <removeUnusedImports/>
                         <toggleOffOn/>
-                        <trimTrailingWhitespace/>
                         <endWithNewline/>
-                        <indent>
-                            <tabs>true</tabs>
-                            <spacesPerTab>2</spacesPerTab>
-                        </indent>
-                        <googleJavaFormat/>
-                        <palantirJavaFormat/>
                     </java>
                 </configuration>
             </plugin>

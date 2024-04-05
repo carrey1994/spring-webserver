@@ -19,56 +19,64 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
-    private final OrderDetailRepository orderDetailRepository;
-    private final RedisService redisService;
+	private final OrderRepository orderRepository;
+	private final ProductRepository productRepository;
+	private final OrderDetailRepository orderDetailRepository;
+	private final RedisService redisService;
 
-    @Autowired
-    public OrderService(
-            OrderRepository orderRepository,
-            ProductRepository productRepository,
-            OrderDetailRepository orderDetailRepository,
-            RedisService redisService) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.orderDetailRepository = orderDetailRepository;
-        this.redisService = redisService;
-    }
+	@Autowired
+	public OrderService(
+			OrderRepository orderRepository,
+			ProductRepository productRepository,
+			OrderDetailRepository orderDetailRepository,
+			RedisService redisService) {
+		this.orderRepository = orderRepository;
+		this.productRepository = productRepository;
+		this.orderDetailRepository = orderDetailRepository;
+		this.redisService = redisService;
+	}
 
-    @Transactional
-    public Order createOrder(GcUser gcUser, NewOrderPayload payload) {
-        Order order = orderRepository.save(new Order(gcUser, Set.of()));
-        Iterable<Product> restoredProducts =
-                productRepository.findAllById(payload.productIdToBuyProductPayload().keySet().stream()
-                        .map(Integer::valueOf)
-                        .toList());
-        Set<OrderDetail> detailList = new HashSet<>();
-        restoredProducts.forEach(restoredProduct -> {
-            BuyingProductPayload buyingProduct =
-                    payload.productIdToBuyProductPayload().get(String.valueOf(restoredProduct.getProductId()));
-            int buyingQuantity = buyingProduct.quantity();
-            int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
-            if (updatedQuantity < 0) {
-                throw new IllegalArgumentException("Product quantity not enough");
-            }
-            restoredProduct.setQuantity(updatedQuantity);
-            OrderDetail orderDetail = new OrderDetail(
-                    restoredProduct, order, buyingQuantity, restoredProduct.getPrice(), buyingProduct.couponId());
-            detailList.add(orderDetail);
-        });
-        order.setOrderDetails(detailList);
-        orderDetailRepository.saveAll(detailList);
-        return order;
-    }
+	@Transactional
+	public Order createOrder(GcUser gcUser, NewOrderPayload payload) {
+		Order order = orderRepository.save(new Order(gcUser, Set.of()));
+		Iterable<Product> restoredProducts =
+				productRepository.findAllById(
+						payload.productIdToBuyProductPayload().keySet().stream()
+								.map(Integer::valueOf)
+								.toList());
+		Set<OrderDetail> detailList = new HashSet<>();
+		restoredProducts.forEach(
+				restoredProduct -> {
+					BuyingProductPayload buyingProduct =
+							payload.productIdToBuyProductPayload()
+									.get(String.valueOf(restoredProduct.getProductId()));
+					int buyingQuantity = buyingProduct.quantity();
+					int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
+					if (updatedQuantity < 0) {
+						throw new IllegalArgumentException("Product quantity not enough");
+					}
+					restoredProduct.setQuantity(updatedQuantity);
+					OrderDetail orderDetail =
+							new OrderDetail(
+									restoredProduct,
+									order,
+									buyingQuantity,
+									restoredProduct.getPrice(),
+									buyingProduct.couponId());
+					detailList.add(orderDetail);
+				});
+		order.setOrderDetails(detailList);
+		orderDetailRepository.saveAll(detailList);
+		return order;
+	}
 
-    public List<Product> createSpecialsOrder(NewOrderPayload newOrderPayload) {
-        // todo:
-        // 1. reduce the quantity in redis, make sure this step is atomic. lua or maybe reddison
-        // support
-        // 2. mock payment and create order to redis queue
-        // 3. async order saving to database
-        redisService.setKeyValue("hello", "world");
-        return List.of();
-    }
+	public List<Product> createSpecialsOrder(NewOrderPayload newOrderPayload) {
+		// todo:
+		// 1. reduce the quantity in redis, make sure this step is atomic. lua or maybe reddison
+		// support
+		// 2. mock payment and create order to redis queue
+		// 3. async order saving to database
+		redisService.setKeyValue("hello", "world");
+		return List.of();
+	}
 }

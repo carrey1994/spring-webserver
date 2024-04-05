@@ -18,19 +18,23 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class RedisConfig {
 
-    private RedisInstance master;
-    private List<RedisInstance> slaves;
-    private static final String REDIS_BASE_URL = "redis://%1s:%2s";
+	private RedisInstance master;
+	private List<RedisInstance> slaves;
+	private static final String REDIS_BASE_URL = "redis://%1s:%2s";
 
-    @Bean
-    public RedissonClient redisClient() {
-        Config config = new Config();
-        MasterSlaveServersConfig masterSlaveServersConfig = config.useMasterSlaveServers()
-                .setMasterAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
-        config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
-        config.setCodec(new JsonJacksonCodec());
-        slaves.forEach(slave ->
-                masterSlaveServersConfig.addSlaveAddress(String.format(REDIS_BASE_URL, slave.host(), slave.port())));
-        return Redisson.create(config);
-    }
+	@Bean
+	public RedissonClient redisClient() {
+		Config config = new Config();
+		MasterSlaveServersConfig masterSlaveServersConfig =
+				config.useMasterSlaveServers()
+						.setMasterAddress(
+								String.format(REDIS_BASE_URL, master.host(), master.port()));
+		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
+		config.setCodec(new JsonJacksonCodec());
+		slaves.forEach(
+				slave ->
+						masterSlaveServersConfig.addSlaveAddress(
+								String.format(REDIS_BASE_URL, slave.host(), slave.port())));
+		return Redisson.create(config);
+	}
 }

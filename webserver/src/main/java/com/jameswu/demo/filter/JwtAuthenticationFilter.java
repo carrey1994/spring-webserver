@@ -28,49 +28,50 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    public JwtAuthenticationFilter(
-            JwtService jwtService,
-            CacheService cacheService,
-            ObjectMapper objectMapper,
-            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-        this.jwtService = jwtService;
-        this.cacheService = cacheService;
-        this.objectMapper = objectMapper;
-        this.resolver = resolver;
-    }
+	@Autowired
+	public JwtAuthenticationFilter(
+			JwtService jwtService,
+			CacheService cacheService,
+			ObjectMapper objectMapper,
+			@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+		this.jwtService = jwtService;
+		this.cacheService = cacheService;
+		this.objectMapper = objectMapper;
+		this.resolver = resolver;
+	}
 
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver resolver;
+	@Qualifier("handlerExceptionResolver") private HandlerExceptionResolver resolver;
 
-    private final JwtService jwtService;
-    private final ObjectMapper objectMapper;
-    private final CacheService cacheService;
+	private final JwtService jwtService;
+	private final ObjectMapper objectMapper;
+	private final CacheService cacheService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/v1/login")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+	@Override
+	protected void doFilterInternal(
+			HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		if (request.getServletPath().contains("/api/v1/login")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!request.getServletPath().contains("/api/v1/public") && authHeader != null) {
-            String accessToken = authHeader.replace(GzTexts.BEARER_PREFIX, "");
-            try {
-                int id = jwtService
-                        .parsePayload(accessToken, JwtService.JWT_USER, UserProfile.class)
-                        .getUserId();
-                GcUser user = cacheService.retrieveOrLoadUser(id);
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (ExpiredJwtException | SignatureException e) {
-                resolver.resolveException(request, response, null, e);
-                return;
-            }
-        }
-        filterChain.doFilter(request, response);
-    }
+		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+		if (!request.getServletPath().contains("/api/v1/public") && authHeader != null) {
+			String accessToken = authHeader.replace(GzTexts.BEARER_PREFIX, "");
+			try {
+				int id =
+						jwtService
+								.parsePayload(accessToken, JwtService.JWT_USER, UserProfile.class)
+								.getUserId();
+				GcUser user = cacheService.retrieveOrLoadUser(id);
+				Authentication authentication =
+						new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			} catch (ExpiredJwtException | SignatureException e) {
+				resolver.resolveException(request, response, null, e);
+				return;
+			}
+		}
+		filterChain.doFilter(request, response);
+	}
 }

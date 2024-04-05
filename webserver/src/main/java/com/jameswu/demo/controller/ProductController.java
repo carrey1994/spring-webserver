@@ -16,25 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/product")
 public class ProductController {
 
-    private final ProductService productService;
+	private final ProductService productService;
 
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+	@Autowired
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
 
-    @GetMapping("all")
-    public Result<List<Product>> all(Pageable pageable) {
-        return Result.success(productService.all(pageable));
-    }
+	@GetMapping("all")
+	public Result<List<Product>> all(Pageable pageable) {
+		return Result.success(productService.all(pageable));
+	}
 
-    @GetMapping("specials/all")
-    public Result<List<SpecialsPayload>> specials() {
-        return Result.success(productService.specials());
-    }
+	@GetMapping("specials/all")
+	public Result<List<SpecialsPayload>> specials() {
+		return Result.success(productService.specials());
+	}
 
-    @GetMapping("specials")
-    public Result<SpecialsPayload> specialsById(@PathParam("productId") int productId) {
-        return Result.success(productService.specialsById(productId));
-    }
+	@GetMapping("specials")
+	public Result<SpecialsPayload> specialsById(@PathParam("productId") int productId) {
+		return Result.success(productService.specialsById(productId));
+	}
 }

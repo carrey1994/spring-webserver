@@ -9,17 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class HealthService {
 
-    private final RedisService redisService;
+	private final RedisService redisService;
 
-    @Autowired
-    public HealthService(RedisService redisService) {
-        this.redisService = redisService;
-    }
+	@Autowired
+	public HealthService(RedisService redisService) {
+		this.redisService = redisService;
+	}
 
-    @Transactional
-    public String checkHealth() {
-        String timeText = String.valueOf(Instant.now());
-        redisService.setKeyValue(GzTexts.HEALTH_CHECK_ON, timeText);
-        return timeText;
-    }
+	@Transactional
+	public String checkHealth() {
+		String timeText = String.valueOf(Instant.now());
+		redisService.setKeyValue(GzTexts.HEALTH_CHECK_ON, timeText);
+		return timeText;
+	}
 }
