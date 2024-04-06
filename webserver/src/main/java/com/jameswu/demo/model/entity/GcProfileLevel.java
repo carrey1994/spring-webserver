@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GcProfileLevel implements Serializable {
 	private int userId;
+	private String nickname;
 	private String email;
 	private String address;
 
@@ -22,6 +23,6 @@ public class GcProfileLevel implements Serializable {
 	private int level;
 
 	public UserProfile toUserProfile() {
-		return new UserProfile(userId, email, address, enrollmentDate, recommenderId);
+		return new UserProfile(userId, email, nickname, address, enrollmentDate, recommenderId);
 	}
 }

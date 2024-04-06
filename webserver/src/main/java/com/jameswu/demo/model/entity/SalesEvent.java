@@ -17,15 +17,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 @Table
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class SalesEvent implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

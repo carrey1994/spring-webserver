@@ -39,32 +39,28 @@ public class OrderService {
 	@Transactional
 	public Order createOrder(GcUser gcUser, NewOrderPayload payload) {
 		Order order = orderRepository.save(new Order(gcUser, Set.of()));
-		Iterable<Product> restoredProducts =
-				productRepository.findAllById(
-						payload.productIdToBuyProductPayload().keySet().stream()
-								.map(Integer::valueOf)
-								.toList());
+		Iterable<Product> restoredProducts = productRepository.findAllById(
+				payload.productIdToBuyProductPayload().keySet().stream()
+						.map(Integer::valueOf)
+						.toList());
 		Set<OrderDetail> detailList = new HashSet<>();
-		restoredProducts.forEach(
-				restoredProduct -> {
-					BuyingProductPayload buyingProduct =
-							payload.productIdToBuyProductPayload()
-									.get(String.valueOf(restoredProduct.getProductId()));
-					int buyingQuantity = buyingProduct.quantity();
-					int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
-					if (updatedQuantity < 0) {
-						throw new IllegalArgumentException("Product quantity not enough");
-					}
-					restoredProduct.setQuantity(updatedQuantity);
-					OrderDetail orderDetail =
-							new OrderDetail(
-									restoredProduct,
-									order,
-									buyingQuantity,
-									restoredProduct.getPrice(),
-									buyingProduct.couponId());
-					detailList.add(orderDetail);
-				});
+		restoredProducts.forEach(restoredProduct -> {
+			BuyingProductPayload buyingProduct = payload.productIdToBuyProductPayload()
+					.get(String.valueOf(restoredProduct.getProductId()));
+			int buyingQuantity = buyingProduct.quantity();
+			int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
+			if (updatedQuantity < 0) {
+				throw new IllegalArgumentException("Product quantity not enough");
+			}
+			restoredProduct.setQuantity(updatedQuantity);
+			OrderDetail orderDetail = new OrderDetail(
+					restoredProduct,
+					order,
+					buyingQuantity,
+					restoredProduct.getPrice(),
+					buyingProduct.couponId());
+			detailList.add(orderDetail);
+		});
 		order.setOrderDetails(detailList);
 		orderDetailRepository.saveAll(detailList);
 		return order;

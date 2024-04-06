@@ -121,9 +121,9 @@
             <version>3.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.google.googlejavaformat</groupId>
-            <artifactId>google-java-format</artifactId>
-            <version>1.19.2</version>
+            <groupId>com.palantir.javaformat</groupId>
+            <artifactId>palantir-java-format</artifactId>
+            <version>2.41.0</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -180,12 +180,10 @@
                 </executions>
                 <configuration>
                     <java>
-                        <googleJavaFormat>
-                            <version>1.19.2</version>
-                            <style>AOSP</style>
-                            <reflowLongStrings>true</reflowLongStrings>
-                            <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
-                        </googleJavaFormat>
+                        <palantirJavaFormat>
+                            <version>2.41.0</version>                     <!-- optional -->
+                            <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                        </palantirJavaFormat>
                         <formatAnnotations/>
                         <indent>
                             <tabs>true</tabs>

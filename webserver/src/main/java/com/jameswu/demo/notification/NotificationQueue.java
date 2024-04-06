@@ -12,9 +12,11 @@ public abstract class NotificationQueue<T, M extends AbstractMail> {
 	/**
 	 * @Autowire failed by constructor way.
 	 */
-	@Autowired private NotificationSender notificationSender;
+	@Autowired
+	private NotificationSender notificationSender;
 
-	@Autowired private RabbitService rabbitService;
+	@Autowired
+	private RabbitService rabbitService;
 
 	public void publish(T ts) {
 		rabbitService.sendMessage(queueTag().name(), formatHtml(ts));

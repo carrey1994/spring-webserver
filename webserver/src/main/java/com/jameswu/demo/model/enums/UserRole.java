@@ -20,10 +20,9 @@ public enum UserRole {
 	}
 
 	public List<SimpleGrantedAuthority> getAuthorities() {
-		var authorities =
-				getPermissions().stream()
-						.map(permission -> new SimpleGrantedAuthority(permission.getPrivilege()))
-						.collect(Collectors.toList());
+		var authorities = getPermissions().stream()
+				.map(permission -> new SimpleGrantedAuthority(permission.getPrivilege()))
+				.collect(Collectors.toList());
 		authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + name()));
 		return authorities;
 	}

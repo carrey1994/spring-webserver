@@ -30,9 +30,8 @@ public class UserController {
 	@PutMapping("update")
 	public Result<UserProfile> updateUserProfile(
 			Authentication authentication, @Valid @RequestBody UserProfilePayload userProfile) {
-		return Result.success(
-				userService.updateUserProfile(
-						((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
+		return Result.success(userService.updateUserProfile(
+				((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
 	}
 
 	@GetMapping("me")

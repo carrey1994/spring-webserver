@@ -15,15 +15,12 @@ import jakarta.validation.constraints.DecimalMin;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 @Table
 @Entity(name = "order_detail")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class OrderDetail implements Serializable {
 
 	@Id

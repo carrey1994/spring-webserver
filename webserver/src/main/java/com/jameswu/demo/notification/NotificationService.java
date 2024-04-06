@@ -31,11 +31,10 @@ public class NotificationService {
 
 	@PostConstruct
 	public void initQueues() {
-		notificationQueues.forEach(
-				queue -> {
-					rabbitAdmin.declareQueue(new Queue(queue.queueTag().name()));
-					queueMap.put(queue.queueTag(), queue);
-				});
+		notificationQueues.forEach(queue -> {
+			rabbitAdmin.declareQueue(new Queue(queue.queueTag().name()));
+			queueMap.put(queue.queueTag(), queue);
+		});
 	}
 
 	@SneakyThrows

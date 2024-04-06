@@ -2,6 +2,7 @@ package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.payload.SpecialsPayload;
+import com.jameswu.demo.model.response.CommentResponse;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.ProductService;
 import jakarta.websocket.server.PathParam;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,5 +38,15 @@ public class ProductController {
 	@GetMapping("specials")
 	public Result<SpecialsPayload> specialsById(@PathParam("productId") int productId) {
 		return Result.success(productService.specialsById(productId));
+	}
+
+	@GetMapping("comments")
+	public Result<List<CommentResponse>> comments(Pageable pageable, @RequestParam int productId) {
+		return Result.success(productService.comments(pageable, productId));
+	}
+
+	@GetMapping("comments/replies")
+	public Result<List<CommentResponse>> replies(@RequestParam int parentCommentId) {
+		return Result.success(productService.replies(parentCommentId));
 	}
 }

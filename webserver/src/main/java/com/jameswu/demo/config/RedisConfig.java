@@ -25,16 +25,12 @@ public class RedisConfig {
 	@Bean
 	public RedissonClient redisClient() {
 		Config config = new Config();
-		MasterSlaveServersConfig masterSlaveServersConfig =
-				config.useMasterSlaveServers()
-						.setMasterAddress(
-								String.format(REDIS_BASE_URL, master.host(), master.port()));
+		MasterSlaveServersConfig masterSlaveServersConfig = config.useMasterSlaveServers()
+				.setMasterAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
 		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
 		config.setCodec(new JsonJacksonCodec());
-		slaves.forEach(
-				slave ->
-						masterSlaveServersConfig.addSlaveAddress(
-								String.format(REDIS_BASE_URL, slave.host(), slave.port())));
+		slaves.forEach(slave -> masterSlaveServersConfig.addSlaveAddress(
+				String.format(REDIS_BASE_URL, slave.host(), slave.port())));
 		return Redisson.create(config);
 	}
 }

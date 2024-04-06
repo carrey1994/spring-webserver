@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CacheService {
 
-	@Autowired private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	private final Map<Integer, GcUser> userCache = new ConcurrentHashMap<>();
 	private final Set<Integer> specialsCache = new HashSet<>();
@@ -21,10 +22,9 @@ public class CacheService {
 		if (userCache.containsKey(userId)) {
 			return userCache.get(userId);
 		} else {
-			GcUser user =
-					userRepository
-							.findByUserId(userId)
-							.orElseThrow(() -> new IllegalArgumentException("the user not found"));
+			GcUser user = userRepository
+					.findByUserId(userId)
+					.orElseThrow(() -> new IllegalArgumentException("the user not found"));
 			userCache.put(userId, user);
 			return user;
 		}

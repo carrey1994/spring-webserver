@@ -35,30 +35,27 @@ public class JwtService {
 	}
 
 	public String generateToken(GcUser user) {
-		Claims claims =
-				Jwts.claims()
-						.add(JWT_USER, user.getProfile())
-						.expiration(new Date(System.currentTimeMillis() + refreshTime))
-						.issuedAt(new Date((System.currentTimeMillis())))
-						.issuer(JWT_KEY)
-						.build();
+		Claims claims = Jwts.claims()
+				.add(JWT_USER, user.getProfile())
+				.expiration(new Date(System.currentTimeMillis() + refreshTime))
+				.issuedAt(new Date((System.currentTimeMillis())))
+				.issuer(JWT_KEY)
+				.build();
 
-		String newToken =
-				Jwts.builder()
-						.json(new JacksonSerializer<>(objectMapper))
-						.claims(claims)
-						.signWith(secretKey)
-						.compact();
+		String newToken = Jwts.builder()
+				.json(new JacksonSerializer<>(objectMapper))
+				.claims(claims)
+				.signWith(secretKey)
+				.compact();
 		redisService.setKeyValue(String.valueOf(user.getUserId()), newToken);
 		return newToken;
 	}
 
 	public <T> T parsePayload(String token, String key, Class<T> clazz) {
-		JwtParser parser =
-				Jwts.parser()
-						.json(new JacksonDeserializer<>(objectMapper))
-						.verifyWith(secretKey)
-						.build();
+		JwtParser parser = Jwts.parser()
+				.json(new JacksonDeserializer<>(objectMapper))
+				.verifyWith(secretKey)
+				.build();
 		Claims claims = parser.parseSignedClaims(token).getPayload();
 		// TODO: fix JacksonDeserializer to call claims.get(key, clazz) directly
 		return objectMapper.convertValue(claims.get(key, Map.class), clazz);

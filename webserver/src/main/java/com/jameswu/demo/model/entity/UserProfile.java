@@ -31,7 +31,12 @@ public class UserProfile implements Serializable {
 	@Column(name = "user_id", nullable = false)
 	private int userId;
 
-	@Column @Email private String email;
+	@Column
+	@Email(message = "Invalid Email", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+	private String email;
+
+	@Column(nullable = false)
+	private String nickname;
 
 	@Column(nullable = false)
 	private String address;
@@ -41,7 +46,8 @@ public class UserProfile implements Serializable {
 	private Instant enrollmentDate;
 
 	/* If member joins by himself, recommenderId assigned null. */
-	@Column @Nullable private Integer recommenderId;
+	@Column
+	@Nullable private Integer recommenderId;
 
 	@Override
 	public boolean equals(Object object) {
@@ -50,6 +56,7 @@ public class UserProfile implements Serializable {
 		UserProfile that = (UserProfile) object;
 		return userId == that.userId
 				&& Objects.equals(email, that.email)
+				&& Objects.equals(nickname, that.nickname)
 				&& Objects.equals(address, that.address)
 				&& Objects.equals(enrollmentDate, that.enrollmentDate)
 				&& Objects.equals(recommenderId, that.recommenderId);
@@ -57,6 +64,6 @@ public class UserProfile implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId, email, address, enrollmentDate, recommenderId);
+		return Objects.hash(userId, email, nickname, address, enrollmentDate, recommenderId);
 	}
 }

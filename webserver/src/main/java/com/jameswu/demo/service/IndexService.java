@@ -23,10 +23,8 @@ public class IndexService {
 	}
 
 	public Map<String, String> login(LoginPayload payload) {
-		Authentication authentication =
-				authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(
-								payload.username(), payload.password()));
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(payload.username(), payload.password()));
 		String jwt = jwtService.generateToken((GcUser) authentication.getPrincipal());
 		return Map.of(GzTexts.ACCESS_TOKEN, jwt);
 	}

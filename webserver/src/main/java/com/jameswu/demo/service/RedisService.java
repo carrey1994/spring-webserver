@@ -108,7 +108,8 @@ public class RedisService {
 
 	public void redisIdx() {
 
-		Codec codec = new CompositeCodec(StringCodec.INSTANCE, redisson.getConfig().getCodec());
+		Codec codec =
+				new CompositeCodec(StringCodec.INSTANCE, redisson.getConfig().getCodec());
 
 		RMap m = redisson.getMap("doc:1", codec);
 		//        m.put("inventory", new SimpleObject("name1"));
@@ -127,14 +128,12 @@ public class RedisService {
 				FieldIndex.text("inventory"),
 				FieldIndex.text("booked"));
 
-		SearchResult r =
-				s.search(
-						"idx",
-						"*",
-						QueryOptions.defaults()
-								.returnAttributes(
-										new ReturnAttribute("inventory"),
-										new ReturnAttribute("booked")));
+		SearchResult r = s.search(
+				"idx",
+				"*",
+				QueryOptions.defaults()
+						.returnAttributes(
+								new ReturnAttribute("inventory"), new ReturnAttribute("booked")));
 		System.out.println();
 
 		//        RSearch s = redisson.getSearch();

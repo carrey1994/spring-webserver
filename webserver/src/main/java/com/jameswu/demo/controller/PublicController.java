@@ -49,9 +49,8 @@ public class PublicController {
 	@GetMapping("version")
 	public Result<Map<String, String>> version() {
 		String commitId = gitProperties.getCommitId();
-		String[] tags =
-				Optional.ofNullable(Strings.split(gitProperties.get("tags"), ","))
-						.orElse(new String[] {GzTexts.NONE});
+		String[] tags = Optional.ofNullable(Strings.split(gitProperties.get("tags"), ","))
+				.orElse(new String[] {GzTexts.NONE});
 		return Result.success((Map.of("id", commitId, "tag", tags[tags.length - 1])));
 	}
 }

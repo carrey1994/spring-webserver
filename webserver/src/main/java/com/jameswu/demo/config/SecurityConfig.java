@@ -41,62 +41,47 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		String[] publicRouter =
-				new String[] {
-					"/",
-					"/api/v1/login",
-					"/api/v1/logout",
-					"/api/v1/health/**",
-					"/api/v1/api-docs/**",
-					"/api/v1/public/**",
-					"/*.svg",
-					"/index.html",
-					"/swagger-ui/**",
-					"/main.css",
-					"/app.js",
-					"/favicon.ico",
-					"/gs-guide-websocket/**"
-				};
+		String[] publicRouter = new String[] {
+			"/",
+			"/api/v1/login",
+			"/api/v1/logout",
+			"/api/v1/health/**",
+			"/api/v1/api-docs/**",
+			"/api/v1/public/**",
+			"/*.svg",
+			"/index.html",
+			"/swagger-ui/**",
+			"/main.css",
+			"/app.js",
+			"/favicon.ico",
+			"/gs-guide-websocket/**"
+		};
 
 		http.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(
-						authz ->
-								authz.requestMatchers(publicRouter)
-										.permitAll()
-										.requestMatchers("/api/v1/user/**")
-										.hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
-										.requestMatchers("/api/v1/user/management/**")
-										.hasAnyRole(UserRole.ADMIN.name())
-										.requestMatchers("/api/v1/product/management/**")
-										.hasRole(UserRole.ADMIN.name())
-										.anyRequest()
-										.authenticated())
+				.authorizeHttpRequests(authz -> authz.requestMatchers(publicRouter)
+						.permitAll()
+						.requestMatchers("/api/v1/user/**")
+						.hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
+						.requestMatchers("/api/v1/user/management/**")
+						.hasAnyRole(UserRole.ADMIN.name())
+						.requestMatchers("/api/v1/product/management/**")
+						.hasRole(UserRole.ADMIN.name())
+						.anyRequest()
+						.authenticated())
 				.sessionManagement(
 						session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(
 						jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.logout(
-						logout ->
-								logout.logoutUrl("/api/v1/logout")
-										.logoutSuccessHandler(
-												(request, response, authentication) -> {
-													String jwt =
-															request.getHeader(
-																			HttpHeaders
-																					.AUTHORIZATION)
-																	.replace(
-																			GzTexts.BEARER_PREFIX,
-																			"");
-													jwtService.removeToken(jwt);
-													SecurityContextHolder.clearContext();
-													cacheService.removeIdFromUserCache(
-															jwtService
-																	.parsePayload(
-																			jwt,
-																			JwtService.JWT_USER,
-																			UserProfile.class)
-																	.getUserId());
-												}));
+				.logout(logout -> logout.logoutUrl("/api/v1/logout")
+						.logoutSuccessHandler((request, response, authentication) -> {
+							String jwt = request.getHeader(HttpHeaders.AUTHORIZATION)
+									.replace(GzTexts.BEARER_PREFIX, "");
+							jwtService.removeToken(jwt);
+							SecurityContextHolder.clearContext();
+							cacheService.removeIdFromUserCache(jwtService
+									.parsePayload(jwt, JwtService.JWT_USER, UserProfile.class)
+									.getUserId());
+						}));
 		return http.build();
 	}
 }

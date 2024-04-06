@@ -24,7 +24,8 @@ public class BeansConfig {
 	@Bean
 	@Primary
 	public ObjectMapper objectMapper() {
-		ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+		ObjectMapper objectMapper =
+				JsonMapper.builder().addModule(new JavaTimeModule()).build();
 		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
 		return objectMapper;
 	}
@@ -51,10 +52,9 @@ public class BeansConfig {
 
 	@Bean
 	public UserDetailsService userDetailsService(UserRepository userRepository) {
-		return username ->
-				userRepository
-						.findByUsername(username)
-						.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		return username -> userRepository
+				.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
 	@Bean

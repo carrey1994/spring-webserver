@@ -19,10 +19,9 @@ public class UserService {
 
 	@Transactional
 	public UserProfile updateUserProfile(int userId, UserProfilePayload userProfilePayload) {
-		UserProfile userProfile =
-				userProfileRepository
-						.findById(userId)
-						.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		UserProfile userProfile = userProfileRepository
+				.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
 		userProfile.setAddress(userProfilePayload.address());
 		userProfile.setEmail(userProfilePayload.email());
 		return userProfileRepository.save(userProfile);

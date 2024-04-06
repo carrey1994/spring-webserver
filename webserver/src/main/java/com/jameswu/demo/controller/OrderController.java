@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class OrderController {
 
-	@Autowired private OrderService orderService;
+	@Autowired
+	private OrderService orderService;
 
-	@Autowired private RedisService redisService;
+	@Autowired
+	private RedisService redisService;
 
 	@PostMapping("create")
 	public Result<Order> createOrder(

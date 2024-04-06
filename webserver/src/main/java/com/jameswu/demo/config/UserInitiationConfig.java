@@ -62,25 +62,22 @@ public class UserInitiationConfig {
 		Product c = new Product("C Ins.", "CC", BigDecimal.valueOf(300L), 300);
 		var products = List.of(a, b, c);
 		productRepository.saveAll(List.of(a, b, c));
-		List<GcUser> gcUsers =
-				users.stream()
-						.map(
-								user ->
-										GcUser.builder()
-												.userId(user.id)
-												.userStatus(UserStatus.ACTIVE)
-												.userRole(user.role)
-												.username(user.username)
-												.password(passwordEncoder.encode(user.password))
-												.profile(
-														new UserProfile(
-																user.id,
-																user.username + "@gc.mail",
-																"Taipei",
-																Instant.now(),
-																user.recommenderId))
-												.build())
-						.toList();
+		List<GcUser> gcUsers = users.stream()
+				.map(user -> GcUser.builder()
+						.userId(user.id)
+						.userStatus(UserStatus.ACTIVE)
+						.userRole(user.role)
+						.username(user.username)
+						.password(passwordEncoder.encode(user.password))
+						.profile(new UserProfile(
+								user.id,
+								user.username + "@gc.mail",
+								user.username,
+								"Taipei",
+								Instant.now(),
+								user.recommenderId))
+						.build())
+				.toList();
 		var users = userRepository.saveAll(gcUsers);
 		//        for (GcUser user : users) {
 		//            Order order = new Order(user, Set.of());

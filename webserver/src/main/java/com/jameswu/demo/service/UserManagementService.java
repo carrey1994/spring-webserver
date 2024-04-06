@@ -45,38 +45,31 @@ public class UserManagementService {
 
 	@Transactional
 	public UserProfile register(UserPayload userPayload) {
-		userRepository
-				.findByUsername(userPayload.username())
-				.ifPresent(
-						gcUser -> {
-							throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
-						});
+		userRepository.findByUsername(userPayload.username()).ifPresent(gcUser -> {
+			throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
+		});
 		if (userPayload.recommenderId() != null) {
 			userRepository
 					.findById(userPayload.recommenderId())
-					.ifPresentOrElse(
-							action -> {},
-							() -> {
-								throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
-							});
+					.ifPresentOrElse(action -> {}, () -> {
+						throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
+					});
 		}
 
-		UserProfile userProfile =
-				UserProfile.builder()
-						.email(userPayload.email())
-						.address(userPayload.address())
-						.enrollmentDate(userPayload.date())
-						.recommenderId(userPayload.recommenderId())
-						.build();
+		UserProfile userProfile = UserProfile.builder()
+				.email(userPayload.email())
+				.address(userPayload.address())
+				.enrollmentDate(userPayload.date())
+				.recommenderId(userPayload.recommenderId())
+				.build();
 
-		GcUser newUser =
-				GcUser.builder()
-						.username(userPayload.username())
-						.password(bCryptPasswordEncoder.encode(userPayload.password()))
-						.userRole(UserRole.USER)
-						.userStatus(UserStatus.ACTIVE)
-						.profile(userProfile)
-						.build();
+		GcUser newUser = GcUser.builder()
+				.username(userPayload.username())
+				.password(bCryptPasswordEncoder.encode(userPayload.password()))
+				.userRole(UserRole.USER)
+				.userStatus(UserStatus.ACTIVE)
+				.profile(userProfile)
+				.build();
 
 		userRepository.save(newUser);
 		notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
@@ -91,9 +84,8 @@ public class UserManagementService {
 	public Boolean systemBroadCast() {
 		userRepository
 				.findAll()
-				.forEach(
-						gcUser ->
-								notificationService.putQueue(QueueTag.SYSTEM, gcUser.getProfile()));
+				.forEach(gcUser ->
+						notificationService.putQueue(QueueTag.SYSTEM, gcUser.getProfile()));
 		return true;
 	}
 
@@ -117,19 +109,16 @@ public class UserManagementService {
 	}
 
 	private GcProfileTreeNode mappingChildren(List<GcProfileLevel> gcProfileLevelList, int userId) {
-		GcProfileLevel rootProfileLevel =
-				gcProfileLevelList.stream()
-						.filter((profileLevel) -> profileLevel.getUserId() == userId)
-						.toList()
-						.get(0);
-		Map<Integer, List<GcProfileLevel>> collect =
-				gcProfileLevelList.stream()
-						.filter(e -> e.getRecommenderId() != null)
-						.collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
-		List<GcProfileTreeNode> children =
-				collect.get(userId).stream()
-						.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
-						.toList();
+		GcProfileLevel rootProfileLevel = gcProfileLevelList.stream()
+				.filter((profileLevel) -> profileLevel.getUserId() == userId)
+				.toList()
+				.get(0);
+		Map<Integer, List<GcProfileLevel>> collect = gcProfileLevelList.stream()
+				.filter(e -> e.getRecommenderId() != null)
+				.collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
+		List<GcProfileTreeNode> children = collect.get(userId).stream()
+				.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
+				.toList();
 		GcProfileTreeNode rootNode =
 				new GcProfileTreeNode(rootProfileLevel.toUserProfile(), children);
 		createTreeDiagram(collect, rootNode);
@@ -141,10 +130,9 @@ public class UserManagementService {
 		if (collect.get(node.getUserProfile().getUserId()) == null) {
 			return;
 		}
-		List<GcProfileTreeNode> children =
-				collect.get(node.getUserProfile().getUserId()).stream()
-						.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
-						.toList();
+		List<GcProfileTreeNode> children = collect.get(node.getUserProfile().getUserId()).stream()
+				.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
+				.toList();
 		node.setChildrenProfiles(children);
 		for (GcProfileTreeNode child : children) {
 			createTreeDiagram(collect, child);
