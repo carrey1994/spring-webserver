@@ -54,8 +54,6 @@ public class NotificationSender {
 			javaMailSender.send(mimeMessage);
 		} catch (MessagingException e) {
 			logger.info("Sending message failed.");
-			logger.info(e.getMessage());
-			throw new IllegalArgumentException(e);
 		}
 	}
 

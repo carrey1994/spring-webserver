@@ -1,6 +1,7 @@
 package com.jameswu.demo.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jameswu.demo.exception.GcException.TokenInvalidException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.service.CacheService;
@@ -59,6 +60,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (!request.getServletPath().contains("/api/v1/public") && authHeader != null) {
 			String accessToken = authHeader.replace(GzTexts.BEARER_PREFIX, "");
 			try {
+				// todo: check if token exists first.
+				if (!jwtService.checkToken(accessToken)) {
+					resolver.resolveException(request, response, null, new TokenInvalidException());
+					return;
+				}
 				int id = jwtService
 						.parsePayload(accessToken, JwtService.JWT_USER, UserProfile.class)
 						.getUserId();

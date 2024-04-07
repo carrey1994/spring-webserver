@@ -90,6 +90,10 @@ public class RedisService {
 		redisson.getBucket(key).getAndDelete();
 	}
 
+	public boolean getByKey(String key) {
+		return redisson.getBucket(key).isExists();
+	}
+
 	public RMap<String, String> setHashMap(String key, Object object) {
 		Map map = objectMapper.convertValue(object, Map.class);
 		RMap<String, String> redissonMap = redisson.getMap(key);

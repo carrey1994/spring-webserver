@@ -1,15 +1,12 @@
 package com.jameswu.demo.config;
 
 import com.jameswu.demo.filter.JwtAuthenticationFilter;
-import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.service.CacheService;
 import com.jameswu.demo.service.JwtService;
-import com.jameswu.demo.utils.GzTexts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -74,13 +71,8 @@ public class SecurityConfig {
 						jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.logout(logout -> logout.logoutUrl("/api/v1/logout")
 						.logoutSuccessHandler((request, response, authentication) -> {
-							String jwt = request.getHeader(HttpHeaders.AUTHORIZATION)
-									.replace(GzTexts.BEARER_PREFIX, "");
-							jwtService.removeToken(jwt);
+							jwtService.removeToken(request);
 							SecurityContextHolder.clearContext();
-							cacheService.removeIdFromUserCache(jwtService
-									.parsePayload(jwt, JwtService.JWT_USER, UserProfile.class)
-									.getUserId());
 						}));
 		return http.build();
 	}

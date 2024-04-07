@@ -2,8 +2,8 @@ FROM maven:3.9.6-eclipse-temurin-17-alpine AS backend
 ARG VERSION=0.0.1-SNAPSHOT
 WORKDIR backend
 COPY . .
-RUN mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$VERSION
-RUN mvn clean package -DskipTests=true --quiet
+#RUN mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$VERSION
+#RUN mvn clean package -DskipTests=true --quiet
 
 FROM node:21-alpine AS frontend
 COPY frontend frontend

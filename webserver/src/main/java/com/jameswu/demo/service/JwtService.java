@@ -3,17 +3,20 @@ package com.jameswu.demo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
+import com.jameswu.demo.utils.GzTexts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,11 +30,18 @@ public class JwtService {
 	private final RedisService redisService;
 	private final ObjectMapper objectMapper;
 	private final SecretKey secretKey = Keys.hmacShaKeyFor(JWT_KEY.getBytes());
+	private final CacheService cacheService;
 
 	@Autowired
-	public JwtService(RedisService redisService, ObjectMapper objectMapper) {
+	public JwtService(
+			RedisService redisService, ObjectMapper objectMapper, CacheService cacheService) {
 		this.redisService = redisService;
 		this.objectMapper = objectMapper;
+		this.cacheService = cacheService;
+	}
+
+	public String trimBearerToken(HttpServletRequest request) {
+		return request.getHeader(HttpHeaders.AUTHORIZATION).replace(GzTexts.BEARER_PREFIX, "");
 	}
 
 	public String generateToken(GcUser user) {
@@ -61,9 +71,17 @@ public class JwtService {
 		return objectMapper.convertValue(claims.get(key, Map.class), clazz);
 	}
 
-	public void removeToken(String token) {
+	public void removeToken(HttpServletRequest request) {
+		String token = trimBearerToken(request);
 		String userId =
 				String.valueOf(parsePayload(token, JWT_USER, UserProfile.class).getUserId());
 		redisService.deleteByKey(userId);
+		cacheService.removeIdFromUserCache(Integer.parseInt(userId));
+	}
+
+	public boolean checkToken(String accessToken) {
+		int userId = parsePayload(accessToken, JwtService.JWT_USER, UserProfile.class)
+				.getUserId();
+		return redisService.getByKey(String.valueOf(userId));
 	}
 }
