@@ -48,7 +48,7 @@ public class GcProfileLevelRepository {
 										uh.level < :level
 						)
 						SELECT
-								user_id, email, up.nickname, address, enrollment_date, recommender_id, level
+								user_id, email, nickname, address, enrollment_date, recommender_id, level
 						FROM
 								userhierarchy;
 				""")

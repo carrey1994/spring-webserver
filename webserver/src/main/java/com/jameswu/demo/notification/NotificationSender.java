@@ -53,7 +53,7 @@ public class NotificationSender {
 			helper.setFrom(address);
 			javaMailSender.send(mimeMessage);
 		} catch (MessagingException e) {
-			logger.info("Sending message failed.");
+			logger.info("Sending message failed. Error: {0}",  e);
 		}
 	}
 
