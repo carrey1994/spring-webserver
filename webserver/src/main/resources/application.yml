@@ -56,6 +56,7 @@ mail:
   address: admin@gc.com
 
 jwt:
+  encrypted-key: xVcqqzLRUSnYUKgAciPKnAqgrHGpDLmnEiuLXHeHqBiFHJpQ
   refresh-time: 600000
 
 init:
@@ -63,7 +64,7 @@ init:
     - id: 1
       username: testuser1
       password: testuser1
-      recommenderId: null
+      recommenderId: 0
       role: ADMIN
     - id: 2
       username: testuser2

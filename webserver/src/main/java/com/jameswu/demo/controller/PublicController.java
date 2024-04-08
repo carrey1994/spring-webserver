@@ -1,7 +1,7 @@
 package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.entity.UserProfile;
-import com.jameswu.demo.model.payload.UserPayload;
+import com.jameswu.demo.model.payload.RegisterPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.HealthService;
 import com.jameswu.demo.service.UserManagementService;
@@ -37,8 +37,8 @@ public class PublicController {
 	private final UserManagementService userManagementService;
 
 	@PostMapping("register")
-	public Result<UserProfile> register(@RequestBody @Valid UserPayload userPayload) {
-		return Result.success(userManagementService.register(userPayload));
+	public Result<UserProfile> register(@RequestBody @Valid RegisterPayload registerPayload) {
+		return Result.success(userManagementService.register(registerPayload));
 	}
 
 	@GetMapping("health")

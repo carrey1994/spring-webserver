@@ -40,13 +40,11 @@ public class OrderService {
 	public Order createOrder(GcUser gcUser, NewOrderPayload payload) {
 		Order order = orderRepository.save(new Order(gcUser, Set.of()));
 		Iterable<Product> restoredProducts = productRepository.findAllById(
-				payload.productIdToBuyProductPayload().keySet().stream()
-						.map(Integer::valueOf)
-						.toList());
+				payload.keySet().stream().map(Integer::valueOf).toList());
 		Set<OrderDetail> detailList = new HashSet<>();
 		restoredProducts.forEach(restoredProduct -> {
-			BuyingProductPayload buyingProduct = payload.productIdToBuyProductPayload()
-					.get(String.valueOf(restoredProduct.getProductId()));
+			BuyingProductPayload buyingProduct =
+					payload.get(String.valueOf(restoredProduct.getProductId()));
 			int buyingQuantity = buyingProduct.quantity();
 			int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
 			if (updatedQuantity < 0) {

@@ -34,6 +34,7 @@ public class UserController {
 				((GcUser) authentication.getPrincipal()).getUserId(), userProfile));
 	}
 
+	// todo: frontend can get profile from jwt as well
 	@GetMapping("me")
 	public Result<UserProfile> userProfile(Authentication authentication) {
 		return Result.success(((GcUser) authentication.getPrincipal()).getProfile());

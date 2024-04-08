@@ -1,9 +1,7 @@
 package com.jameswu.demo.model.payload;
 
-import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.HashMap;
 
-public record NewOrderPayload(
-		@NotNull Map<String, BuyingProductPayload> productIdToBuyProductPayload)
+public class NewOrderPayload extends HashMap<String, BuyingProductPayload>
 		implements Serializable {}

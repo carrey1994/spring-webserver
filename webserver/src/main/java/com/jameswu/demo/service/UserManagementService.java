@@ -6,7 +6,7 @@ import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
-import com.jameswu.demo.model.payload.UserPayload;
+import com.jameswu.demo.model.payload.RegisterPayload;
 import com.jameswu.demo.notification.NotificationService;
 import com.jameswu.demo.notification.mail.QueueTag;
 import com.jameswu.demo.repository.GcProfileLevelRepository;
@@ -44,28 +44,29 @@ public class UserManagementService {
 	private final NotificationService notificationService;
 
 	@Transactional
-	public UserProfile register(UserPayload userPayload) {
-		userRepository.findByUsername(userPayload.username()).ifPresent(gcUser -> {
+	public UserProfile register(RegisterPayload registerPayload) {
+		userRepository.findByUsername(registerPayload.username()).ifPresent(gcUser -> {
 			throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
 		});
-		if (userPayload.recommenderId() != null) {
+		if (registerPayload.recommenderId() != null) {
 			userRepository
-					.findById(userPayload.recommenderId())
+					.findById(registerPayload.recommenderId())
 					.ifPresentOrElse(action -> {}, () -> {
 						throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
 					});
 		}
 
 		UserProfile userProfile = UserProfile.builder()
-				.email(userPayload.email())
-				.address(userPayload.address())
-				.enrollmentDate(userPayload.date())
-				.recommenderId(userPayload.recommenderId())
+				.email(registerPayload.email())
+				.address(registerPayload.address())
+				.nickname(registerPayload.nickname())
+				.enrollmentDate(registerPayload.date())
+				.recommenderId(registerPayload.recommenderId())
 				.build();
 
 		GcUser newUser = GcUser.builder()
-				.username(userPayload.username())
-				.password(bCryptPasswordEncoder.encode(userPayload.password()))
+				.username(registerPayload.username())
+				.password(bCryptPasswordEncoder.encode(registerPayload.password()))
 				.userRole(UserRole.USER)
 				.userStatus(UserStatus.ACTIVE)
 				.profile(userProfile)

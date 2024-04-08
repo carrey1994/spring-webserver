@@ -1,7 +1,6 @@
 package com.jameswu.demo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,8 +45,8 @@ public class UserProfile implements Serializable {
 	private Instant enrollmentDate;
 
 	/* If member joins by himself, recommenderId assigned null. */
-	@Column
-	@Nullable private Integer recommenderId;
+	@Column(nullable = false)
+	private int recommenderId;
 
 	@Override
 	public boolean equals(Object object) {

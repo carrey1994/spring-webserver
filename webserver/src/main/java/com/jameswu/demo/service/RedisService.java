@@ -90,7 +90,7 @@ public class RedisService {
 		redisson.getBucket(key).getAndDelete();
 	}
 
-	public boolean getByKey(String key) {
+	public boolean isKeyExists(String key) {
 		return redisson.getBucket(key).isExists();
 	}
 

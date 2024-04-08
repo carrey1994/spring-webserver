@@ -8,9 +8,10 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 
-public record UserPayload(
+public record RegisterPayload(
 		@Size(min = 8, max = 16) @NotNull String username,
 		@Size(min = 8, max = 16) @NotNull String password,
+		@Size(max = 16) @NotNull String nickname,
 		@Email(
 						message = "Invalid Email",
 						regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")

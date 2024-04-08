@@ -2,12 +2,10 @@ package com.jameswu.demo.config;
 
 import com.jameswu.demo.filter.JwtAuthenticationFilter;
 import com.jameswu.demo.model.enums.UserRole;
-import com.jameswu.demo.service.CacheService;
 import com.jameswu.demo.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,21 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	private final AuthenticationProvider authenticationProvider;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtService jwtService;
-	private final CacheService cacheService;
 
 	@Autowired
-	public SecurityConfig(
-			AuthenticationProvider authenticationProvider,
-			JwtAuthenticationFilter jwtAuthenticationFilter,
-			JwtService jwtService,
-			CacheService cacheService) {
-		this.authenticationProvider = authenticationProvider;
+	public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtService jwtService) {
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 		this.jwtService = jwtService;
-		this.cacheService = cacheService;
 	}
 
 	@Bean

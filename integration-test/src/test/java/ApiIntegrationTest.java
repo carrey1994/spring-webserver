@@ -5,10 +5,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.Assertions;
@@ -50,7 +48,7 @@ class ApiIntegrationTest {
 	void diagramApi() {
 		String accessToken = loginApi();
 		Request request = new Request.Builder()
-				.url("http://127.0.0.1:8080/api/v1/user/diagram?id=1")
+				.url("http://127.0.0.1:8080/api/v1/user/management/diagram?id=1")
 				.get()
 				.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
 				.build();
@@ -100,7 +98,7 @@ class ApiIntegrationTest {
 		Map<String, Object> payload = Map.ofEntries(
 				Map.entry("title", "A Product"),
 				Map.entry("description", "A product des."),
-				Map.entry("price", 1000.0),
+				Map.entry("price", 1000),
 				Map.entry("quantity", 1));
 		RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
 		Request request = new Request.Builder()
@@ -121,36 +119,13 @@ class ApiIntegrationTest {
 
 	@SneakyThrows
 	@Test
-	void concurrentlyAddUserApi() {
-		String accessToken = loginApi();
-		ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-		for (int i = 0; i < 200; i++) {
-			int increasedId = i;
-			cachedThreadPool.execute(() -> {
-				Map<String, String> payload = getNewUser(increasedId, 65);
-				RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
-				Request request = new Request.Builder()
-						.url("http://127.0.0.1:8080/api/v1/public/register")
-						.method(HttpMethod.POST.name(), body)
-						.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-						.addHeader(CONTENT_TYPE, APPLICATION_JSON)
-						.build();
-				Response response = doRequest(request);
-				Assertions.assertEquals(HttpStatus.OK.value(), response.code());
-				System.out.println("finish new user registration" + increasedId);
-			});
-		}
-		cachedThreadPool.shutdown();
-		cachedThreadPool.awaitTermination(1, TimeUnit.MINUTES);
-	}
-
-	@SneakyThrows
-	@Test
 	void createOrderApi() {
 		String accessToken = loginApi();
-		Map<String, Object> payload =
-				Map.ofEntries(Map.entry("productId", 1), Map.entry("userId", 1));
-		RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
+		Map coupon = new HashMap<>();
+		coupon.put("quantity", 1);
+		coupon.put("couponId", null);
+		var orderPayload = Map.of("2", coupon);
+		RequestBody body = RequestBody.create(jsonMediaType, parseJson(orderPayload));
 		Request request = new Request.Builder()
 				.url("http://127.0.0.1:8080/api/v1/order/create")
 				.method(HttpMethod.POST.name(), body)
@@ -162,8 +137,7 @@ class ApiIntegrationTest {
 		Assertions.assertEquals(HttpStatus.OK.value(), response.code());
 
 		JsonNode resultNode = objectMapper.readTree(response.body().string());
-		Assertions.assertEquals(
-				1, resultNode.get("message").get("product").get("productId").asLong());
+		Assertions.assertEquals(1, resultNode.get("message").get("orderId").asInt());
 		Assertions.assertTrue(resultNode.get("ok").asBoolean());
 	}
 
@@ -178,31 +152,7 @@ class ApiIntegrationTest {
 				.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
 				.build();
 		Response response = client.newCall(request).execute();
-		JsonNode resultNode = objectMapper.readTree(response.body().string());
 		Assertions.assertEquals(HttpStatus.OK.value(), response.code());
-	}
-
-	@SneakyThrows
-	@Test
-	void multipleTest() {
-		String accessToken = loginApi();
-		Map<String, Object> payload =
-				Map.ofEntries(Map.entry("productId", 1), Map.entry("userId", 1));
-		RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
-		Request request = new Request.Builder()
-				.url("http://127.0.0.1:8080/api/v1/order/create")
-				.method(HttpMethod.POST.name(), body)
-				.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-				.addHeader(CONTENT_TYPE, APPLICATION_JSON)
-				.build();
-
-		Response response = doRequest(request);
-		Assertions.assertEquals(HttpStatus.OK.value(), response.code());
-
-		JsonNode resultNode = objectMapper.readTree(response.body().string());
-		Assertions.assertEquals(
-				1, resultNode.get("message").get("product").get("productId").asLong());
-		Assertions.assertTrue(resultNode.get("ok").asBoolean());
 	}
 
 	@SneakyThrows
@@ -217,11 +167,11 @@ class ApiIntegrationTest {
 
 	private Map<String, String> getNewUser(int increasedId, int baseId) {
 		int id = increasedId + baseId;
-		System.out.println(id);
 		return Map.ofEntries(
 				Map.entry("username", "testuser" + id),
 				Map.entry("password", "testuser" + id),
 				Map.entry("email", "testuser" + id + "@gmail.com"),
+				Map.entry("nickname", "NikcnameTest" + id),
 				Map.entry("address", "Taipei"),
 				Map.entry("date", "2017-08-14 12:17:47"),
 				Map.entry("recommenderId", "1"));
