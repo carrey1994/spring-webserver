@@ -44,7 +44,7 @@ public class UserProfile implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 	private Instant enrollmentDate;
 
-	/* If member joins by himself, recommenderId assigned null. */
+	/* The recommenderId assigned zero means no any recommender. */
 	@Column(nullable = false)
 	private int recommenderId;
 
