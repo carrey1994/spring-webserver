@@ -97,4 +97,8 @@ public class JwtService {
 		// TODO: fix JacksonDeserializer to call claims.get(key, clazz) directly
 		return objectMapper.convertValue(claims.get(key, Map.class), clazz);
 	}
+
+	private void refreshToken(String oldToken) {
+		// todo: refresh access token by refresh token
+	}
 }
