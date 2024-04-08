@@ -1,8 +1,8 @@
 package com.jameswu.demo.model.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -18,5 +18,10 @@ public record RegisterPayload(
 				@NotNull String email,
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") @NotNull Instant date,
 		@Size(max = 25) @NotNull String address,
-		@Nullable Integer recommenderId)
-		implements Serializable {}
+		@Min(0) int recommenderId)
+		implements Serializable {
+
+	public boolean isRecommenderExists() {
+		return recommenderId != 0;
+	}
+}

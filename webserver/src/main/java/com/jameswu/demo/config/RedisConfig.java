@@ -8,9 +8,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.redisson.config.MasterSlaveServersConfig;
-import org.redisson.config.SingleServerConfig;
 import org.redisson.connection.DnsAddressResolverGroupFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +40,8 @@ public class RedisConfig {
 	@Profile("test")
 	public RedissonClient redisClientOnTest() {
 		Config config = new Config();
-		config.useSingleServer().setAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
+		config.useSingleServer()
+				.setAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
 		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
 		config.setCodec(new JsonJacksonCodec());
 		return Redisson.create(config);

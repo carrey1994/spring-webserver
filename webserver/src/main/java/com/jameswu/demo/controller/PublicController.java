@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.GitProperties;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,11 @@ public class PublicController {
 	@PostMapping("register")
 	public Result<UserProfile> register(@RequestBody @Valid RegisterPayload registerPayload) {
 		return Result.success(userManagementService.register(registerPayload));
+	}
+
+	@PostMapping("active")
+	public Result<UserProfile> active(@Param("token") String token) {
+		return Result.success(userManagementService.activeUser(token));
 	}
 
 	@GetMapping("health")

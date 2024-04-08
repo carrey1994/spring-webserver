@@ -1,5 +1,6 @@
 package com.jameswu.demo.service;
 
+import com.jameswu.demo.model.entity.ActiveToken;
 import com.jameswu.demo.model.entity.GcProfileLevel;
 import com.jameswu.demo.model.entity.GcProfileTreeNode;
 import com.jameswu.demo.model.entity.GcUser;
@@ -10,6 +11,7 @@ import com.jameswu.demo.model.payload.RegisterPayload;
 import com.jameswu.demo.notification.NotificationService;
 import com.jameswu.demo.notification.mail.QueueTag;
 import com.jameswu.demo.repository.GcProfileLevelRepository;
+import com.jameswu.demo.repository.TokenRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.utils.GzTexts;
 import java.util.ArrayList;
@@ -31,24 +33,27 @@ public class UserManagementService {
 			UserRepository userRepository,
 			BCryptPasswordEncoder bCryptPasswordEncoder,
 			NotificationService notificationService,
-			GcProfileLevelRepository gcProfileLevelRepository) {
+			GcProfileLevelRepository gcProfileLevelRepository,
+			TokenRepository tokenRepository) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.notificationService = notificationService;
 		this.gcProfileLevelRepository = gcProfileLevelRepository;
+		this.tokenRepository = tokenRepository;
 	}
 
 	private final GcProfileLevelRepository gcProfileLevelRepository;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final NotificationService notificationService;
+	private final TokenRepository tokenRepository;
 
 	@Transactional
 	public UserProfile register(RegisterPayload registerPayload) {
 		userRepository.findByUsername(registerPayload.username()).ifPresent(gcUser -> {
 			throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
 		});
-		if (registerPayload.recommenderId() != null) {
+		if (registerPayload.isRecommenderExists()) {
 			userRepository
 					.findById(registerPayload.recommenderId())
 					.ifPresentOrElse(action -> {}, () -> {
@@ -68,11 +73,12 @@ public class UserManagementService {
 				.username(registerPayload.username())
 				.password(bCryptPasswordEncoder.encode(registerPayload.password()))
 				.userRole(UserRole.USER)
-				.userStatus(UserStatus.ACTIVE)
+				.userStatus(UserStatus.INACTIVE)
 				.profile(userProfile)
 				.build();
 
-		userRepository.save(newUser);
+		newUser = userRepository.save(newUser);
+		tokenRepository.save(ActiveToken.userWithDefaultToken(newUser));
 		notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
 		return newUser.getProfile();
 	}
@@ -138,5 +144,18 @@ public class UserManagementService {
 		for (GcProfileTreeNode child : children) {
 			createTreeDiagram(collect, child);
 		}
+	}
+
+	@Transactional
+	public UserProfile activeUser(String token) {
+		ActiveToken activeToken = tokenRepository
+				.findByToken(token)
+				.orElseThrow(() -> new IllegalArgumentException("Active token invalid"));
+		if (!activeToken.validateToken()) {
+			throw new IllegalArgumentException("Active token invalid");
+		}
+		activeToken.getUser().setUserStatus(UserStatus.ACTIVE);
+		tokenRepository.delete(activeToken);
+		return userRepository.save(activeToken.getUser()).getProfile();
 	}
 }
