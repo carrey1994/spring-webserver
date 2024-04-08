@@ -8,10 +8,13 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.redisson.config.MasterSlaveServersConfig;
+import org.redisson.config.SingleServerConfig;
 import org.redisson.connection.DnsAddressResolverGroupFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ConfigurationProperties(prefix = "redis")
@@ -23,6 +26,7 @@ public class RedisConfig {
 	private static final String REDIS_BASE_URL = "redis://%1s:%2s";
 
 	@Bean
+	@Profile("!test")
 	public RedissonClient redisClient() {
 		Config config = new Config();
 		MasterSlaveServersConfig masterSlaveServersConfig = config.useMasterSlaveServers()
@@ -31,6 +35,16 @@ public class RedisConfig {
 		config.setCodec(new JsonJacksonCodec());
 		slaves.forEach(slave -> masterSlaveServersConfig.addSlaveAddress(
 				String.format(REDIS_BASE_URL, slave.host(), slave.port())));
+		return Redisson.create(config);
+	}
+
+	@Bean
+	@Profile("test")
+	public RedissonClient redisClientOnTest() {
+		Config config = new Config();
+		config.useSingleServer().setAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
+		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
+		config.setCodec(new JsonJacksonCodec());
 		return Redisson.create(config);
 	}
 }
