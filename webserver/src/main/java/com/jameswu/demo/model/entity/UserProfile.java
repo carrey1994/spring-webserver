@@ -1,6 +1,9 @@
 package com.jameswu.demo.model.entity;
 
+import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -64,5 +67,10 @@ public class UserProfile implements Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(userId, email, nickname, address, enrollmentDate, recommenderId);
+	}
+
+	@JsonIgnore
+	public boolean isRecommenderExists() {
+		return recommenderId != DEFAULT_RECOMMENDER_ID;
 	}
 }

@@ -4,8 +4,7 @@ import com.jameswu.demo.exception.GcException.TokenInvalidException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.service.CacheService;
 import com.jameswu.demo.service.JwtService;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,15 +44,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (!request.getServletPath().contains("/api/v1/public") && accessToken != null) {
 			try {
 				// todo: check if token exists first.
-				if (!jwtService.isTokenExists(accessToken)) {
-					throw new TokenInvalidException();
-				}
+				jwtService.throwIfTokenNotFound(accessToken, new TokenInvalidException());
 				int id = jwtService.parseUserProfile(accessToken).getUserId();
 				GcUser user = cacheService.retrieveOrLoadUser(id);
 				var authToken =
 						new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authToken);
-			} catch (ExpiredJwtException | SignatureException | TokenInvalidException e) {
+			} catch (JwtException e) {
 				resolver.resolveException(request, response, null, e);
 				return;
 			}

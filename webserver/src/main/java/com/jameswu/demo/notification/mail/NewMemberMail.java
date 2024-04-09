@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewMemberMail extends AbstractMail {
-	private String id;
-	private String name;
+	private String link;
+	private String nickname;
 
-	public NewMemberMail(String id, String name, String receiver) {
-		super("new_member", "We have new member!", receiver);
-		this.id = id;
-		this.name = name;
+	public NewMemberMail(String link, String nickname, String receiver) {
+		super("new_member", "Welcome!! Registration notification.", receiver);
+		this.link = link;
+		this.nickname = nickname;
 	}
 }

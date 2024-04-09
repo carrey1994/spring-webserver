@@ -1,5 +1,7 @@
 package com.jameswu.demo.model.payload;
 
+import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -22,6 +24,6 @@ public record RegisterPayload(
 		implements Serializable {
 
 	public boolean isRecommenderExists() {
-		return recommenderId != 0;
+		return recommenderId != DEFAULT_RECOMMENDER_ID;
 	}
 }

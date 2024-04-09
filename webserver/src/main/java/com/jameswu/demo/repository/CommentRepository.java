@@ -12,6 +12,4 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
 	Page<Comment> findAllByProductIdOrderByCreatedTime(Pageable pageable, int productId);
 
 	List<Comment> findAllByParentCommentIdOrderByCreatedTime(int parentCommentId);
-
-	// todo: join user profile to get nickname
 }

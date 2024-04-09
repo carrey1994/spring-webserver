@@ -1,6 +1,7 @@
 package com.jameswu.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jameswu.demo.exception.GcException.TokenInvalidException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.utils.GzTexts;
@@ -79,9 +80,11 @@ public class JwtService {
 		cacheService.removeIdFromUserCache(userId);
 	}
 
-	public boolean isTokenExists(String accessToken) {
+	public void throwIfTokenNotFound(String accessToken, TokenInvalidException e) {
 		int userId = parsePayload(accessToken, PROFILE, UserProfile.class).getUserId();
-		return redisService.isKeyExists(RedisKey.withUserPrefix(userId));
+		if (!redisService.isKeyExists(RedisKey.withUserPrefix(userId))) {
+			throw e;
+		}
 	}
 
 	private SecretKey secretKey() {

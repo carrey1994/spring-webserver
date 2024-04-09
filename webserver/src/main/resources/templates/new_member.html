@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="headerfiles">
-    <meta charset="UTF-8" />
-<!--    <link th:href="@{/css/styles.css}" rel="stylesheet">-->
+    <meta charset="UTF-8"/>
+    <!--    <link th:href="@{/css/styles.css}" rel="stylesheet">-->
 </head>
 <body>
 <div th:fragment="header">
@@ -15,13 +15,14 @@
 <div class="another">This is another sidebar</div>
 <table border="1">
     <tr>
-        <td><label th:text="${id}" /></td>
+        <td>Hi, <span th:text="${nickname}"></span></td>
     </tr>
     <tr>
-        <td><label th:text="${name}" /></td>
+        <td>驗證帳號</td>
     </tr>
     <tr>
-        <td><input type="submit" value="Submit" /></td>
+    <!-- todo: this should be using frontend page to call post request to activate user and redirect to login. -->
+        <td><a th:href="${link}"></a><span th:text="${link}"></span></td>
     </tr>
 </table>
 </body>

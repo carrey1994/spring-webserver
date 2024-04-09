@@ -14,13 +14,17 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Table
 @Entity(name = "order_detail")
-@Data
+@Getter
+@Setter
 public class OrderDetail implements Serializable {
 
 	@Id
@@ -59,5 +63,18 @@ public class OrderDetail implements Serializable {
 		this.payment = payment;
 		this.order = order;
 		this.couponId = couponId;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (object == null || getClass() != object.getClass()) return false;
+		OrderDetail that = (OrderDetail) object;
+		return orderDetailId == that.orderDetailId && quantity == that.quantity && Objects.equals(order, that.order) && Objects.equals(product, that.product) && Objects.equals(couponId, that.couponId) && Objects.equals(payment, that.payment);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(orderDetailId, order, product, quantity, couponId, payment);
 	}
 }

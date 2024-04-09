@@ -1,6 +1,7 @@
 package com.jameswu.demo.repository;
 
 import com.jameswu.demo.model.entity.GcProfileLevel;
+import com.jameswu.demo.model.entity.UserProfile;
 import jakarta.persistence.EntityManager;
 import java.sql.Timestamp;
 import java.util.List;
@@ -56,15 +57,15 @@ public class GcProfileLevelRepository {
 				.setParameter("level", level)
 				.list();
 		session.close();
-
 		return results.stream()
 				.map((result) -> new GcProfileLevel(
-						(int) result[0],
-						(String) result[1],
-						(String) result[2],
-						(String) result[3],
-						((Timestamp) result[4]).toInstant(),
-						(Integer) result[5],
+						new UserProfile(
+								(int) result[0],
+								(String) result[1],
+								(String) result[2],
+								(String) result[3],
+								((Timestamp) result[4]).toInstant(),
+								(Integer) result[5]),
 						Integer.parseInt(result[6].toString())))
 				.toList();
 	}

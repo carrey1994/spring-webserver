@@ -78,8 +78,8 @@ public class UserManagementService {
 				.build();
 
 		newUser = userRepository.save(newUser);
-		tokenRepository.save(ActiveToken.userWithDefaultToken(newUser));
-		notificationService.putQueue(QueueTag.NEW_USER_TAG, userProfile);
+		var activeToken = tokenRepository.save(ActiveToken.userWithDefaultToken(newUser));
+		notificationService.putQueue(QueueTag.NEW_USER_TAG, activeToken);
 		return newUser.getProfile();
 	}
 
@@ -121,7 +121,7 @@ public class UserManagementService {
 				.toList()
 				.get(0);
 		Map<Integer, List<GcProfileLevel>> collect = gcProfileLevelList.stream()
-				.filter(e -> e.getRecommenderId() != null)
+				.filter(UserProfile::isRecommenderExists)
 				.collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
 		List<GcProfileTreeNode> children = collect.get(userId).stream()
 				.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))

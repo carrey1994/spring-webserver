@@ -42,7 +42,7 @@ public class PublicController {
 		return Result.success(userManagementService.register(registerPayload));
 	}
 
-	@PostMapping("active")
+	@PostMapping("activate")
 	public Result<UserProfile> active(@Param("token") String token) {
 		return Result.success(userManagementService.activeUser(token));
 	}
