@@ -31,7 +31,7 @@ public class ActiveToken {
 	private int id;
 
 	/** user settings */
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private GcUser user;
 

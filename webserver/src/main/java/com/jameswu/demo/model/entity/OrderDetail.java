@@ -32,13 +32,13 @@ public class OrderDetail implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderDetailId;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
 	@JsonBackReference
 	@EqualsAndHashCode.Exclude
 	private Order order;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
 	@JsonBackReference
 	@EqualsAndHashCode.Exclude
@@ -50,7 +50,7 @@ public class OrderDetail implements Serializable {
 	@Column(nullable = true, columnDefinition = "BINARY(16)")
 	private UUID couponId;
 
-	@Column(name = "payment", precision = 10, scale = 2, nullable = false)
+	@Column(name = "payment", precision = 11, scale = 2, nullable = false)
 	@DecimalMin(value = "0.00", message = "Payment must be greater than or equal to 0.00")
 	private BigDecimal payment;
 
