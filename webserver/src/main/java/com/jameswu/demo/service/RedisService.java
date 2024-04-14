@@ -3,26 +3,14 @@ package com.jameswu.demo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jameswu.demo.utils.GzTexts;
 import com.jameswu.demo.utils.RedisKey;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
-import org.redisson.api.RMap;
 import org.redisson.api.RScript;
-import org.redisson.api.RSearch;
 import org.redisson.api.RedissonClient;
-import org.redisson.api.search.index.FieldIndex;
-import org.redisson.api.search.index.IndexOptions;
-import org.redisson.api.search.index.IndexType;
-import org.redisson.api.search.query.QueryOptions;
-import org.redisson.api.search.query.ReturnAttribute;
-import org.redisson.api.search.query.SearchResult;
-import org.redisson.client.codec.Codec;
-import org.redisson.client.codec.StringCodec;
-import org.redisson.codec.CompositeCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,14 +94,19 @@ public class RedisService {
 		return objectMapper.convertValue(redisson.getBucket(hashKey).get(), clazz);
 	}
 
-	public void loadLuaScript(String lua){
+	public void loadLuaScript(String lua) {
 		String evalSha = redisson.getScript().scriptLoad(lua);
 		cacheService.addEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER, evalSha);
 	}
 
-	public void executeEvalSha(){
+	public void executeEvalSha() {
 		String evalSha = cacheService.getEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER);
-		redisson.getScript().evalSha(RScript.Mode.READ_WRITE, evalSha, RScript.ReturnType.VALUE, List.of(1, RedisKey.withSpecialsPrefix(1), 1));
+		redisson.getScript()
+				.evalSha(
+						RScript.Mode.READ_WRITE,
+						evalSha,
+						RScript.ReturnType.VALUE,
+						List.of(1, RedisKey.withSpecialsPrefix(1), 1));
 	}
 
 	public <T> Optional<T> getValueByKey(String key) {

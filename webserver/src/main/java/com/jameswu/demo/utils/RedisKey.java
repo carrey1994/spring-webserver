@@ -22,5 +22,4 @@ public enum RedisKey {
 	public static String withUserPrefix(int userId) {
 		return PREFIX_USER.key + userId;
 	}
-
 }

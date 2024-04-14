@@ -2,14 +2,12 @@ package com.jameswu.demo.service;
 
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.repository.UserRepository;
-
+import com.jameswu.demo.utils.RedisKey;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.jameswu.demo.utils.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

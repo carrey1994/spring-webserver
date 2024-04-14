@@ -42,7 +42,8 @@ public class ProductService {
 	}
 
 	public SpecialsPayload specialsById(int productId) {
-		var detail = redisService.getHashClass(RedisKey.withSpecialsPrefix(productId), SpecialsDetailPayload.class);
+		var detail = redisService.getHashClass(
+				RedisKey.withSpecialsPrefix(productId), SpecialsDetailPayload.class);
 		return new SpecialsPayload(productId, detail);
 	}
 
