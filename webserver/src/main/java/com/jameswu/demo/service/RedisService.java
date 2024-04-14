@@ -90,13 +90,18 @@ public class RedisService {
 		return map;
 	}
 
+	public void setHashMap(){
+		redisson.getBucket("SPECIALS_PRODUCT_ID_1").set(Map.of("inventory", "100", "booked", "0"));
+	}
+
 	public <T> T getHashClass(String hashKey, Class<T> clazz) {
 		return objectMapper.convertValue(redisson.getBucket(hashKey).get(), clazz);
 	}
 
-	public void loadLuaScript(String lua) {
+	public String loadLuaScript(String lua) {
 		String evalSha = redisson.getScript().scriptLoad(lua);
 		cacheService.addEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER, evalSha);
+		return evalSha;
 	}
 
 	public void executeEvalSha() {

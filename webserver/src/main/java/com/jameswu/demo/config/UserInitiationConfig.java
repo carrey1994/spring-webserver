@@ -92,26 +92,28 @@ public class UserInitiationConfig {
 		//                    UUID.randomUUID()));
 		//        }
 
-		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0));
+		redisService.setHashMap();
+		//RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0)
 
 		var script =
 				"""
-				local n = tonumber(ARGV[1])
-				if not n  or n == 0 then
-					return 0      \s
-				end               \s
-				local vals = redis.call("HMGET", KEYS[1], "inventory", "booked");
-				local total = tonumber(vals[1])
-				local blocked = tonumber(vals[2])
-				if not total or not blocked then
-					return 0      \s
-				end               \s
-				if blocked + n <= total then
-					redis.call("HINCRBY", KEYS[1], "booked", n)                                  \s
-					return n;  \s
-				end               \s
-				return 0
-		""";
-		redisService.loadLuaScript(script);
+						local n = tonumber(ARGV[1])\s
+						if not n  or n == 0 then\s
+							return 0\s
+						end\s
+						local vals = redis.call("HMGET", KEYS[1], "inventory", "booked");\s
+						local total = tonumber(vals[1])\s
+						local blocked = tonumber(vals[2])\s
+						if not total or not blocked then\s
+							return 0\s
+						end\s
+						if blocked + n <= total then\s
+							redis.call("HINCRBY", KEYS[1], "booked", n)\s
+							return n;\s
+						end\s
+						return 0
+						""";
+
+		System.out.println("LUA EVAL: " + redisService.loadLuaScript(script));
 	}
 }
