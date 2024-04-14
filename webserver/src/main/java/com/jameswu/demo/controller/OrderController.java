@@ -36,7 +36,7 @@ public class OrderController {
 				orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
 	}
 
-	@GetMapping("specials/create")
+	@PostMapping("specials/create")
 	public Result<List<Product>> createSpecialsOrder(
 			@RequestBody @Valid NewOrderPayload newOrderPayload) {
 		return Result.success(orderService.createSpecialsOrder(newOrderPayload));

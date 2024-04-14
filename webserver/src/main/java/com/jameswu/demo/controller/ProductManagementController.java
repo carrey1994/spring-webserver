@@ -9,7 +9,7 @@ import com.jameswu.demo.model.response.CommentResponse;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.ProductManagementService;
 import jakarta.validation.Valid;
-import org.redisson.api.RMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +32,7 @@ public class ProductManagementController {
 	}
 
 	@PostMapping("specials/add")
-	public Result<RMap<String, String>> addSpecials(@Valid @RequestBody SpecialsPayload payload) {
+	public Result<Map<String, String>> addSpecials(@Valid @RequestBody SpecialsPayload payload) {
 		return Result.success(productManagementService.addSpecials(payload));
 	}
 

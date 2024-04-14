@@ -21,7 +21,7 @@ class TreeYamlTest {
 		//        List<Map<String, Object>> rootYaml = new ArrayList<>();
 		//        createUserOrderByBFS(rootYaml);
 		//        generateYaml(rootYaml);
-		System.out.println(removeDuplicates(new int[] {1, 1, 2}));
+		//		System.out.println(removeDuplicates(new int[] {1, 1, 2}));
 	}
 
 	/*

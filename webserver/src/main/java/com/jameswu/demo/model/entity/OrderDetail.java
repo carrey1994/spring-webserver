@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +53,10 @@ public class OrderDetail implements Serializable {
 	@DecimalMin(value = "0.00", message = "Payment must be greater than or equal to 0.00")
 	private BigDecimal payment;
 
+	@Column(name = "discount", precision = 11, scale = 2, nullable = false)
+	@DecimalMin(value = "0.00", message = "Payment must be greater than or equal to 0.00")
+	private BigDecimal discount;
+
 	public OrderDetail() {}
 
 	public OrderDetail(
@@ -70,11 +73,17 @@ public class OrderDetail implements Serializable {
 		if (this == object) return true;
 		if (object == null || getClass() != object.getClass()) return false;
 		OrderDetail that = (OrderDetail) object;
-		return orderDetailId == that.orderDetailId && quantity == that.quantity && Objects.equals(order, that.order) && Objects.equals(product, that.product) && Objects.equals(couponId, that.couponId) && Objects.equals(payment, that.payment);
+		return orderDetailId == that.orderDetailId
+				&& quantity == that.quantity
+				&& Objects.equals(order, that.order)
+				&& Objects.equals(product, that.product)
+				&& Objects.equals(couponId, that.couponId)
+				&& Objects.equals(payment, that.payment)
+				&& Objects.equals(discount, that.discount);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderDetailId, order, product, quantity, couponId, payment);
+		return Objects.hash(orderDetailId, order, product, quantity, couponId, payment, discount);
 	}
 }

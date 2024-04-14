@@ -11,7 +11,7 @@ import com.jameswu.demo.repository.CommentRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserProfileRepository;
 import com.jameswu.demo.utils.RedisKey;
-import org.redisson.api.RMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +42,9 @@ public class ProductManagementService {
 				payload.title(), payload.description(), payload.price(), payload.quantity()));
 	}
 
-	public RMap<String, String> addSpecials(SpecialsPayload payload) {
+	public Map<String, String> addSpecials(SpecialsPayload payload) {
 		return redisService.setHashMap(
-				RedisKey.withProductPrefix(payload.productId()), payload.specialsDetailPayload());
+				RedisKey.withSpecialsPrefix(payload.productId()), payload.specialsDetailPayload());
 	}
 
 	@Transactional

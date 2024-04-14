@@ -11,15 +11,16 @@ public enum RedisKey {
 	PREFIX_CREATE_ORDER("LOCK_CREATE_ORDER_"),
 	PREFIX_SPECIALS("SPECIALS_PRODUCT_ID_"),
 	PREFIX_USER("USER_"),
-	;
+	LUA_CREATE_SPECIALS_ORDER("LUA_CREATE_SPECIALS_ORDER");
 
 	private final String key;
 
-	public static String withProductPrefix(int productId) {
+	public static String withSpecialsPrefix(int productId) {
 		return PREFIX_SPECIALS.key + productId;
 	}
 
 	public static String withUserPrefix(int userId) {
-		return PREFIX_SPECIALS.key + userId;
+		return PREFIX_USER.key + userId;
 	}
+
 }

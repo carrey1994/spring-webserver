@@ -5,11 +5,13 @@ import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
+import com.jameswu.demo.model.payload.SpecialsDetailPayload;
 import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
+import com.jameswu.demo.utils.RedisKey;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -89,5 +91,27 @@ public class UserInitiationConfig {
 		//                    BigDecimal.valueOf(100L),
 		//                    UUID.randomUUID()));
 		//        }
+
+		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0));
+
+		var script = """
+				local n = tonumber(ARGV[1])
+				if not n  or n == 0 then
+				    return 0      \s
+				end               \s
+				local vals = redis.call("HMGET", KEYS[1], "inventory", "booked");
+				local total = tonumber(vals[1])
+				local blocked = tonumber(vals[2])
+				if not total or not blocked then
+				    return 0      \s
+				end               \s
+				if blocked + n <= total then
+				    redis.call("HINCRBY", KEYS[1], "booked", n)                                  \s
+				    return n;  \s
+				end               \s
+				return 0
+		""";
+		redisService.loadLuaScript(script);
+
 	}
 }

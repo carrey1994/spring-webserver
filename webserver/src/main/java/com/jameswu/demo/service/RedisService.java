@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jameswu.demo.utils.GzTexts;
 import com.jameswu.demo.utils.RedisKey;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
+import org.redisson.api.RScript;
 import org.redisson.api.RSearch;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.search.index.FieldIndex;
@@ -94,71 +96,25 @@ public class RedisService {
 		return redisson.getBucket(key).isExists();
 	}
 
-	public RMap<String, String> setHashMap(String key, Object object) {
+	public Map<String, String> setHashMap(String key, Object object) {
 		Map map = objectMapper.convertValue(object, Map.class);
-		RMap<String, String> redissonMap = redisson.getMap(key);
-		redissonMap.putAll(map);
-		return redissonMap;
-	}
-
-	public <T> T getHashMap(String hashKey, String fieldKey) {
-		return (T) redisson.getMap(hashKey).get(fieldKey);
+		redisson.getBucket(key).set(map);
+		return map;
 	}
 
 	public <T> T getHashClass(String hashKey, Class<T> clazz) {
-		RMap<Object, Object> map = redisson.getMap(hashKey);
-		return objectMapper.convertValue(map, clazz);
+		return objectMapper.convertValue(redisson.getBucket(hashKey).get(), clazz);
 	}
 
-	public void redisIdx() {
-
-		Codec codec =
-				new CompositeCodec(StringCodec.INSTANCE, redisson.getConfig().getCodec());
-
-		RMap m = redisson.getMap("doc:1", codec);
-		//        m.put("inventory", new SimpleObject("name1"));
-		//        m.put("v2", new SimpleObject("name2"));
-		//
-		//        RMap m2 = redisson.getMap("doc:2", codec);
-		//        m2.put("v1", new SimpleObject("name3"));
-		//        m2.put("v2", new SimpleObject("name4"));
-
-		RSearch s = redisson.getSearch();
-		s.createIndex(
-				"idx",
-				IndexOptions.defaults()
-						.on(IndexType.HASH)
-						.prefix(Collections.singletonList(RedisKey.PREFIX_SPECIALS.getKey())),
-				FieldIndex.text("inventory"),
-				FieldIndex.text("booked"));
-
-		SearchResult r = s.search(
-				"idx",
-				"*",
-				QueryOptions.defaults()
-						.returnAttributes(
-								new ReturnAttribute("inventory"), new ReturnAttribute("booked")));
-		System.out.println();
-
-		//        RSearch s = redisson.getSearch();
-		//        s.createIndex("idx", IndexOptions.defaults()
-		//                        .on(IndexType.HASH)
-		//                        .prefix(List.of(RedisKey.PREFIX_SPECIALS.getKey())),
-		//                FieldIndex.text("inventory"),
-		//                FieldIndex.text("booked"));
-		//
-		//        SearchResult r = s.search("idx", "*", QueryOptions.defaults()
-		//                .returnAttributes(new ReturnAttribute("inventory"), new
-		// ReturnAttribute("booked")));
-		//        System.out.println();
+	public void loadLuaScript(String lua){
+		String evalSha = redisson.getScript().scriptLoad(lua);
+		cacheService.addEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER, evalSha);
 	}
 
-	//    public <T> T getHashClassList(String hashKey, Class<T> clazz) {
-	//        RMap<Object, Object> map = redisson.getList(hashKey);
-	//        objectMapper.convertValue(jsonString,
-	// objectMapper.getTypeFactory().constructCollectionType(List.class, MyPOJO.class)
-	//        return objectMapper.convertValue(map, clazz);
-	//    }
+	public void executeEvalSha(){
+		String evalSha = cacheService.getEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER);
+		redisson.getScript().evalSha(RScript.Mode.READ_WRITE, evalSha, RScript.ReturnType.VALUE, List.of(1, RedisKey.withSpecialsPrefix(1), 1));
+	}
 
 	public <T> Optional<T> getValueByKey(String key) {
 		RBucket<T> data = redisson.getBucket(key);
