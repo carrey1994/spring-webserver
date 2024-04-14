@@ -11,6 +11,7 @@ import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.Codec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,12 +87,12 @@ public class RedisService {
 
 	public Map<String, String> setHashMap(String key, Object object) {
 		Map map = objectMapper.convertValue(object, Map.class);
-		redisson.getBucket(key).set(map);
+		redisson.getMap(key).putAll(map);
 		return map;
 	}
 
 	public void setHashMap(){
-		redisson.getBucket("SPECIALS_PRODUCT_ID_1").set(Map.of("inventory", "100", "booked", "0"));
+		redisson.getMap("SPECIALS_PRODUCT_ID_1").putAll(Map.of("inventory", 100, "booked", 0));
 	}
 
 	public <T> T getHashClass(String hashKey, Class<T> clazz) {
@@ -111,7 +112,7 @@ public class RedisService {
 						RScript.Mode.READ_WRITE,
 						evalSha,
 						RScript.ReturnType.VALUE,
-						List.of(1, RedisKey.withSpecialsPrefix(1), 1));
+						List.of(RedisKey.withSpecialsPrefix(1)), 1, 1);
 	}
 
 	public <T> Optional<T> getValueByKey(String key) {

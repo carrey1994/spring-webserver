@@ -92,8 +92,8 @@ public class UserInitiationConfig {
 		//                    UUID.randomUUID()));
 		//        }
 
-		redisService.setHashMap();
-		//RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0)
+		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0));
+
 
 		var script =
 				"""

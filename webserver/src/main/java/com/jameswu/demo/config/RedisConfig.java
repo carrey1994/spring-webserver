@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Data;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.redisson.config.MasterSlaveServersConfig;
@@ -30,7 +31,7 @@ public class RedisConfig {
 		MasterSlaveServersConfig masterSlaveServersConfig = config.useMasterSlaveServers()
 				.setMasterAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
 		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
-		config.setCodec(new JsonJacksonCodec());
+		config.setCodec(new StringCodec());
 		slaves.forEach(slave -> masterSlaveServersConfig.addSlaveAddress(
 				String.format(REDIS_BASE_URL, slave.host(), slave.port())));
 		return Redisson.create(config);
