@@ -1,8 +1,11 @@
 package com.jameswu.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jameswu.demo.model.payload.SpecialOrderPayload;
 import com.jameswu.demo.utils.GzTexts;
+import com.jameswu.demo.utils.LuaScripts;
 import com.jameswu.demo.utils.RedisKey;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,7 +14,6 @@ import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;
-import org.redisson.client.codec.Codec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,12 @@ public class RedisService {
 	private final CacheService cacheService;
 	private final RedissonClient redisson;
 	private final ObjectMapper objectMapper;
+
+	@PostConstruct
+	public void init() {
+		String evalSha = redisson.getScript().scriptLoad(LuaScripts.BOOKING_SPECIALS_LUA_script);
+		cacheService.addEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER, evalSha);
+	}
 
 	public void trySystemLock(RedisKey systemKey) {
 		if ((systemKey.getKey().charAt(systemKey.getKey().length() - 1)) == '_') {
@@ -91,10 +99,6 @@ public class RedisService {
 		return map;
 	}
 
-	public void setHashMap(){
-		redisson.getMap("SPECIALS_PRODUCT_ID_1").putAll(Map.of("inventory", 100, "booked", 0));
-	}
-
 	public <T> T getHashClass(String hashKey, Class<T> clazz) {
 		return objectMapper.convertValue(redisson.getBucket(hashKey).get(), clazz);
 	}
@@ -105,14 +109,16 @@ public class RedisService {
 		return evalSha;
 	}
 
-	public void executeEvalSha() {
+	public void executeEvalSha(SpecialOrderPayload specialOrderPayload) {
 		String evalSha = cacheService.getEvalSha(RedisKey.LUA_CREATE_SPECIALS_ORDER);
 		redisson.getScript()
 				.evalSha(
 						RScript.Mode.READ_WRITE,
 						evalSha,
 						RScript.ReturnType.VALUE,
-						List.of(RedisKey.withSpecialsPrefix(1)), 1, 1);
+						List.of(RedisKey.withSpecialsPrefix(specialOrderPayload.productId())),
+						specialOrderPayload.booked(),
+						specialOrderPayload.booked());
 	}
 
 	public <T> Optional<T> getValueByKey(String key) {

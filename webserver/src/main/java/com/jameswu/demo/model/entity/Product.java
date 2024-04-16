@@ -37,7 +37,7 @@ public class Product implements Serializable {
 	@DecimalMin(value = "0.00", message = "Price must be greater than or equal to 0.00")
 	private BigDecimal price;
 
-	@Column(name = "quantity", nullable = false)
+	@Column(name = "booked", nullable = false)
 	private int quantity;
 
 	public Product(String title, String description, BigDecimal price, int quantity) {

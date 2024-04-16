@@ -1,7 +1,9 @@
 package com.jameswu.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jameswu.demo.model.payload.SpecialOrderPayload;
 import com.jameswu.demo.notification.mail.AbstractMail;
+import com.jameswu.demo.notification.mail.QueueTag;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +32,14 @@ public class RabbitService {
 	}
 
 	@SneakyThrows
-	public void sendMessage(String queueTagName, AbstractMail payload) {
+	public void sendEmail(String queueTagName, AbstractMail payload) {
 		Message message = new Message(objectMapper.writeValueAsBytes(payload), messageProperties);
 		rabbitTemplate.send(queueTagName, message);
+	}
+
+	@SneakyThrows
+	public void sendSpecialsOrder(SpecialOrderPayload specialOrderPayload) {
+		Message message = new Message(objectMapper.writeValueAsBytes(specialOrderPayload), messageProperties);
+		rabbitTemplate.send(QueueTag.SPECIAL_ORDER.name(), message);
 	}
 }

@@ -19,7 +19,7 @@ public abstract class NotificationQueue<T, M extends AbstractMail> {
 	private RabbitService rabbitService;
 
 	public void publish(T ts) {
-		rabbitService.sendMessage(queueTag().name(), formatHtml(ts));
+		rabbitService.sendEmail(queueTag().name(), formatHtml(ts));
 	}
 
 	protected void consume(M mail) {
