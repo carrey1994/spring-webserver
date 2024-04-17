@@ -5,15 +5,14 @@ import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
-import com.jameswu.demo.model.payload.SpecialsDetailPayload;
 import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
-import com.jameswu.demo.utils.RedisKey;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 @ConfigurationProperties(prefix = "init")
@@ -58,12 +58,17 @@ public class UserInitiationConfig {
 			int id, String username, String password, Integer recommenderId, UserRole role) {}
 
 	@Bean
+	@Transactional
 	public void initUsers() {
 		Product a = new Product("A Ins.", "AA", BigDecimal.valueOf(100L), 100);
 		Product b = new Product("B Ins.", "BB", BigDecimal.valueOf(200L), 200);
 		Product c = new Product("C Ins.", "CC", BigDecimal.valueOf(300L), 300);
-		var products = List.of(a, b, c);
-		productRepository.saveAll(List.of(a, b, c));
+		List<Product> products = new ArrayList<>();
+		//		for (int i = 0; i < 1000; i++) {
+		//			products.add(new Product("A Ins.", "AA", BigDecimal.valueOf(i + 1), i + 1));
+		//		}
+		//		var products = List.of(a, b, c);
+		//		productRepository.saveAll(products);
 		List<GcUser> gcUsers = users.stream()
 				.map(user -> GcUser.builder()
 						.userId(user.id)
@@ -81,17 +86,18 @@ public class UserInitiationConfig {
 						.build())
 				.toList();
 		var users = userRepository.saveAll(gcUsers);
-		//        for (GcUser user : users) {
-		//            Order order = new Order(user, Set.of());
-		//            var updatedOrder = orderRepository.save(order);
-		//            orderDetailRepository.save(new OrderDetail(
-		//                    products.get(new Random().nextInt(3)),
-		//                    updatedOrder,
-		//                    100,
-		//                    BigDecimal.valueOf(100L),
-		//                    UUID.randomUUID()));
-		//        }
+		//		        for (GcUser user : users) {
+		//		            Order order = new Order(user, Set.of());
+		//		            var updatedOrder = orderRepository.save(order);
+		//		            orderDetailRepository.save(new OrderDetail(
+		//		                    products.get(new Random().nextInt(3)),
+		//		                    updatedOrder,
+		//		                    100,
+		//		                    BigDecimal.valueOf(100L),
+		//		                    UUID.randomUUID()));
+		//		        }
 
-		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100, 0));
+		//		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100,
+		// 0));
 	}
 }

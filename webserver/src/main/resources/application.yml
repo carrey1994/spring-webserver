@@ -12,30 +12,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: user
     password: my-sql-password
-    url: jdbc:mysql://localhost:3306/webserver
+    url: jdbc:mysql://localhost:3306/webserver?rewriteBatchedStatements=true
   jpa:
     properties:
       hibernate:
+        batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 30
         dialect: org.hibernate.dialect.MySQLDialect
-        generate_statistics: false
+        generate_statistics: true
         format_sql: false
     hibernate:
       show-sql: false
       ddl-auto: create-drop
-    show-sql: false
-
-logging:
-  level:
-    com:
-      jameswu: DEBUG
-    org:
-      springframework:
-        security: DEBUG
-        web: DEBUG
-
-hibernate:
-  type:
-    preferred_uuid_jdbc_type: CHAR
 
 redis:
   master:

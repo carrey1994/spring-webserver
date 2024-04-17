@@ -6,12 +6,9 @@ import com.jameswu.demo.model.entity.OrderDetail;
 import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.payload.BuyingProductPayload;
 import com.jameswu.demo.model.payload.NewOrderPayload;
-import com.jameswu.demo.model.payload.SpecialOrderPayload;
-import com.jameswu.demo.model.payload.SpecialsDetailPayload;
 import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
-import com.jameswu.demo.utils.RedisKey;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,14 +75,14 @@ public class OrderService {
 		// 3. async order saving to database
 		List<Integer> productIds =
 				newOrderPayload.keySet().stream().map(Integer::parseInt).toList();
-//		redisService.executeEvalSha();
+		//		redisService.executeEvalSha();
 
-//		rabbitService.sendEmail(new SpecialOrderPayload(user.getUserId(), newOrderPayload.));
+		//		rabbitService.sendEmail(new SpecialOrderPayload(user.getUserId(), newOrderPayload.));
 		productIds.forEach(id -> {
-//			new SpecialOrderPayload(user.getUserId(), newOrderPayload.get(id).)
+			//			new SpecialOrderPayload(user.getUserId(), newOrderPayload.get(id).)
 
-//			SpecialsDetailPayload hashClass = redisService.getHashClass(
-//					RedisKey.withSpecialsPrefix(id), SpecialsDetailPayload.class);
+			//			SpecialsDetailPayload hashClass = redisService.getHashClass(
+			//					RedisKey.withSpecialsPrefix(id), SpecialsDetailPayload.class);
 		});
 		return List.of();
 	}

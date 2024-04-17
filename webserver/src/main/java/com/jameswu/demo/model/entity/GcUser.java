@@ -43,7 +43,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 public class GcUser implements UserDetails, Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "user_id")
 	private int userId;
 

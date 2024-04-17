@@ -66,7 +66,7 @@ services:
       - dev
 
   spring-mysql-master:
-    image: bitnami/mysql:8.0
+    image: bitnami/mysql:8.0.30
     container_name: spring-mysql-master
     environment:
       MYSQL_DATABASE: webserver

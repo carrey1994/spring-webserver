@@ -28,7 +28,7 @@ import lombok.Setter;
 @Setter
 public class Order implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "order_id")
 	private int orderId;
 

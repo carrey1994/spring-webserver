@@ -39,7 +39,8 @@ public class RabbitService {
 
 	@SneakyThrows
 	public void sendSpecialsOrder(SpecialOrderPayload specialOrderPayload) {
-		Message message = new Message(objectMapper.writeValueAsBytes(specialOrderPayload), messageProperties);
+		Message message =
+				new Message(objectMapper.writeValueAsBytes(specialOrderPayload), messageProperties);
 		rabbitTemplate.send(QueueTag.SPECIAL_ORDER.name(), message);
 	}
 }

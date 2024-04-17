@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Product implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "product_id", nullable = false)
 	private int productId;
 
@@ -45,6 +45,15 @@ public class Product implements Serializable {
 		this.description = description;
 		this.price = price;
 		this.quantity = quantity;
+	}
+
+	public Product(
+			int productId, String title, String description, BigDecimal price, int quantity) {
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.quantity = quantity;
+		this.productId = productId;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class OrderDetail implements Serializable {
 
 	@Id
 	@Column(name = "order_detail_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int orderDetailId;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
