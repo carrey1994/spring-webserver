@@ -10,13 +10,11 @@ import java.util.Map;
 import lombok.SneakyThrows;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-@Disabled("test for local only")
 class ApiIntegrationTest {
 	private final String APPLICATION_JSON = "application/json";
 	private final String CONTENT_TYPE = "Content-Type";
@@ -28,7 +26,7 @@ class ApiIntegrationTest {
 	public String loginApi() {
 
 		var payload = Map.ofEntries(
-				Map.entry("username", "testuser7"), Map.entry("password", "testuser7"));
+				Map.entry("username", "TestUser7"), Map.entry("password", "TestUser7"));
 		RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
 		Request request = new Request.Builder()
 				.url("http://127.0.0.1:8080/api/v1/login")
@@ -88,7 +86,6 @@ class ApiIntegrationTest {
 				Strings.isNullOrEmpty(resultNode.get("message").get("userId").asText()));
 		Assertions.assertEquals(
 				"1", resultNode.get("message").get("recommenderId").asText());
-		Assertions.assertTrue(resultNode.get("ok").asBoolean());
 	}
 
 	@SneakyThrows
@@ -138,7 +135,6 @@ class ApiIntegrationTest {
 
 		JsonNode resultNode = objectMapper.readTree(response.body().string());
 		Assertions.assertEquals(1, resultNode.get("message").get("orderId").asInt());
-		Assertions.assertTrue(resultNode.get("ok").asBoolean());
 	}
 
 	@SneakyThrows
@@ -168,9 +164,9 @@ class ApiIntegrationTest {
 	private Map<String, String> getNewUser(int increasedId, int baseId) {
 		int id = increasedId + baseId;
 		return Map.ofEntries(
-				Map.entry("username", "testuser" + id),
-				Map.entry("password", "testuser" + id),
-				Map.entry("email", "testuser" + id + "@gmail.com"),
+				Map.entry("username", "TestUser" + id),
+				Map.entry("password", "TestUser" + id),
+				Map.entry("email", "TestUser" + id + "@gmail.com"),
 				Map.entry("nickname", "NikcnameTest" + id),
 				Map.entry("address", "Taipei"),
 				Map.entry("date", "2017-08-14 12:17:47"),

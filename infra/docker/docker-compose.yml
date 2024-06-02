@@ -35,33 +35,12 @@ services:
       timeout: 5s
       retries: 3
 
-  vault:
-    image: hashicorp/vault
-    cap_add:
-      - IPC_LOCK
-    environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=myroot
-      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
-    ports:
-      - "8200:8200"
-    networks:
-      - dev
-
   spring-sonarqube:
+    profiles: [ "sonar" ]
     image: sonarqube:community
     ports:
       - "9000:9000"
       - "9092:9092"
-    networks:
-      - dev
-
-  spring-postgres:
-    image: postgres:16
-    container_name: spring-postgres
-    environment:
-      POSTGRES_PASSWORD: postgrez
-    ports:
-      - "5432:5432"
     networks:
       - dev
 
@@ -158,8 +137,6 @@ services:
         condition: service_healthy
       spring-mailhog:
         condition: service_healthy
-
-
 
 networks:
   dev:
