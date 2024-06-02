@@ -16,12 +16,10 @@ check_container_health() {
 }
 
 # Wait for each container to be healthy
-check_container_health "spring-redis-commander"
-check_container_health "spring-redis-slave"
-check_container_health "spring-redis-master"
-check_container_health "spring-mailhog"
-check_container_health "spring-mysql-master"
-check_container_health "spring-rabbitmq"
+containers=("spring-redis-commander" "spring-redis-slave" "spring-redis-master" "spring-mailhog" "spring-mysql-master" "spring-rabbitmq")
+for container in "${containers[@]}"; do
+    check_container_health $container
+done
 echo "All containers are healthy."
 
 echo "Running webserver... "
@@ -39,5 +37,5 @@ while true; do
 done
 
 # Run integration test
-./mvnw -pl integration-test test
+./mvnw test
 echo "Finished webserver test"

@@ -18,8 +18,10 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
-      - name: Check style
+      - name: Spotless check
         run: ./mvnw spotless:check
+      - name: SpotBugs check
+        run: ./mvnw spotbugs:check
       - name: Build jar
         run: ./mvnw package -DskipTests=true --quiet
       - name: Login to Docker Hub
