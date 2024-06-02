@@ -3,6 +3,7 @@ package com.jameswu.demo.model.payload;
 import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jameswu.demo.annotation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +12,8 @@ import java.io.Serializable;
 import java.time.Instant;
 
 public record RegisterPayload(
-		@Size(min = 8, max = 16) @NotNull String username,
-		@Size(min = 8, max = 16) @NotNull String password,
+		@Password @NotNull String username,
+		@Password @NotNull String password,
 		@Size(max = 16) @NotNull String nickname,
 		@Email(
 						message = "Invalid Email",

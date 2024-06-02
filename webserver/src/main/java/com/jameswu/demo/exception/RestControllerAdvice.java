@@ -15,7 +15,7 @@ public class RestControllerAdvice {
 	public ResponseEntity<Object> handleIllegalException(
 			IllegalArgumentException ex, WebRequest request) {
 		return new ResponseEntity<>(
-				Result.failure(ex.getMessage()),
+				Result.failure(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()),
 				new HttpHeaders(),
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -23,7 +23,7 @@ public class RestControllerAdvice {
 	@ExceptionHandler(value = {Exception.class})
 	public ResponseEntity<Object> handleOtherExceptions(Exception ex, WebRequest request) {
 		return new ResponseEntity<>(
-				Result.failure(ex.getMessage()),
+				Result.failure(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()),
 				new HttpHeaders(),
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
