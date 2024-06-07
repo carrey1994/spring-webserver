@@ -1,0 +1,15 @@
+The webserver is designed for simple member system.
+The frontend is designed for website ui.
+The integration-test is used to test the api flow, and it will take test on the github action.
+The infra contains yaml of docker and terraform for dev env or local.
+The docker-ci-tester.sh is for test on CI instead of local.
+
+There are ways to launch the server on local.
+1. If Docker installed,
+   Run "./docker-starter.sh -w".
+   (The -w flag will pull image from dockerhub for backend server, otherwise script will launch the services except webserver.)
+2. If Docker and K3d installed,
+   Run "./k3d-starter.sh".
+   (If Istio install, the flag '-i' is enable to launch with Istio.)
+3. If Docker and Terraform installed,
+   Run "./terraform-starter.sh".
