@@ -16,15 +16,18 @@ public interface TokenRepository extends CrudRepository<ActiveToken, Integer> {
 	@Query(
 			value =
 					"""
-			SELECT
-			t.id,
-			t.user_id,
-			t.token
-			FROM
-			active_token t
-			INNER JOIN user_profile p ON t.user_id = p.user_id
-			WHERE
-			p.enrollment_date BETWEEN :prevTime AND :nextTime
+				SELECT
+					t.id,
+					t.user_id,
+					t.token
+				FROM
+					active_token t
+				INNER JOIN
+					user_profile p
+				ON
+					t.user_id = p.user_id
+				WHERE
+					p.enrollment_date BETWEEN :prevTime AND :nextTime
 			""",
 			nativeQuery = true)
 	List<ActiveToken> findTokenAfterLastSentTime(
