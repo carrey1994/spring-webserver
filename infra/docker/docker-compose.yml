@@ -45,13 +45,14 @@ services:
       - dev
 
   spring-mysql-master:
-    image: bitnami/mysql:8.0.30
+    image: bitnami/mysql:8.0.37
     container_name: spring-mysql-master
     environment:
       MYSQL_DATABASE: webserver
       MYSQL_PASSWORD: my-sql-password
       MYSQL_USER: user
       MYSQL_ROOT_PASSWORD: my-sql-password
+#      MYSQL_EXTRA_FLAGS: '--lower-case-table-names=1'
     ports:
       - "3306:3306"
     networks:

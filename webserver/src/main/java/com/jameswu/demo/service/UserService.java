@@ -1,5 +1,6 @@
 package com.jameswu.demo.service;
 
+import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.payload.UserProfilePayload;
 import com.jameswu.demo.repository.UserProfileRepository;
@@ -18,12 +19,9 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserProfile updateUserProfile(int userId, UserProfilePayload userProfilePayload) {
-		UserProfile userProfile = userProfileRepository
-				.findById(userId)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
-		userProfile.setAddress(userProfilePayload.address());
-		userProfile.setEmail(userProfilePayload.email());
-		return userProfileRepository.save(userProfile);
+	public UserProfile updateUserProfile(GcUser user, UserProfilePayload userProfilePayload) {
+		user.getProfile().setAddress(userProfilePayload.address());
+		user.getProfile().setEmail(userProfilePayload.email());
+		return userProfileRepository.save(user.getProfile());
 	}
 }

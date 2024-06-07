@@ -54,7 +54,7 @@ public class UserManagementService {
 				throw new IllegalArgumentException(GzTexts.USER_NOT_FOUND);
 			});
 		}
-		System.out.println("User registration: --|>" + Instant.now().getEpochSecond());
+
 		UserProfile userProfile = UserProfile.builder()
 				.email(registerPayload.email())
 				.address(registerPayload.address())
@@ -73,7 +73,6 @@ public class UserManagementService {
 
 		newUser = userRepository.save(newUser);
 		tokenRepository.save(ActiveToken.userWithDefaultToken(newUser));
-		//		notificationService.putQueue(QueueTag.NEW_USER_TAG, activeToken);
 		return newUser.getProfile();
 	}
 

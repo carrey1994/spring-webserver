@@ -47,7 +47,7 @@ public class GcUser implements UserDetails, Serializable {
 	@Column(name = "user_id")
 	private int userId;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, columnDefinition = "VARCHAR(16) COLLATE latin1_general_cs")
 	@Size(min = 8, max = 16)
 	@NotBlank
 	private String username;
