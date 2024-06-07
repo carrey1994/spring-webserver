@@ -16,8 +16,7 @@ public class SystemNotificationQueue extends NotificationQueue<UserProfile, Syst
 
 	@Override
 	protected AbstractMail formatHtml(UserProfile t) {
-		return new SystemMail(
-				String.valueOf(t.getUserId()), t.getEmail(), t.getEmail(), "1.0.0-rc1");
+		return new SystemMail(String.valueOf(t.getUserId()), t.getEmail(), t.getEmail(), "1.0.0-rc1");
 	}
 
 	@Override

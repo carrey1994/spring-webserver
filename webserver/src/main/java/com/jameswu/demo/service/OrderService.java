@@ -46,8 +46,7 @@ public class OrderService {
 				payload.keySet().stream().map(Integer::valueOf).toList());
 		Set<OrderDetail> detailList = new HashSet<>();
 		restoredProducts.forEach(restoredProduct -> {
-			BuyingProductPayload buyingProduct =
-					payload.get(String.valueOf(restoredProduct.getProductId()));
+			BuyingProductPayload buyingProduct = payload.get(String.valueOf(restoredProduct.getProductId()));
 			int buyingQuantity = buyingProduct.quantity();
 			int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
 			if (updatedQuantity < 0) {
@@ -55,11 +54,7 @@ public class OrderService {
 			}
 			restoredProduct.setQuantity(updatedQuantity);
 			OrderDetail orderDetail = new OrderDetail(
-					restoredProduct,
-					order,
-					buyingQuantity,
-					restoredProduct.getPrice(),
-					buyingProduct.couponId());
+					restoredProduct, order, buyingQuantity, restoredProduct.getPrice(), buyingProduct.couponId());
 			detailList.add(orderDetail);
 		});
 		order.setOrderDetails(detailList);

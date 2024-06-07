@@ -13,12 +13,7 @@ public class GcProfileLevel extends UserProfile implements Serializable {
 
 	public UserProfile toUserProfile() {
 		return new UserProfile(
-				getUserId(),
-				getEmail(),
-				getNickname(),
-				getAddress(),
-				getEnrollmentDate(),
-				getRecommenderId());
+				getUserId(), getEmail(), getNickname(), getAddress(), getEnrollmentDate(), getRecommenderId());
 	}
 
 	public GcProfileLevel(UserProfile userProfile, int level) {

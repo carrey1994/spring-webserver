@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(
 		basePackages = {
 			"com.jameswu.demo.config",
+			"com.jameswu.demo.scheduled",
 			"com.jameswu.demo.controller",
 			"com.jameswu.demo.exception",
 			"com.jameswu.demo.filter",
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = "com.jameswu.demo.repository")
 @EnableTransactionManagement
 @EnableAsync
+@EnableScheduling
 public class WebApplication {
 
 	public static void main(String[] args) {

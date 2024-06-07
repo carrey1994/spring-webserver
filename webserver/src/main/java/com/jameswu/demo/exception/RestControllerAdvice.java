@@ -12,8 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 public class RestControllerAdvice {
 
 	@ExceptionHandler(value = {IllegalArgumentException.class})
-	public ResponseEntity<Object> handleIllegalException(
-			IllegalArgumentException ex, WebRequest request) {
+	public ResponseEntity<Object> handleIllegalException(IllegalArgumentException ex, WebRequest request) {
 		return new ResponseEntity<>(
 				Result.failure(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()),
 				new HttpHeaders(),

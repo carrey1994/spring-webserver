@@ -36,8 +36,7 @@ public class JwtService {
 	private final CacheService cacheService;
 
 	@Autowired
-	public JwtService(
-			RedisService redisService, ObjectMapper objectMapper, CacheService cacheService) {
+	public JwtService(RedisService redisService, ObjectMapper objectMapper, CacheService cacheService) {
 		this.redisService = redisService;
 		this.objectMapper = objectMapper;
 		this.cacheService = cacheService;

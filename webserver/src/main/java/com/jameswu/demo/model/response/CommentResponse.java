@@ -15,12 +15,7 @@ public class CommentResponse implements Serializable {
 	Instant createdTime;
 
 	public CommentResponse(
-			int commentId,
-			String content,
-			String nickname,
-			int productId,
-			int parentCommentId,
-			Instant createdTime) {
+			int commentId, String content, String nickname, int productId, int parentCommentId, Instant createdTime) {
 		this.commentId = commentId;
 		this.content = content;
 		this.nickname = nickname;

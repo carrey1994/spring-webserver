@@ -49,12 +49,7 @@ public class Comment implements Serializable {
 	private Instant createdTime;
 
 	public Comment(
-			String content,
-			int userId,
-			String nickname,
-			int productId,
-			int parentCommentId,
-			Instant createdTime) {
+			String content, int userId, String nickname, int productId, int parentCommentId, Instant createdTime) {
 		this.content = content;
 		this.userId = userId;
 		this.nickname = nickname;
@@ -65,11 +60,6 @@ public class Comment implements Serializable {
 
 	public static Comment to(CommentPayload payload, String nickname, int userId) {
 		return new Comment(
-				payload.content(),
-				userId,
-				nickname,
-				payload.productId(),
-				payload.parentCommentId(),
-				Instant.now());
+				payload.content(), userId, nickname, payload.productId(), payload.parentCommentId(), Instant.now());
 	}
 }

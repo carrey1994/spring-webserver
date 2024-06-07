@@ -26,8 +26,7 @@ public class IndexController {
 	private final IndexService indexService;
 
 	@PostMapping("/login")
-	public Result<Map<String, String>> login(
-			@Valid @RequestBody LoginPayload payload, BindingResult result) {
+	public Result<Map<String, String>> login(@Valid @RequestBody LoginPayload payload, BindingResult result) {
 		if (result.hasErrors()) {
 			Map<String, String> errors = new HashMap<>();
 			for (FieldError error : result.getFieldErrors()) {

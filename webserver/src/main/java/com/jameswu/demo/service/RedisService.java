@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
+import org.redisson.api.RMap;
 import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,7 @@ import org.springframework.stereotype.Service;
 public class RedisService {
 
 	@Autowired
-	public RedisService(
-			RedissonClient redisson, CacheService cacheService, ObjectMapper objectMapper) {
+	public RedisService(RedissonClient redisson, CacheService cacheService, ObjectMapper objectMapper) {
 		this.redisson = redisson;
 		this.cacheService = cacheService;
 		this.objectMapper = objectMapper;
@@ -56,16 +56,14 @@ public class RedisService {
 	}
 
 	public void tryPartialLock(RedisKey redisPartialKey, String key) {
-		if ((redisPartialKey.getKey().charAt(redisPartialKey.getKey().length() - 1))
-				!= GzTexts.DASH.charAt(0)) {
+		if ((redisPartialKey.getKey().charAt(redisPartialKey.getKey().length() - 1)) != GzTexts.DASH.charAt(0)) {
 			throw new IllegalArgumentException("key is not prefix format.");
 		}
 		tryLock(redisPartialKey.getKey() + key);
 	}
 
 	public void tryPartialUnlock(RedisKey redisPartialKey, String key) {
-		if ((redisPartialKey.getKey().charAt(redisPartialKey.getKey().length() - 1))
-				!= GzTexts.DASH.charAt(0)) {
+		if ((redisPartialKey.getKey().charAt(redisPartialKey.getKey().length() - 1)) != GzTexts.DASH.charAt(0)) {
 			throw new IllegalArgumentException("key is not prefix format.");
 		}
 		RLock lock = redisson.getLock(redisPartialKey.getKey() + key);
@@ -123,6 +121,11 @@ public class RedisService {
 
 	public <T> Optional<T> getValueByKey(String key) {
 		RBucket<T> data = redisson.getBucket(key);
-		return Optional.of(data.get());
+		return Optional.ofNullable(data.get());
+	}
+
+	public <K, V> Optional<RMap<K, V>> getMapValueByKey(String key) {
+		RMap<K, V> data = redisson.getMap(key);
+		return Optional.ofNullable(data);
 	}
 }

@@ -32,8 +32,8 @@ public class RedisConfig {
 				.setMasterAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
 		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
 		config.setCodec(new StringCodec());
-		slaves.forEach(slave -> masterSlaveServersConfig.addSlaveAddress(
-				String.format(REDIS_BASE_URL, slave.host(), slave.port())));
+		slaves.forEach(slave ->
+				masterSlaveServersConfig.addSlaveAddress(String.format(REDIS_BASE_URL, slave.host(), slave.port())));
 		return Redisson.create(config);
 	}
 
@@ -41,8 +41,7 @@ public class RedisConfig {
 	@Profile("test")
 	public RedissonClient redisClientOnTest() {
 		Config config = new Config();
-		config.useSingleServer()
-				.setAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
+		config.useSingleServer().setAddress(String.format(REDIS_BASE_URL, master.host(), master.port()));
 		config.setAddressResolverGroupFactory(new DnsAddressResolverGroupFactory());
 		config.setCodec(new JsonJacksonCodec());
 		return Redisson.create(config);

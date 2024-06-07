@@ -31,14 +31,13 @@ public class OrderController {
 	@PostMapping("create")
 	public Result<Order> createOrder(
 			Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
-		return Result.success(
-				orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
+		return Result.success(orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
 	}
 
 	@PostMapping("specials/create")
 	public Result<List<Product>> createSpecialsOrder(
 			Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
-		return Result.success(orderService.createSpecialsOrder(
-				(GcUser) authentication.getPrincipal(), newOrderPayload));
+		return Result.success(
+				orderService.createSpecialsOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
 	}
 }

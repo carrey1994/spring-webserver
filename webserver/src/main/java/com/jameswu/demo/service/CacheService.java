@@ -28,8 +28,7 @@ public class CacheService {
 			GcUser user = userRepository
 					.findByUserId(userId)
 					.orElseThrow(() -> new IllegalArgumentException("the user not found"));
-			userCache.put(userId, user);
-			return user;
+			return userCache.put(userId, user);
 		}
 	}
 

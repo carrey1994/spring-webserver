@@ -25,9 +25,7 @@ public class NotificationSender {
 
 	@Autowired
 	public NotificationSender(
-			JavaMailSender javaMailSender,
-			SpringTemplateEngine templateEngine,
-			ObjectMapper objectMapper) {
+			JavaMailSender javaMailSender, SpringTemplateEngine templateEngine, ObjectMapper objectMapper) {
 		this.javaMailSender = javaMailSender;
 		this.templateEngine = templateEngine;
 		this.objectMapper = objectMapper;
@@ -43,7 +41,6 @@ public class NotificationSender {
 	@Async
 	public void sendNotification(AbstractMail mail) {
 		try {
-			logger.info(String.format("ID -> %s", Thread.currentThread().getId()));
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, UTF_8);
 			String htmlMsg = renderedHTML(mail);

@@ -38,8 +38,8 @@ public class ProductManagementService {
 
 	@Transactional
 	public Product add(ProductPayload payload) {
-		return productRepository.save(new Product(
-				payload.title(), payload.description(), payload.price(), payload.quantity()));
+		return productRepository.save(
+				new Product(payload.title(), payload.description(), payload.price(), payload.quantity()));
 	}
 
 	public Map<String, String> addSpecials(SpecialsPayload payload) {
@@ -55,8 +55,8 @@ public class ProductManagementService {
 		payload.checkIfDefault((id) -> commentRepository
 				.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Parent comment not found")));
-		var comment = commentRepository.save(
-				Comment.to(payload, user.getProfile().getNickname(), user.getUserId()));
+		var comment =
+				commentRepository.save(Comment.to(payload, user.getProfile().getNickname(), user.getUserId()));
 		return CommentResponse.from(comment);
 	}
 }

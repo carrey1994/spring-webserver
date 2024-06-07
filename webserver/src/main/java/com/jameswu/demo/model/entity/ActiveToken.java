@@ -56,8 +56,8 @@ public class ActiveToken {
 	}
 
 	public boolean validateToken() {
-		return Instant.ofEpochMilli(Long.parseLong(
-						new String(Base64.getDecoder().decode(token.getBytes())).split("\\.")[1]))
+		return Instant.ofEpochMilli(
+						Long.parseLong(new String(Base64.getDecoder().decode(token.getBytes())).split("\\.")[1]))
 				.isAfter(Instant.now());
 	}
 }

@@ -32,11 +32,6 @@ public class UserManagementController {
 		return Result.success(userManagementService.activeUsers(pageable).getContent());
 	}
 
-	@GetMapping("system")
-	public Result<Boolean> systemBroadcast() {
-		return Result.success((userManagementService.systemBroadCast()));
-	}
-
 	@GetMapping("diagram")
 	public Result<GcProfileTreeNode> diagram(@RequestParam("id") int userId) {
 		return Result.success(userManagementService.searchingDiagram(userId));

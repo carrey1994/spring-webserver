@@ -45,8 +45,7 @@ public class BeansConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-			throws Exception {
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
 
@@ -59,8 +58,7 @@ public class BeansConfig {
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer gitPropsConfigurer() {
-		PropertySourcesPlaceholderConfigurer propsConfig =
-				new PropertySourcesPlaceholderConfigurer();
+		PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
 		propsConfig.setLocation(new ClassPathResource("git.properties"));
 		propsConfig.setIgnoreResourceNotFound(true);
 		propsConfig.setIgnoreUnresolvablePlaceholders(true);

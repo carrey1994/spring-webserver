@@ -15,8 +15,7 @@ public class GcProfileLevelRepository {
 	@Autowired
 	private EntityManager entityManager;
 
-	public List<GcProfileLevel> queryChildren(
-			@Param("user_id") int userId, @Param("level") int level) {
+	public List<GcProfileLevel> queryChildren(@Param("user_id") int userId, @Param("level") int level) {
 		Session session = entityManager.unwrap(Session.class);
 		List<Object[]> results = session.createNativeQuery(
 						"""

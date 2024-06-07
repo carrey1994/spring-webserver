@@ -32,8 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private CacheService cacheService;
 
 	@Override
-	protected void doFilterInternal(
-			HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		if (request.getServletPath().contains("/api/v1/login")) {
 			filterChain.doFilter(request, response);
@@ -47,8 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				jwtService.throwIfTokenNotFound(accessToken, new TokenInvalidException());
 				int id = jwtService.parseUserProfile(accessToken).getUserId();
 				GcUser user = cacheService.retrieveOrLoadUser(id);
-				var authToken =
-						new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+				var authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authToken);
 			} catch (JwtException e) {
 				resolver.resolveException(request, response, null, e);

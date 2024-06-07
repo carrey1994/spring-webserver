@@ -22,7 +22,7 @@ spring:
         jdbc:
           batch_size: 30
         dialect: org.hibernate.dialect.MySQLDialect
-        generate_statistics: true
+        generate_statistics: false
         format_sql: false
     hibernate:
       show-sql: false
@@ -35,11 +35,6 @@ redis:
   slaves:
     - host: localhost
       port: 6380
-
-server:
-  error:
-    include-binding-errors: always
-    include-message: always
 
 mail:
   host: localhost

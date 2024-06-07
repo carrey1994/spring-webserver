@@ -55,10 +55,8 @@ public class SecurityConfig {
 						.hasRole(UserRole.ADMIN.name())
 						.anyRequest()
 						.authenticated())
-				.sessionManagement(
-						session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.addFilterBefore(
-						jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.logout(logout -> logout.logoutUrl("/api/v1/logout")
 						.logoutSuccessHandler((request, response, authentication) -> {
 							jwtService.removeToken(request);

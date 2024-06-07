@@ -16,6 +16,10 @@ public class Result<T> {
 		return new Result<>(message, 200);
 	}
 
+	public static <T> Result<T> success(T message, int code) {
+		return new Result<>(message, code);
+	}
+
 	public static <T> Result<T> failure(T message, int code) {
 		return new Result<>(message, code);
 	}

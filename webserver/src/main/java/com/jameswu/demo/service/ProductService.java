@@ -42,24 +42,18 @@ public class ProductService {
 	}
 
 	public SpecialsPayload specialsById(int productId) {
-		var detail = redisService.getHashClass(
-				RedisKey.withSpecialsPrefix(productId), SpecialsDetailPayload.class);
+		var detail = redisService.getHashClass(RedisKey.withSpecialsPrefix(productId), SpecialsDetailPayload.class);
 		return new SpecialsPayload(productId, detail);
 	}
 
 	public List<CommentResponse> comments(Pageable pageable, int productId) {
-		return commentRepository
-				.findAllByProductIdOrderByCreatedTime(pageable, productId)
-				.getContent()
-				.stream()
+		return commentRepository.findAllByProductIdOrderByCreatedTime(pageable, productId).getContent().stream()
 				.map(CommentResponse::from)
 				.toList();
 	}
 
 	public List<CommentResponse> replies(int parentCommentId) {
-		return commentRepository
-				.findAllByParentCommentIdOrderByCreatedTime(parentCommentId)
-				.stream()
+		return commentRepository.findAllByParentCommentIdOrderByCreatedTime(parentCommentId).stream()
 				.map(CommentResponse::from)
 				.toList();
 	}

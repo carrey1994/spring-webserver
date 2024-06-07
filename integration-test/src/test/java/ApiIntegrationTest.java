@@ -25,8 +25,7 @@ class ApiIntegrationTest {
 	@SneakyThrows
 	public String loginApi() {
 
-		var payload = Map.ofEntries(
-				Map.entry("username", "TestUser7"), Map.entry("password", "TestUser7"));
+		var payload = Map.ofEntries(Map.entry("username", "TestUser7"), Map.entry("password", "TestUser7"));
 		RequestBody body = RequestBody.create(jsonMediaType, parseJson(payload));
 		Request request = new Request.Builder()
 				.url("http://127.0.0.1:8080/api/v1/login")
@@ -169,7 +168,6 @@ class ApiIntegrationTest {
 				Map.entry("email", "TestUser" + id + "@gmail.com"),
 				Map.entry("nickname", "NikcnameTest" + id),
 				Map.entry("address", "Taipei"),
-				Map.entry("date", "2017-08-14 12:17:47"),
 				Map.entry("recommenderId", "1"));
 	}
 }

@@ -16,8 +16,7 @@ class WebApplicationTests {
 		ConstraintValidatorContext context = Mockito.mock(ConstraintValidatorContext.class);
 		Mockito.when(context.buildConstraintViolationWithTemplate(ArgumentMatchers.anyString()))
 				.thenReturn(violationBuilderMock);
-		String[] validPassword =
-				new String[] {"StrongPassword123", "SecureP@ssw0rd!", "MyP@ssw0rd123"};
+		String[] validPassword = new String[] {"StrongPassword123", "SecureP@ssw0rd!", "MyP@ssw0rd123"};
 		String[] invalidPassword = new String[] {
 			// (too short)
 			"weak",

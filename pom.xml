@@ -182,7 +182,7 @@
                     <java>
                         <palantirJavaFormat>
                             <version>2.41.0</version>                     <!-- optional -->
-                            <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                            <style>PALANTIR</style>
                         </palantirJavaFormat>
                         <formatAnnotations/>
                         <indent>

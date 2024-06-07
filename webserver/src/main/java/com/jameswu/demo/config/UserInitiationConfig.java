@@ -54,8 +54,7 @@ public class UserInitiationConfig {
 	private OrderRepository orderRepository;
 	private OrderDetailRepository orderDetailRepository;
 
-	record InitUserData(
-			int id, String username, String password, Integer recommenderId, UserRole role) {}
+	record InitUserData(int id, String username, String password, Integer recommenderId, UserRole role) {}
 
 	@Bean
 	@Transactional

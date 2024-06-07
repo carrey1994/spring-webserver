@@ -25,9 +25,7 @@ public class PublicController {
 
 	@Autowired
 	public PublicController(
-			HealthService healthService,
-			GitProperties gitProperties,
-			UserManagementService userManagementService1) {
+			HealthService healthService, GitProperties gitProperties, UserManagementService userManagementService1) {
 		this.healthService = healthService;
 		this.gitProperties = gitProperties;
 		this.userManagementService = userManagementService1;
