@@ -19,9 +19,9 @@ jobs:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Spotless check
-        run: ./mvnw spotless:check
+        run: ./mvnw spotless:check --quiet
       - name: SpotBugs check
-        run: ./mvnw spotbugs:check
+        run: ./mvnw spotbugs:check --quiet
       - name: Build jar
         run: ./mvnw package -DskipTests=true --quiet
       - name: Login to Docker Hub
@@ -32,6 +32,13 @@ jobs:
       - name: Test api by docker
         run: |
           ./docker-ci-tester.sh
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Jest Report
+          path: webserver/target/surefire-reports/*.xml
+          reporter: jest-junit
 
   docker:
     runs-on: ubuntu-latest
