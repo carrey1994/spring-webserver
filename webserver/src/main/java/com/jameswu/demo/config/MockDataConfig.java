@@ -27,9 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 @ConfigurationProperties(prefix = "init")
 @Profile("!prod")
 @Data
-public class UserInitiationConfig {
+public class MockDataConfig {
 	@Autowired
-	public UserInitiationConfig(
+	public MockDataConfig(
 			UserRepository userRepository,
 			ProductRepository productRepository,
 			RedisService redisService,
@@ -59,15 +59,11 @@ public class UserInitiationConfig {
 	@Bean
 	@Transactional
 	public void initUsers() {
-		Product a = new Product("A Ins.", "AA", BigDecimal.valueOf(100L), 100);
-		Product b = new Product("B Ins.", "BB", BigDecimal.valueOf(200L), 200);
-		Product c = new Product("C Ins.", "CC", BigDecimal.valueOf(300L), 300);
 		List<Product> products = new ArrayList<>();
-		//		for (int i = 0; i < 1000; i++) {
-		//			products.add(new Product("A Ins.", "AA", BigDecimal.valueOf(i + 1), i + 1));
-		//		}
-		//		var products = List.of(a, b, c);
-		//		productRepository.saveAll(products);
+		for (int i = 0; i < 1000; i++) {
+			products.add(new Product("A Ins.", "AA", BigDecimal.valueOf(i + 1), i + 1));
+		}
+		productRepository.saveAll(products);
 		List<GcUser> gcUsers = users.stream()
 				.map(user -> GcUser.builder()
 						.userId(user.id)

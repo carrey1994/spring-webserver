@@ -6,6 +6,7 @@ import com.jameswu.demo.utils.RedisKey;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,13 @@ public class CacheService {
 	private final Map<RedisKey, String> evalShaCache = new HashMap<>();
 
 	public GcUser retrieveOrLoadUser(int userId) {
-		if (userCache.containsKey(userId)) {
-			return userCache.get(userId);
-		} else {
-			GcUser user = userRepository
+		return Optional.ofNullable(userCache.get(userId)).orElseGet(() -> {
+			var user = userRepository
 					.findByUserId(userId)
 					.orElseThrow(() -> new IllegalArgumentException("the user not found"));
-			return userCache.put(userId, user);
-		}
+			userCache.put(userId, user);
+			return user;
+		});
 	}
 
 	public void removeIdFromUserCache(int userId) {

@@ -23,7 +23,6 @@ import lombok.Setter;
 @Entity(name = "gc_order")
 @Table(name = "gc_order")
 @NoArgsConstructor
-@EqualsAndHashCode
 @Getter
 @Setter
 public class Order implements Serializable {

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "product")
-@Table(indexes = {@Index(name = "idx_price", columnList = "price", unique = true)})
+@Table(indexes = {@Index(name = "idx_price", columnList = "price")})
 @NoArgsConstructor
 @Getter
 @Setter

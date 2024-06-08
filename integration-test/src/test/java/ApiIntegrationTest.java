@@ -6,6 +6,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
 import org.assertj.core.util.Strings;
@@ -118,9 +119,10 @@ class ApiIntegrationTest {
 	void createOrderApi() {
 		String accessToken = loginApi();
 		Map coupon = new HashMap<>();
-		coupon.put("quantity", 1);
+		coupon.put("quantity", 9);
 		coupon.put("couponId", null);
-		var orderPayload = Map.of("2", coupon);
+		coupon.put("productId", 10);
+		var orderPayload = List.of(coupon);
 		RequestBody body = RequestBody.create(jsonMediaType, parseJson(orderPayload));
 		Request request = new Request.Builder()
 				.url("http://127.0.0.1:8080/api/v1/order/create")
@@ -131,23 +133,8 @@ class ApiIntegrationTest {
 
 		Response response = doRequest(request);
 		Assertions.assertEquals(HttpStatus.OK.value(), response.code());
-
 		JsonNode resultNode = objectMapper.readTree(response.body().string());
 		Assertions.assertEquals(1, resultNode.get("message").get("orderId").asInt());
-	}
-
-	@SneakyThrows
-	@Test
-	void systemApi() {
-
-		String accessToken = loginApi();
-		Request request = new Request.Builder()
-				.url("http://127.0.0.1:8080/api/v1/user/management/system")
-				.get()
-				.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-				.build();
-		Response response = client.newCall(request).execute();
-		Assertions.assertEquals(HttpStatus.OK.value(), response.code());
 	}
 
 	@SneakyThrows

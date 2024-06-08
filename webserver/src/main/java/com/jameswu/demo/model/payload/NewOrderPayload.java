@@ -1,6 +1,6 @@
 package com.jameswu.demo.model.payload;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.List;
 
-public class NewOrderPayload extends HashMap<String, BuyingProductPayload> implements Serializable {}
+public record NewOrderPayload(List<OrderDetailPayload> orderDetails) implements Serializable {}

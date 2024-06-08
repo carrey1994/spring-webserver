@@ -3,11 +3,12 @@ package com.jameswu.demo.controller;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.Order;
 import com.jameswu.demo.model.entity.Product;
-import com.jameswu.demo.model.payload.NewOrderPayload;
+import com.jameswu.demo.model.payload.OrderDetailPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.OrderService;
 import com.jameswu.demo.service.RedisService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,14 +31,13 @@ public class OrderController {
 
 	@PostMapping("create")
 	public Result<Order> createOrder(
-			Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
-		return Result.success(orderService.createOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
+			Authentication authentication, @RequestBody @Valid @NotNull List<OrderDetailPayload> orderDetails) {
+		return Result.success(orderService.createOrder((GcUser) authentication.getPrincipal(), orderDetails));
 	}
 
 	@PostMapping("specials/create")
 	public Result<List<Product>> createSpecialsOrder(
-			Authentication authentication, @RequestBody @Valid NewOrderPayload newOrderPayload) {
-		return Result.success(
-				orderService.createSpecialsOrder((GcUser) authentication.getPrincipal(), newOrderPayload));
+			Authentication authentication, @RequestBody @Valid @NotNull List<OrderDetailPayload> orderDetails) {
+		return Result.success(orderService.createSpecialsOrder((GcUser) authentication.getPrincipal(), orderDetails));
 	}
 }
