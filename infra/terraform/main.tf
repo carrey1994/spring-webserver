@@ -59,14 +59,13 @@ resource "docker_container" "spring_mailhog" {
   }
 }
 
-resource "docker_container" "spring_mysql_master" {
-  image = "bitnami/mysql:8.0"
-  name  = "spring-mysql-master"
+resource "docker_container" "spring_postgres" {
+  image = "postgres"
+  name  = "spring-postgres"
   env = [
-    "MYSQL_DATABASE=webserver",
-    "MYSQL_PASSWORD=my-sql-password",
-    "MYSQL_USER=user",
-    "MYSQL_ROOT_PASSWORD=my-sql-password"
+    "POSTGRES_DB=webserver",
+    "POSTGRES_USER=user",
+    "POSTGRES_PASSWORD=my-postgres-password"
   ]
 
   ports {
@@ -81,7 +80,7 @@ resource "docker_container" "spring_mysql_master" {
   restart = "always"
 
   healthcheck {
-    test     = ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+    test     = ["CMD-SHELL", "pg_isready -U user"]
     interval = "5s"
     timeout  = "30s"
     retries  = 5
@@ -151,7 +150,7 @@ resource "docker_container" "spring_webserver" {
   restart = "always"
 
   depends_on = [
-    docker_container.spring_mysql_master,
+    docker_container.spring_postgres,
     docker_container.spring_redis_master,
     docker_container.spring_redis_slave,
     docker_container.spring_rabbitmq,
