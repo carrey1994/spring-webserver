@@ -2,48 +2,42 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   namespace: dev
-  name: mysql-deployment
+  name: postgres-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: postgres
   template:
     metadata:
       labels:
-        app: mysql
+        app: postgres
     spec:
       containers:
-        - name: mysql
-          image: bitnami/mysql:8.0  # Use the desired mysql version
+        - name: postgres
+          image: postgres:latest  # Use the desired PostgreSQL version
           env:
-            - name: MYSQL_PASSWORD
+            - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_PASSWORD
-            - name: MYSQL_USER
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_USER
-            - name: MYSQL_DATABASE
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_DATABASE
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
           ports:
-            - containerPort: 3306
-#          volumeMounts:
-#            - name: mysql-data
-#              mountPath: /var/lib/mysql
-#      volumes:
-#      - name: mysql-data
-#        persistentVolumeClaim:
-#          claimName: mysql-pvc
-
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc

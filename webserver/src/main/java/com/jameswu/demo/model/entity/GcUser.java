@@ -43,11 +43,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 public class GcUser implements UserDetails, Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private int userId;
 
-	@Column(nullable = false, unique = true, columnDefinition = "VARCHAR(16) COLLATE latin1_general_cs")
+	@Column(nullable = false, unique = true)
 	@Size(min = 8, max = 16)
 	@NotBlank
 	private String username;

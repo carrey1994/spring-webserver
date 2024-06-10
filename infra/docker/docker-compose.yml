@@ -44,25 +44,23 @@ services:
     networks:
       - dev
 
-  spring-mysql-master:
-    image: bitnami/mysql:8.0.37
-    container_name: spring-mysql-master
+  spring-postgres:
+    image: postgres
+    container_name: spring-postgres
     environment:
-      MYSQL_DATABASE: webserver
-      MYSQL_PASSWORD: my-sql-password
-      MYSQL_USER: user
-      MYSQL_ROOT_PASSWORD: my-sql-password
-#      MYSQL_EXTRA_FLAGS: '--lower-case-table-names=1'
+      POSTGRES_DB: webserver
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: my-postgres-password
     ports:
-      - "3306:3306"
+      - "5432:5432"
     networks:
       - dev
     restart: always
     healthcheck:
-      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MYSQL_USER', '-p$$MYSQL_PASSWORD' ]
-      timeout: 60s
+      test: ["CMD-SHELL", "pg_isready -U user"]
       interval: 5s
-      retries: 10
+      timeout: 5s
+      retries: 3
 
   spring-redis-master:
     image: redis
@@ -128,7 +126,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
     depends_on:
-      spring-mysql-master:
+      spring-postgres:
         condition: service_healthy
       spring-redis-master:
         condition: service_healthy

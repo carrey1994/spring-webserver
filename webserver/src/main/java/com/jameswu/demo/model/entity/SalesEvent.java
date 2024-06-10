@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class SalesEvent implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "sales_event_id", nullable = false)
 	private int salesEventId;
 

@@ -2,12 +2,11 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   java:
     runs-on: ubuntu-latest
     steps:
@@ -16,8 +15,8 @@ jobs:
       - name: Setup maven
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '17'
+          distribution: "zulu" # See 'Supported distributions' for available options
+          java-version: "17"
       - name: Spotless check
         run: ./mvnw spotless:check --quiet
       - name: SpotBugs check
@@ -32,13 +31,13 @@ jobs:
       - name: Test api by docker
         run: |
           ./docker-ci-tester.sh
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: Jest Report
-          path: webserver/target/surefire-reports/*.xml
-          reporter: jest-junit
+      # - name: Test Report
+      #   uses: dorny/test-reporter@v1
+      #   if: success() || failure()
+      #   with:
+      #     name: Jest Report
+      #     path: webserver/target/surefire-reports/*.xml
+      #     reporter: jest-junit
 
   docker:
     runs-on: ubuntu-latest

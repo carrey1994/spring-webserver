@@ -25,7 +25,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 @NoArgsConstructor
 public class ActiveToken {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
 	private int id;
 

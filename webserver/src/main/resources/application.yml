@@ -9,10 +9,10 @@ spring:
     username: user
     password: my-rabbitmq
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
     username: user
-    password: my-sql-password
-    url: jdbc:mysql://localhost:3306/webserver?rewriteBatchedStatements=true
+    password: my-postgres-password
+    url: jdbc:postgresql://localhost:5432/webserver
   jpa:
     properties:
       hibernate:
@@ -21,7 +21,6 @@ spring:
         order_updates: true
         jdbc:
           batch_size: 30
-        dialect: org.hibernate.dialect.MySQLDialect
         generate_statistics: false
         format_sql: false
     hibernate:
@@ -97,268 +96,268 @@ init:
       password: TestUser10
       recommenderId: 5
       role: ADMIN
-    - id: 11
-      username: TestUser11
-      password: TestUser11
-      recommenderId: 5
-      role: ADMIN
-    - id: 12
-      username: TestUser12
-      password: TestUser12
-      recommenderId: 6
-      role: ADMIN
-    - id: 13
-      username: TestUser13
-      password: TestUser13
-      recommenderId: 6
-      role: ADMIN
-    - id: 14
-      username: TestUser14
-      password: TestUser14
-      recommenderId: 7
-      role: ADMIN
-    - id: 15
-      username: TestUser15
-      password: TestUser15
-      recommenderId: 7
-      role: ADMIN
-    - id: 16
-      username: TestUser16
-      password: TestUser16
-      recommenderId: 8
-      role: ADMIN
-    - id: 17
-      username: TestUser17
-      password: TestUser17
-      recommenderId: 8
-      role: ADMIN
-    - id: 18
-      username: TestUser18
-      password: TestUser18
-      recommenderId: 9
-      role: ADMIN
-    - id: 19
-      username: TestUser19
-      password: TestUser19
-      recommenderId: 9
-      role: ADMIN
-    - id: 20
-      username: TestUser20
-      password: TestUser20
-      recommenderId: 10
-      role: ADMIN
-    - id: 21
-      username: TestUser21
-      password: TestUser21
-      recommenderId: 10
-      role: ADMIN
-    - id: 22
-      username: TestUser22
-      password: TestUser22
-      recommenderId: 11
-      role: ADMIN
-    - id: 23
-      username: TestUser23
-      password: TestUser23
-      recommenderId: 11
-      role: ADMIN
-    - id: 24
-      username: TestUser24
-      password: TestUser24
-      recommenderId: 12
-      role: ADMIN
-    - id: 25
-      username: TestUser25
-      password: TestUser25
-      recommenderId: 12
-      role: ADMIN
-    - id: 26
-      username: TestUser26
-      password: TestUser26
-      recommenderId: 13
-      role: ADMIN
-    - id: 27
-      username: TestUser27
-      password: TestUser27
-      recommenderId: 13
-      role: ADMIN
-    - id: 28
-      username: TestUser28
-      password: TestUser28
-      recommenderId: 14
-      role: ADMIN
-    - id: 29
-      username: TestUser29
-      password: TestUser29
-      recommenderId: 14
-      role: ADMIN
-    - id: 30
-      username: TestUser30
-      password: TestUser30
-      recommenderId: 15
-      role: ADMIN
-    - id: 31
-      username: TestUser31
-      password: TestUser31
-      recommenderId: 15
-      role: ADMIN
-    - id: 32
-      username: TestUser32
-      password: TestUser32
-      recommenderId: 16
-      role: ADMIN
-    - id: 33
-      username: TestUser33
-      password: TestUser33
-      recommenderId: 16
-      role: ADMIN
-    - id: 34
-      username: TestUser34
-      password: TestUser34
-      recommenderId: 17
-      role: ADMIN
-    - id: 35
-      username: TestUser35
-      password: TestUser35
-      recommenderId: 17
-      role: ADMIN
-    - id: 36
-      username: TestUser36
-      password: TestUser36
-      recommenderId: 18
-      role: ADMIN
-    - id: 37
-      username: TestUser37
-      password: TestUser37
-      recommenderId: 18
-      role: ADMIN
-    - id: 38
-      username: TestUser38
-      password: TestUser38
-      recommenderId: 19
-      role: ADMIN
-    - id: 39
-      username: TestUser39
-      password: TestUser39
-      recommenderId: 19
-      role: ADMIN
-    - id: 40
-      username: TestUser40
-      password: TestUser40
-      recommenderId: 20
-      role: ADMIN
-    - id: 41
-      username: TestUser41
-      password: TestUser41
-      recommenderId: 20
-      role: ADMIN
-    - id: 42
-      username: TestUser42
-      password: TestUser42
-      recommenderId: 21
-      role: ADMIN
-    - id: 43
-      username: TestUser43
-      password: TestUser43
-      recommenderId: 21
-      role: ADMIN
-    - id: 44
-      username: TestUser44
-      password: TestUser44
-      recommenderId: 22
-      role: ADMIN
-    - id: 45
-      username: TestUser45
-      password: TestUser45
-      recommenderId: 22
-      role: ADMIN
-    - id: 46
-      username: TestUser46
-      password: TestUser46
-      recommenderId: 23
-      role: ADMIN
-    - id: 47
-      username: TestUser47
-      password: TestUser47
-      recommenderId: 23
-      role: ADMIN
-    - id: 48
-      username: TestUser48
-      password: TestUser48
-      recommenderId: 24
-      role: ADMIN
-    - id: 49
-      username: TestUser49
-      password: TestUser49
-      recommenderId: 24
-      role: ADMIN
-    - id: 50
-      username: TestUser50
-      password: TestUser50
-      recommenderId: 25
-      role: ADMIN
-    - id: 51
-      username: TestUser51
-      password: TestUser51
-      recommenderId: 25
-      role: ADMIN
-    - id: 52
-      username: TestUser52
-      password: TestUser52
-      recommenderId: 26
-      role: ADMIN
-    - id: 53
-      username: TestUser53
-      password: TestUser53
-      recommenderId: 26
-      role: ADMIN
-    - id: 54
-      username: TestUser54
-      password: TestUser54
-      recommenderId: 27
-      role: ADMIN
-    - id: 55
-      username: TestUser55
-      password: TestUser55
-      recommenderId: 27
-      role: ADMIN
-    - id: 56
-      username: TestUser56
-      password: TestUser56
-      recommenderId: 28
-      role: ADMIN
-    - id: 57
-      username: TestUser57
-      password: TestUser57
-      recommenderId: 28
-      role: ADMIN
-    - id: 58
-      username: TestUser58
-      password: TestUser58
-      recommenderId: 29
-      role: ADMIN
-    - id: 59
-      username: TestUser59
-      password: TestUser59
-      recommenderId: 29
-      role: ADMIN
-    - id: 60
-      username: TestUser60
-      password: TestUser60
-      recommenderId: 30
-      role: ADMIN
-    - id: 61
-      username: TestUser61
-      password: TestUser61
-      recommenderId: 30
-      role: ADMIN
-    - id: 62
-      username: TestUser62
-      password: TestUser62
-      recommenderId: 31
-      role: ADMIN
-    - id: 63
-      username: TestUser63
-      password: TestUser63
-      recommenderId: 31
-      role: ADMIN
+#    - id: 11
+#      username: TestUser11
+#      password: TestUser11
+#      recommenderId: 5
+#      role: ADMIN
+#    - id: 12
+#      username: TestUser12
+#      password: TestUser12
+#      recommenderId: 6
+#      role: ADMIN
+#    - id: 13
+#      username: TestUser13
+#      password: TestUser13
+#      recommenderId: 6
+#      role: ADMIN
+#    - id: 14
+#      username: TestUser14
+#      password: TestUser14
+#      recommenderId: 7
+#      role: ADMIN
+#    - id: 15
+#      username: TestUser15
+#      password: TestUser15
+#      recommenderId: 7
+#      role: ADMIN
+#    - id: 16
+#      username: TestUser16
+#      password: TestUser16
+#      recommenderId: 8
+#      role: ADMIN
+#    - id: 17
+#      username: TestUser17
+#      password: TestUser17
+#      recommenderId: 8
+#      role: ADMIN
+#    - id: 18
+#      username: TestUser18
+#      password: TestUser18
+#      recommenderId: 9
+#      role: ADMIN
+#    - id: 19
+#      username: TestUser19
+#      password: TestUser19
+#      recommenderId: 9
+#      role: ADMIN
+#    - id: 20
+#      username: TestUser20
+#      password: TestUser20
+#      recommenderId: 10
+#      role: ADMIN
+#    - id: 21
+#      username: TestUser21
+#      password: TestUser21
+#      recommenderId: 10
+#      role: ADMIN
+#    - id: 22
+#      username: TestUser22
+#      password: TestUser22
+#      recommenderId: 11
+#      role: ADMIN
+#    - id: 23
+#      username: TestUser23
+#      password: TestUser23
+#      recommenderId: 11
+#      role: ADMIN
+#    - id: 24
+#      username: TestUser24
+#      password: TestUser24
+#      recommenderId: 12
+#      role: ADMIN
+#    - id: 25
+#      username: TestUser25
+#      password: TestUser25
+#      recommenderId: 12
+#      role: ADMIN
+#    - id: 26
+#      username: TestUser26
+#      password: TestUser26
+#      recommenderId: 13
+#      role: ADMIN
+#    - id: 27
+#      username: TestUser27
+#      password: TestUser27
+#      recommenderId: 13
+#      role: ADMIN
+#    - id: 28
+#      username: TestUser28
+#      password: TestUser28
+#      recommenderId: 14
+#      role: ADMIN
+#    - id: 29
+#      username: TestUser29
+#      password: TestUser29
+#      recommenderId: 14
+#      role: ADMIN
+#    - id: 30
+#      username: TestUser30
+#      password: TestUser30
+#      recommenderId: 15
+#      role: ADMIN
+#    - id: 31
+#      username: TestUser31
+#      password: TestUser31
+#      recommenderId: 15
+#      role: ADMIN
+#    - id: 32
+#      username: TestUser32
+#      password: TestUser32
+#      recommenderId: 16
+#      role: ADMIN
+#    - id: 33
+#      username: TestUser33
+#      password: TestUser33
+#      recommenderId: 16
+#      role: ADMIN
+#    - id: 34
+#      username: TestUser34
+#      password: TestUser34
+#      recommenderId: 17
+#      role: ADMIN
+#    - id: 35
+#      username: TestUser35
+#      password: TestUser35
+#      recommenderId: 17
+#      role: ADMIN
+#    - id: 36
+#      username: TestUser36
+#      password: TestUser36
+#      recommenderId: 18
+#      role: ADMIN
+#    - id: 37
+#      username: TestUser37
+#      password: TestUser37
+#      recommenderId: 18
+#      role: ADMIN
+#    - id: 38
+#      username: TestUser38
+#      password: TestUser38
+#      recommenderId: 19
+#      role: ADMIN
+#    - id: 39
+#      username: TestUser39
+#      password: TestUser39
+#      recommenderId: 19
+#      role: ADMIN
+#    - id: 40
+#      username: TestUser40
+#      password: TestUser40
+#      recommenderId: 20
+#      role: ADMIN
+#    - id: 41
+#      username: TestUser41
+#      password: TestUser41
+#      recommenderId: 20
+#      role: ADMIN
+#    - id: 42
+#      username: TestUser42
+#      password: TestUser42
+#      recommenderId: 21
+#      role: ADMIN
+#    - id: 43
+#      username: TestUser43
+#      password: TestUser43
+#      recommenderId: 21
+#      role: ADMIN
+#    - id: 44
+#      username: TestUser44
+#      password: TestUser44
+#      recommenderId: 22
+#      role: ADMIN
+#    - id: 45
+#      username: TestUser45
+#      password: TestUser45
+#      recommenderId: 22
+#      role: ADMIN
+#    - id: 46
+#      username: TestUser46
+#      password: TestUser46
+#      recommenderId: 23
+#      role: ADMIN
+#    - id: 47
+#      username: TestUser47
+#      password: TestUser47
+#      recommenderId: 23
+#      role: ADMIN
+#    - id: 48
+#      username: TestUser48
+#      password: TestUser48
+#      recommenderId: 24
+#      role: ADMIN
+#    - id: 49
+#      username: TestUser49
+#      password: TestUser49
+#      recommenderId: 24
+#      role: ADMIN
+#    - id: 50
+#      username: TestUser50
+#      password: TestUser50
+#      recommenderId: 25
+#      role: ADMIN
+#    - id: 51
+#      username: TestUser51
+#      password: TestUser51
+#      recommenderId: 25
+#      role: ADMIN
+#    - id: 52
+#      username: TestUser52
+#      password: TestUser52
+#      recommenderId: 26
+#      role: ADMIN
+#    - id: 53
+#      username: TestUser53
+#      password: TestUser53
+#      recommenderId: 26
+#      role: ADMIN
+#    - id: 54
+#      username: TestUser54
+#      password: TestUser54
+#      recommenderId: 27
+#      role: ADMIN
+#    - id: 55
+#      username: TestUser55
+#      password: TestUser55
+#      recommenderId: 27
+#      role: ADMIN
+#    - id: 56
+#      username: TestUser56
+#      password: TestUser56
+#      recommenderId: 28
+#      role: ADMIN
+#    - id: 57
+#      username: TestUser57
+#      password: TestUser57
+#      recommenderId: 28
+#      role: ADMIN
+#    - id: 58
+#      username: TestUser58
+#      password: TestUser58
+#      recommenderId: 29
+#      role: ADMIN
+#    - id: 59
+#      username: TestUser59
+#      password: TestUser59
+#      recommenderId: 29
+#      role: ADMIN
+#    - id: 60
+#      username: TestUser60
+#      password: TestUser60
+#      recommenderId: 30
+#      role: ADMIN
+#    - id: 61
+#      username: TestUser61
+#      password: TestUser61
+#      recommenderId: 30
+#      role: ADMIN
+#    - id: 62
+#      username: TestUser62
+#      password: TestUser62
+#      recommenderId: 31
+#      role: ADMIN
+#    - id: 63
+#      username: TestUser63
+#      password: TestUser63
+#      recommenderId: 31
+#      role: ADMIN

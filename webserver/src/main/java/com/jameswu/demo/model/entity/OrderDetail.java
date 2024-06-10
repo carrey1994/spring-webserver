@@ -28,7 +28,7 @@ public class OrderDetail implements Serializable {
 
 	@Id
 	@Column(name = "order_detail_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderDetailId;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -46,7 +46,7 @@ public class OrderDetail implements Serializable {
 	@Column(nullable = false)
 	private int quantity;
 
-	@Column(nullable = true, columnDefinition = "BINARY(16)")
+	@Column(name = "coupon_id", nullable = true)
 	private UUID couponId;
 
 	@Column(name = "payment", precision = 11, scale = 2, nullable = false)

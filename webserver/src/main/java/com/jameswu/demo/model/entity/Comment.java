@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Comment implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int commentId;
 
 	@Column(name = "content", nullable = false)

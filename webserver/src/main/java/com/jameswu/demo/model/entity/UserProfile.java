@@ -29,7 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserProfile implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
 	private int userId;
 
