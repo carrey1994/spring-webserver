@@ -44,7 +44,7 @@ public class OrderService {
 
 	@Transactional
 	public Order createOrder(GcUser gcUser, List<OrderDetailPayload> orderDetails) {
-		Order order = orderRepository.save(new Order(gcUser, Set.of()));
+		Order order = new Order(gcUser, Set.of());
 		Iterable<Product> restoredProducts = productRepository.findAllById(
 				orderDetails.stream().map(OrderDetailPayload::productId).toList());
 		Map<Integer, OrderDetailPayload> productMap =
@@ -68,7 +68,7 @@ public class OrderService {
 			detailList.add(orderDetail);
 		});
 		order.setOrderDetails(detailList);
-		orderDetailRepository.saveAll(detailList);
+		orderRepository.save(order);
 		return order;
 	}
 

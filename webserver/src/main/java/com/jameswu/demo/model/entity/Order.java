@@ -37,7 +37,7 @@ public class Order implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private GcUser user;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "order")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "order")
 	@JsonManagedReference
 	@EqualsAndHashCode.Exclude
 	private Set<OrderDetail> orderDetails;

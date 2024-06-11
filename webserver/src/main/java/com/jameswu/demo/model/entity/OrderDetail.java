@@ -31,7 +31,7 @@ public class OrderDetail implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderDetailId;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
 	@JsonBackReference
 	@EqualsAndHashCode.Exclude

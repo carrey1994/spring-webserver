@@ -76,6 +76,19 @@ public class UserManagementService {
 		return newUser.getProfile();
 	}
 
+	@Transactional
+	public UserProfile activeUser(String token) {
+		ActiveToken activeToken = tokenRepository
+				.findByToken(token)
+				.orElseThrow(() -> new IllegalArgumentException("Active token invalid"));
+		if (!activeToken.validateToken()) {
+			throw new IllegalArgumentException("Active token invalid");
+		}
+		activeToken.getUser().setUserStatus(UserStatus.ACTIVE);
+		tokenRepository.delete(activeToken);
+		return userRepository.save(activeToken.getUser()).getProfile();
+	}
+
 	public Page<UserProfile> activeUsers(Pageable pageable) {
 		/* Don't use user repo calling findAll to get user profiles, it makes n+1 queries. */
 		return userRepository.findByUserStatus(UserStatus.ACTIVE, pageable).map(GcUser::getProfile);
@@ -100,7 +113,7 @@ public class UserManagementService {
 
 	private GcProfileTreeNode mappingChildren(List<GcProfileLevel> gcProfileLevelList, int userId) {
 		GcProfileLevel rootProfileLevel = gcProfileLevelList.stream()
-				.filter((profileLevel) -> profileLevel.getUserId() == userId)
+				.filter(profileLevel -> profileLevel.getUserId() == userId)
 				.toList()
 				.get(0);
 		Map<Integer, List<GcProfileLevel>> collect = gcProfileLevelList.stream()
@@ -125,18 +138,5 @@ public class UserManagementService {
 		for (GcProfileTreeNode child : children) {
 			createTreeDiagram(collect, child);
 		}
-	}
-
-	@Transactional
-	public UserProfile activeUser(String token) {
-		ActiveToken activeToken = tokenRepository
-				.findByToken(token)
-				.orElseThrow(() -> new IllegalArgumentException("Active token invalid"));
-		if (!activeToken.validateToken()) {
-			throw new IllegalArgumentException("Active token invalid");
-		}
-		activeToken.getUser().setUserStatus(UserStatus.ACTIVE);
-		tokenRepository.delete(activeToken);
-		return userRepository.save(activeToken.getUser()).getProfile();
 	}
 }

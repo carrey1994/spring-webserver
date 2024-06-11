@@ -25,13 +25,14 @@ public class MailScheduledService {
 		this.notificationService = notificationService;
 	}
 
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 60000)
 	public void sendMail() {
 		var nextTime = Instant.now();
 		redisService.<String>getValueByKey(RedisKey.MAIL_PREV_TIME.getKey()).ifPresent(prev -> {
 			var tokens = tokenRepository.findTokenAfterLastSentTime(Instant.parse(prev), nextTime);
 			tokens.forEach(token -> notificationService.putQueue(QueueTag.NEW_USER_TAG, token));
 		});
+		// todo: interrupt if exception in async
 		redisService.setKeyValue(RedisKey.MAIL_PREV_TIME.getKey(), String.valueOf(nextTime));
 	}
 }

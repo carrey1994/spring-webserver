@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 class WebApplicationTests {
 
 	@Test
-	public void passwordValidation() {
+	void passwordValidation() {
 		ConstraintValidatorContext.ConstraintViolationBuilder violationBuilderMock =
 				Mockito.mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
 		ConstraintValidatorContext context = Mockito.mock(ConstraintValidatorContext.class);

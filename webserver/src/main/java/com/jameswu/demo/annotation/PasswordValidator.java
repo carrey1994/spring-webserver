@@ -7,9 +7,6 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 	private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,20}$";
 
 	@Override
-	public void initialize(Password constraintAnnotation) {}
-
-	@Override
 	public boolean isValid(String password, ConstraintValidatorContext context) {
 		if (password == null || !password.matches(PASSWORD_PATTERN)) {
 			context.disableDefaultConstraintViolation();

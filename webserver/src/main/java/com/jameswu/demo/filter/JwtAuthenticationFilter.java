@@ -1,6 +1,5 @@
 package com.jameswu.demo.filter;
 
-import com.jameswu.demo.exception.GcException.TokenInvalidException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.service.CacheService;
 import com.jameswu.demo.service.JwtService;
@@ -23,6 +22,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+	@Autowired
 	@Qualifier("handlerExceptionResolver") private HandlerExceptionResolver resolver;
 
 	@Autowired
@@ -42,17 +42,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String accessToken = jwtService.trimBearerToken(request);
 		if (!request.getServletPath().contains("/api/v1/public") && accessToken != null) {
 			try {
-				// todo: check if token exists first.
-				jwtService.throwIfTokenNotFound(accessToken, new TokenInvalidException());
-				int id = jwtService.parseUserProfile(accessToken).getUserId();
-				GcUser user = cacheService.retrieveOrLoadUser(id);
-				var authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authToken);
+				authByValidToken(accessToken);
 			} catch (JwtException e) {
+				// TODO: handle by exception handler
 				resolver.resolveException(request, response, null, e);
 				return;
 			}
 		}
 		filterChain.doFilter(request, response);
+	}
+
+	private void authByValidToken(String accessToken) {
+		jwtService.throwIfTokenNotFound(accessToken);
+		int id = jwtService.parseUserProfile(accessToken).getUserId();
+		GcUser user = cacheService.retrieveOrLoadUser(id);
+		var authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 }

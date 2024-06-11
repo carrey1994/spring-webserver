@@ -15,6 +15,7 @@ public class GzTexts {
 	public static final String ACCESS_TOKEN = "access-token";
 	public static final String DASH = "_";
 	public static final String NONE = "none";
+	public static final String EMPTY = "";
 
 	public static final int DEFAULT_RECOMMENDER_ID = 0;
 }

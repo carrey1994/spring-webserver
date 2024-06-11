@@ -7,7 +7,7 @@ git-crypt unlock ~/.git-crypt-key
 export $(cat .env | xargs)
 
 ./mvnw spotless:apply
-./mvnw package -DskipTests=true
+./mvnw clean package -DskipTests=true
 
 if [ $? != 0 ]; then
     exit 1
@@ -17,7 +17,7 @@ fi
 SESSION_NAME="demo-webserver"
 
 # Java command to be executed
-JAVA_CMD="java -agentlib:jdwp=transport=dt_socket,address=8080,server=y,suspend=n \
+JAVA_CMD="java -agentlib:jdwp=transport=dt_socket,address=5050,server=y,suspend=n \
         -jar -Dspring.profiles.active=supa \
         webserver/target/webserver-0.0.1-SNAPSHOT.jar"
         

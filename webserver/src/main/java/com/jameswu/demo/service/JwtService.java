@@ -1,7 +1,7 @@
 package com.jameswu.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jameswu.demo.exception.GcException.TokenInvalidException;
+import com.jameswu.demo.exception.GcException;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.utils.GzTexts;
@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,11 +45,9 @@ public class JwtService {
 
 	public String trimBearerToken(HttpServletRequest request) {
 		String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		if (authHeader != null) {
-			return authHeader.replace(GzTexts.BEARER_PREFIX, "");
-		} else {
-			return null;
-		}
+		return Optional.ofNullable(authHeader)
+				.map(s -> s.replace(GzTexts.BEARER_PREFIX, GzTexts.EMPTY))
+				.orElse(null);
 	}
 
 	public String generateToken(GcUser user) {
@@ -79,10 +78,10 @@ public class JwtService {
 		cacheService.removeIdFromUserCache(userId);
 	}
 
-	public void throwIfTokenNotFound(String accessToken, TokenInvalidException e) {
+	public void throwIfTokenNotFound(String accessToken) {
 		int userId = parsePayload(accessToken, PROFILE, UserProfile.class).getUserId();
 		if (!redisService.isKeyExists(RedisKey.withUserPrefix(userId))) {
-			throw e;
+			throw new GcException.TokenInvalidException();
 		}
 	}
 
@@ -96,7 +95,7 @@ public class JwtService {
 				.verifyWith(secretKey())
 				.build();
 		Claims claims = parser.parseSignedClaims(token).getPayload();
-		// TODO: fix JacksonDeserializer to call claims.get(key, clazz) directly
+		// TODO: Maybe JacksonDeserializer could call claims.get(key, clazz) directly
 		return objectMapper.convertValue(claims.get(key, Map.class), clazz);
 	}
 }

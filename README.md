@@ -1,8 +1,5 @@
-The webserver is designed for simple member system.
-The frontend is designed for website ui.
-The integration-test is used to test the api flow, and it will take test on the github action.
-The infra contains yaml of docker and terraform for dev env or local.
 The docker-ci-tester.sh is for test on CI instead of local.
+The .env file is encrypted and works with local-starter.sh to setup env variable for connecting cloud service, hence they are not public.
 
 There are ways to launch the server on local.
 1. If Docker installed,

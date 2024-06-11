@@ -10,6 +10,7 @@ import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.service.RedisService;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 @ConfigurationProperties(prefix = "init")
@@ -58,12 +58,15 @@ public class MockDataConfig {
 
 	@Bean
 	@Transactional
-	public void initUsers() {
+	public void init() {
+		// mock products
 		List<Product> products = new ArrayList<>();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			products.add(new Product("A Ins.", "AA", BigDecimal.valueOf(i + 1), i + 1));
 		}
 		productRepository.saveAll(products);
+
+		// mock users
 		List<GcUser> gcUsers = users.stream()
 				.map(user -> GcUser.builder()
 						.userId(user.id)
@@ -80,19 +83,6 @@ public class MockDataConfig {
 								user.recommenderId))
 						.build())
 				.toList();
-		var users = userRepository.saveAll(gcUsers);
-		//		        for (GcUser user : users) {
-		//		            Order order = new Order(user, Set.of());
-		//		            var updatedOrder = orderRepository.save(order);
-		//		            orderDetailRepository.save(new OrderDetail(
-		//		                    products.get(new Random().nextInt(3)),
-		//		                    updatedOrder,
-		//		                    100,
-		//		                    BigDecimal.valueOf(100L),
-		//		                    UUID.randomUUID()));
-		//		        }
-
-		//		redisService.setHashMap(RedisKey.withSpecialsPrefix(1), new SpecialsDetailPayload(100,
-		// 0));
+		userRepository.saveAll(gcUsers);
 	}
 }
