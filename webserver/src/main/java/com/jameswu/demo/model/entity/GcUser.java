@@ -20,7 +20,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -41,7 +40,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GcUser implements UserDetails, Serializable {
+public class GcUser implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
