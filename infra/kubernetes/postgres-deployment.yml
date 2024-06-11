@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:latest  # Use the desired PostgreSQL version
+          image: postgres:latest # Use the desired PostgreSQL version
           env:
             - name: POSTGRES_DB
               valueFrom:
