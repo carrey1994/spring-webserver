@@ -6,7 +6,6 @@ import com.jameswu.demo.model.entity.Product;
 import com.jameswu.demo.model.payload.OrderDetailPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.OrderService;
-import com.jameswu.demo.service.RedisService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -25,9 +24,6 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-
-	@Autowired
-	private RedisService redisService;
 
 	@PostMapping("create")
 	public Result<Order> createOrder(

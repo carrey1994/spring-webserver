@@ -118,7 +118,7 @@ class ApiIntegrationTest {
 	@Test
 	void createOrderApi() {
 		String accessToken = loginApi();
-		Map coupon = new HashMap<>();
+		Map<String, Integer> coupon = new HashMap<>();
 		coupon.put("quantity", 9);
 		coupon.put("couponId", null);
 		coupon.put("productId", 10);
