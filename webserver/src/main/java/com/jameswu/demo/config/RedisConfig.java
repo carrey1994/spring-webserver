@@ -60,6 +60,7 @@ public class RedisConfig {
 		return config;
 	}
 
+	// fix UnknownHostException issue.
 	private class DnsAddressResolverGroupFactory implements AddressResolverGroupFactory {
 		@Override
 		public AddressResolverGroup<InetSocketAddress> create(
