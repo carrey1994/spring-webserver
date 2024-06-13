@@ -1,6 +1,5 @@
 package com.jameswu.demo.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,11 +46,9 @@ public class SalesEvent implements Serializable {
 	@DecimalMin(value = "0.00", message = "Discount must be greater than or equal to 0.00")
 	private BigDecimal discount;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 	@Column(name = "start_day", nullable = false)
 	private Instant startDay;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 	@Column(name = "end_day", nullable = false)
 	private Instant endDay;
 }
