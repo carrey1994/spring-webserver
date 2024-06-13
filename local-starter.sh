@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # unlock .env
+jenv local 17.0.9
 git-crypt unlock ~/.git-crypt-key
 
 # Jar build

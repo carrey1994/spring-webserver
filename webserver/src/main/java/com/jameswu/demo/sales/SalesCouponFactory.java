@@ -25,8 +25,8 @@ public class SalesCouponFactory {
 				orderDetail.setPayment(productPrice.min(coupon.getCashDiscount()));
 				break;
 			case PERCENTAGE_DISCOUNT:
-				orderDetail.setDiscount(productPrice.multiply(coupon.getOffDiscount()));
-				orderDetail.setPayment(productPrice.min(productPrice.multiply(coupon.getOffDiscount())));
+				orderDetail.setDiscount(productPrice.multiply(coupon.getPercentageDiscount()));
+				orderDetail.setPayment(productPrice.min(productPrice.multiply(coupon.getPercentageDiscount())));
 				break;
 			default:
 				break;
