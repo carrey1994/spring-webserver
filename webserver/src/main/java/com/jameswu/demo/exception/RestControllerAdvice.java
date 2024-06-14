@@ -4,12 +4,18 @@ import com.jameswu.demo.model.response.Result;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class RestControllerAdvice {
+
+	@ExceptionHandler(value = {UsernameNotFoundException.class})
+	public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
+		return new ResponseEntity<>(Result.failure(ex.getMessage(), 888), new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
 
 	@ExceptionHandler(value = {IllegalArgumentException.class})
 	public ResponseEntity<Object> handleIllegalException(IllegalArgumentException ex, WebRequest request) {
