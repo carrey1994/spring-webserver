@@ -94,11 +94,8 @@ public class UserManagementService {
 		GcUser user = activeToken.getUser();
 		user.setUserStatus(UserStatus.ACTIVE);
 		tokenRepository.delete(activeToken);
-		Coupon newUserCouponGift = Coupon.percentageCoupon(
-				BigDecimal.valueOf(0.9),
-				"new user coupon gift",
-				user,
-				UUID.randomUUID().toString());
+		Coupon newUserCouponGift =
+				Coupon.percentageCoupon(BigDecimal.valueOf(0.9), "new user coupon gift", user, UUID.randomUUID());
 		couponRepository.save(newUserCouponGift);
 		return userRepository.save(activeToken.getUser()).getProfile();
 	}

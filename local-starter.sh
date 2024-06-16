@@ -2,9 +2,6 @@
 
 # unlock .env
 git-crypt unlock ~/.git-crypt-key
-if [ $? != 0 ]; then
-    exit 1
-fi
 
 # Jar build
 export $(cat .env | xargs)

@@ -12,7 +12,8 @@ public class SalesCouponFactory {
 	private CouponRepository couponRepository;
 
 	public void calculateDiscountByCoupon(OrderDetail orderDetail) {
-		var coupon = couponRepository.findById(orderDetail.getCouponId()).orElse(null);
+		var coupon =
+				couponRepository.findByCouponCode(orderDetail.getCouponCode()).orElse(null);
 		var productPrice = orderDetail.getProduct().getPrice();
 		if (coupon == null) {
 			orderDetail.setDiscount(BigDecimal.ZERO);

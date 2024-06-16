@@ -1,6 +1,7 @@
 package com.jameswu.demo.filter;
 
 import com.jameswu.demo.model.entity.GcUser;
+import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.service.CacheService;
 import com.jameswu.demo.service.JwtService;
 import io.jsonwebtoken.JwtException;
@@ -53,8 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void authByValidToken(String accessToken) {
-		jwtService.throwIfTokenNotFound(accessToken);
-		int id = jwtService.parseUserProfile(accessToken).getUserId();
+		UserProfile userProfile = jwtService.throwIfTokenNotFound(accessToken);
+		int id = userProfile.getUserId();
 		GcUser user = cacheService.retrieveOrLoadUser(id);
 		var authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
