@@ -45,7 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			try {
 				authByValidToken(accessToken);
 			} catch (JwtException e) {
-				// TODO: handle by exception handler
 				resolver.resolveException(request, response, null, e);
 				return;
 			}
