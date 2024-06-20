@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Data
 public abstract class NotificationQueue<T, M extends AbstractMail> {
 
-	/**
-	 * @Autowire failed by constructor way.
-	 */
 	@Autowired
 	private NotificationSender notificationSender;
 

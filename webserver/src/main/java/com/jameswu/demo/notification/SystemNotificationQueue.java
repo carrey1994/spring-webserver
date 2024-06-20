@@ -4,15 +4,11 @@ import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.notification.mail.AbstractMail;
 import com.jameswu.demo.notification.mail.QueueTag;
 import com.jameswu.demo.notification.mail.SystemMail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SystemNotificationQueue extends NotificationQueue<UserProfile, SystemMail> {
-
-	private Logger logger = LoggerFactory.getLogger(SystemNotificationQueue.class);
 
 	@Override
 	protected AbstractMail formatHtml(UserProfile t) {

@@ -54,7 +54,7 @@ public class JwtService {
 		Claims claims = Jwts.claims()
 				.add(PROFILE, user.getProfile())
 				.expiration(new Date(System.currentTimeMillis() + refreshTime))
-				.issuedAt(new Date((System.currentTimeMillis())))
+				.issuedAt(new Date())
 				.issuer(encryptedKey)
 				.build();
 

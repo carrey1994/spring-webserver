@@ -2,6 +2,7 @@ package com.jameswu.demo.exception;
 
 import com.jameswu.demo.model.response.Result;
 import io.jsonwebtoken.JwtException;
+import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,16 @@ public class GcControllerAdvice {
 	}
 
 	private ResponseEntity<Object> defaultException(Exception ex, HttpStatus httpStatus) {
-		return new ResponseEntity<>(Result.failure(ex.getMessage(), httpStatus.value()), new HttpHeaders(), httpStatus);
+		return new ResponseEntity<>(
+				Result.failure(Optional.ofNullable(ex.getMessage()).orElse("No message"), httpStatus.value()),
+				new HttpHeaders(),
+				httpStatus);
 	}
 
 	private ResponseEntity<Object> defaultException(Exception ex, HttpStatus httpStatus, int customCode) {
-		return new ResponseEntity<>(Result.failure(ex.getMessage(), customCode), new HttpHeaders(), httpStatus);
+		return new ResponseEntity<>(
+				Result.failure(Optional.ofNullable(ex.getMessage()).orElse("No message"), customCode),
+				new HttpHeaders(),
+				httpStatus);
 	}
 }

@@ -11,13 +11,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "comment")
 @Table(name = "comment")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

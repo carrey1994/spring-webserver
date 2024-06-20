@@ -9,7 +9,6 @@ import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserRepository;
-import com.jameswu.demo.service.RedisService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -32,7 +31,6 @@ public class MockDataConfig {
 	public MockDataConfig(
 			UserRepository userRepository,
 			ProductRepository productRepository,
-			RedisService redisService,
 			BCryptPasswordEncoder passwordEncoder,
 			List<InitUserData> users,
 			OrderRepository orderRepository,
@@ -40,7 +38,6 @@ public class MockDataConfig {
 		this.userRepository = userRepository;
 		this.productRepository = productRepository;
 		this.orderRepository = orderRepository;
-		this.redisService = redisService;
 		this.passwordEncoder = passwordEncoder;
 		this.users = users;
 		this.orderDetailRepository = orderDetailRepository;
@@ -48,7 +45,6 @@ public class MockDataConfig {
 
 	private UserRepository userRepository;
 	private ProductRepository productRepository;
-	private RedisService redisService;
 	private BCryptPasswordEncoder passwordEncoder;
 	private List<InitUserData> users;
 	private OrderRepository orderRepository;
