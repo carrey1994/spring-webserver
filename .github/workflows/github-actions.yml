@@ -26,13 +26,6 @@ jobs:
       - name: Test api by docker
         run: |
           ./docker-ci-tester.sh
-      # - name: Test Report
-      #   uses: dorny/test-reporter@v1
-      #   if: success() || failure()
-      #   with:
-      #     name: Jest Report
-      #     path: webserver/target/surefire-reports/*.xml
-      #     reporter: jest-junit
 
   spotBugs:
     runs-on: ubuntu-latest
@@ -44,7 +37,23 @@ jobs:
           distribution: "zulu"
           java-version: "17"
       - name: SpotBugs check
-        run: ./mvnw spotbugs:check --quiet
+        run:  ./mvnw -q -DskipTests=true -Pskip-nullaway spotbugs:check verify
+      - name: Test Report
+        uses: jwgmeligmeyling/spotbugs-github-action@master
+        with:
+          path: webserver/target/spotbugsXml.xml
+
+  nullaway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup maven
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+      - name: Nullaway check
+        run:  ./mvnw -B -DskipTests=true -Dspotbugs.skip=true -Dorg.slf4j.simpleLogger.defaultLogLevel=warn verify
 
   lint:
     runs-on: ubuntu-latest
@@ -56,7 +65,7 @@ jobs:
           distribution: "zulu"
           java-version: "17"
       - name: Spotless check
-        run: ./mvnw spotless:check --quiet
+        run: ./mvnw -q spotless:check
 
   security:
     runs-on: ubuntu-latest
