@@ -10,3 +10,4 @@ There are ways to launch the server on local.
    (If Istio install, the flag '-i' is enable to launch with Istio.)
 3. If Docker and Terraform installed,
    Run "./terraform-starter.sh".
+![architecture.png](architecture.png)
