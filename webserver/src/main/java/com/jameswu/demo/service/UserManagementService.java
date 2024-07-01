@@ -53,7 +53,7 @@ public class UserManagementService {
 
 	@Transactional
 	public UserProfile register(RegisterPayload registerPayload) {
-		userRepository.findByUsername(registerPayload.username()).ifPresent(gcUser -> {
+		userRepository.findByUsernameIgnoreCase(registerPayload.username()).ifPresent(gcUser -> {
 			throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
 		});
 		if (registerPayload.isRecommenderExists()) {
