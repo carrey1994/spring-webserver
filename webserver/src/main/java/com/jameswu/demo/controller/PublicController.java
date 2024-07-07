@@ -57,4 +57,10 @@ public class PublicController {
 				.orElse(new String[] {GzTexts.NONE});
 		return Result.success((Map.of("id", commitId, "tag", tags[tags.length - 1])));
 	}
+
+	@GetMapping("long-time")
+	public Result<String> longTime() throws InterruptedException {
+		Thread.sleep(60 * 1000 * 2);
+		return Result.success("OK");
+	}
 }
