@@ -1,0 +1,1262 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/user/update": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "updateUserProfile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfilePayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/register": {
+      "post": {
+        "tags": [
+          "public-controller"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/activate": {
+      "post": {
+        "tags": [
+          "public-controller"
+        ],
+        "operationId": "active",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/management/specials/add": {
+      "post": {
+        "tags": [
+          "product-management-controller"
+        ],
+        "operationId": "addSpecials",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecialsPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/management/comments/add": {
+      "post": {
+        "tags": [
+          "product-management-controller"
+        ],
+        "operationId": "addComment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultCommentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/management/add": {
+      "post": {
+        "tags": [
+          "product-management-controller"
+        ],
+        "operationId": "add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/specials/create": {
+      "post": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "createSpecialsOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrderDetailPayload"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/create": {
+      "post": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "createOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrderDetailPayload"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOrder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/login": {
+      "post": {
+        "tags": [
+          "index-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/me": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "userProfile",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/management/direct": {
+      "get": {
+        "tags": [
+          "user-management-controller"
+        ],
+        "operationId": "direct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultGcProfileTreeNode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/management/diagram": {
+      "get": {
+        "tags": [
+          "user-management-controller"
+        ],
+        "operationId": "diagram",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultGcProfileTreeNode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/management/all": {
+      "get": {
+        "tags": [
+          "user-management-controller"
+        ],
+        "operationId": "activeUsers",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListUserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/coupons": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "getCouponsByUser",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListCoupon"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/version": {
+      "get": {
+        "tags": [
+          "public-controller"
+        ],
+        "operationId": "version",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultMapStringString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/long-time": {
+      "get": {
+        "tags": [
+          "public-controller"
+        ],
+        "operationId": "longTime",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/public/health": {
+      "get": {
+        "tags": [
+          "public-controller"
+        ],
+        "operationId": "checkHealth",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/specials": {
+      "get": {
+        "tags": [
+          "product-controller"
+        ],
+        "operationId": "specialsById",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultSpecialsPayload"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/specials/all": {
+      "get": {
+        "tags": [
+          "product-controller"
+        ],
+        "operationId": "specials",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListSpecialsPayload"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/comments": {
+      "get": {
+        "tags": [
+          "product-controller"
+        ],
+        "operationId": "comments",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListCommentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/comments/replies": {
+      "get": {
+        "tags": [
+          "product-controller"
+        ],
+        "operationId": "replies",
+        "parameters": [
+          {
+            "name": "parentCommentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListCommentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/product/all": {
+      "get": {
+        "tags": [
+          "product-controller"
+        ],
+        "operationId": "all",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultListProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfilePayload": {
+        "required": [
+          "address",
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 25,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "ResultUserProfile": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/UserProfile"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "enrollmentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recommenderId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RegisterPayload": {
+        "required": [
+          "address",
+          "email",
+          "nickname",
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "nickname": {
+            "maxLength": 16,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 25,
+            "minLength": 0,
+            "type": "string"
+          },
+          "recommenderId": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SpecialsDetailPayload": {
+        "type": "object",
+        "properties": {
+          "inventory": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "booked": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SpecialsPayload": {
+        "required": [
+          "specialsDetailPayload"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "specialsDetailPayload": {
+            "$ref": "#/components/schemas/SpecialsDetailPayload"
+          }
+        }
+      },
+      "ResultMapStringString": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CommentPayload": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "productId": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentCommentId": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CommentResponse": {
+        "type": "object",
+        "properties": {
+          "commentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentCommentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResultCommentResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/CommentResponse"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ProductPayload": {
+        "required": [
+          "description",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "price": {
+            "maximum": 999999999.99,
+            "exclusiveMaximum": false,
+            "minimum": 0.00,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "quantity": {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "minimum": 0.00,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultProduct": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "OrderDetailPayload": {
+        "required": [
+          "productId"
+        ],
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "maximum": 9999,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "couponId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultListProduct": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GcUser": {
+        "required": [
+          "password",
+          "userRole",
+          "userStatus",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "maxLength": 16,
+            "minLength": 8,
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "ADMIN"
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/UserProfile"
+          },
+          "userStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          }
+        }
+      },
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/GcUser"
+          },
+          "orderDetails": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderDetail"
+            }
+          }
+        }
+      },
+      "OrderDetail": {
+        "type": "object",
+        "properties": {
+          "orderDetailId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "couponCode": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "payment": {
+            "minimum": 0.00,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "discount": {
+            "minimum": 0.00,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "ResultOrder": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "LoginPayload": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "GcProfileTreeNode": {
+        "type": "object",
+        "properties": {
+          "userProfile": {
+            "$ref": "#/components/schemas/UserProfile"
+          },
+          "childrenProfiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GcProfileTreeNode"
+            }
+          }
+        }
+      },
+      "ResultGcProfileTreeNode": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/GcProfileTreeNode"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ResultListUserProfile": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserProfile"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Coupon": {
+        "required": [
+          "couponCategory",
+          "couponCode"
+        ],
+        "type": "object",
+        "properties": {
+          "couponId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "couponCode": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/GcUser"
+          },
+          "couponCategory": {
+            "type": "string",
+            "enum": [
+              "PERCENTAGE_DISCOUNT",
+              "CASH_DISCOUNT"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "cashDiscount": {
+            "minimum": 0.00,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "percentageDiscount": {
+            "maximum": 0.99,
+            "exclusiveMaximum": false,
+            "minimum": 0.01,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "ResultListCoupon": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Coupon"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultString": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultSpecialsPayload": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/SpecialsPayload"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultListSpecialsPayload": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpecialsPayload"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultListCommentResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentResponse"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  }
+}

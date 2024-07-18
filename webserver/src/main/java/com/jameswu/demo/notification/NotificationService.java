@@ -18,11 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
+	private final RabbitAdmin rabbitAdmin;
 	private final List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues;
 	private final Map<QueueTag, NotificationQueue<?, ? extends AbstractMail>> queueMap = new HashMap<>();
 	private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
-
-	private final RabbitAdmin rabbitAdmin;
 
 	@Autowired
 	public NotificationService(
@@ -42,8 +41,7 @@ public class NotificationService {
 	@SneakyThrows
 	public <T> void putQueue(QueueTag queue, T payload) {
 		Optional<NotificationQueue> notificationQueue = Optional.ofNullable(queueMap.get(queue));
-		notificationQueue.ifPresentOrElse(mq -> mq.publish(payload), () -> {
-			logger.info("Queue not found: " + queue.name());
-		});
+		notificationQueue.ifPresentOrElse(
+				mq -> mq.publish(payload), () -> logger.info("Queue not found: " + queue.name()));
 	}
 }
