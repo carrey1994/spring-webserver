@@ -1,0 +1,11 @@
+groups:
+  - name: api-performance.rules
+    rules:
+      - alert: HighApiExecutionTime
+        expr: (avg_over_time(api_execution_time_seconds_sum[5m]) / avg_over_time(api_execution_time_seconds_count[5m])) > 120
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API Execution Time"
+          description: "API {{ $labels.method }} has high execution time."

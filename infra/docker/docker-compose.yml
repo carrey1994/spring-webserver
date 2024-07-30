@@ -137,6 +137,50 @@ services:
       spring-mailhog:
         condition: service_healthy
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - dev
+    volumes:
+      - ../kubernetes/prometheus/config:/etc/prometheus
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet --tries=1 --timeout=5 http://localhost:9090/-/healthy || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  alertmanager:
+    container_name: alertmanager
+    image: prom/alertmanager
+    ports:
+      - "9093:9093"
+    networks:
+      - dev
+    volumes:
+      - ../kubernetes/alert-manager/config:/config
+    command: --config.file=/config/alertmanager.yml --log.level=debug
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet --tries=1 --timeout=5 http://localhost:9093/-/healthy || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    networks:
+      - dev
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet --tries=1 --timeout=5 http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 networks:
   dev:
     driver: bridge

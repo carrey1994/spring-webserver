@@ -55,11 +55,11 @@ public class UserProfile implements Serializable {
 		if (object == null || getClass() != object.getClass()) return false;
 		UserProfile that = (UserProfile) object;
 		return userId == that.userId
+				&& recommenderId == that.recommenderId
 				&& Objects.equals(email, that.email)
 				&& Objects.equals(nickname, that.nickname)
 				&& Objects.equals(address, that.address)
-				&& Objects.equals(enrollmentDate, that.enrollmentDate)
-				&& Objects.equals(recommenderId, that.recommenderId);
+				&& Objects.equals(enrollmentDate, that.enrollmentDate);
 	}
 
 	@Override

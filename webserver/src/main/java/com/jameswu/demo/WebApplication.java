@@ -24,7 +24,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 			"com.jameswu.demo.filter",
 			"com.jameswu.demo.service",
 			"com.jameswu.demo.notification",
-			"com.jameswu.demo.repository"
+			"com.jameswu.demo.repository",
+			"com.jameswu.demo.aspect"
 		})
 @Import(GcControllerAdvice.class)
 @EnableJpaRepositories(basePackages = "com.jameswu.demo.repository")
