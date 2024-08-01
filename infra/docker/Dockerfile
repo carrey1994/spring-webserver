@@ -7,7 +7,6 @@ WORKDIR /backend
 # Copy only the files needed for dependency resolution
 COPY pom.xml pom.xml
 COPY webserver webserver
-COPY integration-test integration-test
 
 RUN mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${VERSION} && \
     mvn clean package -DskipTests=true --quiet

@@ -15,7 +15,6 @@
     <name>demo</name>
     <description>Demo project for Spring Boot</description>
     <modules>
-        <module>integration-test</module>
         <module>webserver</module>
     </modules>
     <properties>
