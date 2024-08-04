@@ -8,6 +8,7 @@ import com.jameswu.demo.model.payload.OrderDetailPayload;
 import com.jameswu.demo.repository.OrderDetailRepository;
 import com.jameswu.demo.repository.OrderRepository;
 import com.jameswu.demo.repository.ProductRepository;
+import com.jameswu.demo.utils.RedisKey;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -44,32 +45,35 @@ public class OrderService {
 
 	@Transactional
 	public Order createOrder(GcUser gcUser, List<OrderDetailPayload> orderDetails) {
+		List<Integer> productIds =
+				orderDetails.stream().map(OrderDetailPayload::productId).toList();
 		Order order = new Order(gcUser, Set.of());
-		Iterable<Product> restoredProducts = productRepository.findAllById(
-				orderDetails.stream().map(OrderDetailPayload::productId).toList());
+		redisService.executeDuringLocked(
+				RedisKey.PREFIX_PRODUCT,
+				productIds.stream().map(String::valueOf).toList(),
+				() -> processOrderCreating(productIds, order, orderDetails));
+		return order;
+	}
+
+	private void processOrderCreating(List<Integer> productIds, Order order, List<OrderDetailPayload> orderDetails) {
+		Iterable<Product> products = productRepository.findAllById(productIds);
 		Map<Integer, OrderDetailPayload> productMap =
 				orderDetails.stream().collect(Collectors.toMap(OrderDetailPayload::productId, Function.identity()));
 		Set<OrderDetail> detailList = new HashSet<>();
-		restoredProducts.forEach(restoredProduct -> {
-			OrderDetailPayload buyingProduct = productMap.get(restoredProduct.getProductId());
+		products.forEach(product -> {
+			OrderDetailPayload buyingProduct = productMap.get(product.getProductId());
 			int buyingQuantity = buyingProduct.quantity();
-			int updatedQuantity = restoredProduct.getQuantity() - buyingQuantity;
+			int updatedQuantity = product.getQuantity() - buyingQuantity;
 			if (updatedQuantity < 0) {
 				throw new IllegalArgumentException("Product booked not enough");
 			}
-			restoredProduct.setQuantity(updatedQuantity);
+			product.setQuantity(updatedQuantity);
 			OrderDetail orderDetail = new OrderDetail(
-					restoredProduct,
-					order,
-					buyingQuantity,
-					restoredProduct.getPrice(),
-					buyingProduct.couponId(),
-					BigDecimal.ZERO);
+					product, order, buyingQuantity, product.getPrice(), buyingProduct.couponId(), BigDecimal.ZERO);
 			detailList.add(orderDetail);
 		});
 		order.setOrderDetails(detailList);
 		orderRepository.save(order);
-		return order;
 	}
 
 	public List<Product> createSpecialsOrder(GcUser user, List<OrderDetailPayload> orderDetails) {

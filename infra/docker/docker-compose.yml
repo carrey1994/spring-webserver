@@ -95,21 +95,6 @@ services:
       interval: 5s
       retries: 5
 
-  spring-redis-commander:
-    container_name: spring-redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    volumes:
-      - ./data/spring-redis-commander/data:/data
-    environment:
-      - REDIS_HOSTS=master:spring-redis-master,slave-1:spring-redis-slave
-    ports:
-      - "8081:8081"
-    networks:
-      - dev
-    depends_on:
-      - spring-redis-slave
-
   spring-webserver:
     profiles: [ "webserver" ]
     image: carrey1994/spring-webserver:latest

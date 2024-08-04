@@ -23,7 +23,8 @@ check_service_health() {
 }
 
 # Wait for each container to be healthy
-containers=("spring-redis-commander" "spring-redis-slave" "spring-redis-master" "spring-mailhog" "spring-postgres" "spring-rabbitmq")
+echo "Going to check containers to be healthy..."
+containers=("spring-redis-slave" "spring-redis-master" "spring-mailhog" "spring-postgres" "spring-rabbitmq")
 for container in "${containers[@]}"; do
     check_service_health $container
 done
