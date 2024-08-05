@@ -4,4 +4,4 @@ infra
 architecture.png
 http-test.sh
 k3d-starter.sh
-.env
+.local-env

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# unlock .env
+# unlock .local-env
 git-crypt unlock ~/.git-crypt-key
 
 # Jar build
-export $(cat .env | xargs)
+export $(cat .local-env | xargs)
 
 ./mvnw spotless:apply
 ./mvnw clean package -DskipTests=true
