@@ -14,6 +14,8 @@ public interface UserRepository extends CrudRepository<GcUser, Integer> {
 
 	Optional<GcUser> findByUsername(String username);
 
+	Optional<GcUser> findByUsernameIgnoreCase(String username);
+
 	Optional<GcUser> findByUserId(int userId);
 
 	@EntityGraph(value = "gc_user_graph", type = EntityGraph.EntityGraphType.LOAD)

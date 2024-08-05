@@ -2,15 +2,14 @@ package com.jameswu.demo.model.entity;
 
 import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jameswu.demo.annotation.Email;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -33,22 +32,21 @@ public class UserProfile implements Serializable {
 	@Column(name = "user_id", nullable = false)
 	private int userId;
 
-	@Column
-	@Email(message = "Invalid Email", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+	@Email
+	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(nullable = false)
+	@Column(name = "nickname", nullable = false)
 	private String nickname;
 
-	@Column(nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 
-	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+	@Column(name = "enrollment_date", nullable = false)
 	private Instant enrollmentDate;
 
 	/* The recommenderId assigned zero means no any recommender. */
-	@Column(nullable = false)
+	@Column(name = "recommender_id", nullable = false)
 	private int recommenderId;
 
 	@Override
@@ -57,11 +55,11 @@ public class UserProfile implements Serializable {
 		if (object == null || getClass() != object.getClass()) return false;
 		UserProfile that = (UserProfile) object;
 		return userId == that.userId
+				&& recommenderId == that.recommenderId
 				&& Objects.equals(email, that.email)
 				&& Objects.equals(nickname, that.nickname)
 				&& Objects.equals(address, that.address)
-				&& Objects.equals(enrollmentDate, that.enrollmentDate)
-				&& Objects.equals(recommenderId, that.recommenderId);
+				&& Objects.equals(enrollmentDate, that.enrollmentDate);
 	}
 
 	@Override

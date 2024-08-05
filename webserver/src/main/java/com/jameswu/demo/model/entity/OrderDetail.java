@@ -46,8 +46,8 @@ public class OrderDetail implements Serializable {
 	@Column(nullable = false)
 	private int quantity;
 
-	@Column(name = "coupon_id", nullable = true)
-	private UUID couponId;
+	@Column(name = "coupon_code", nullable = true)
+	private UUID couponCode;
 
 	@Column(name = "payment", precision = 11, scale = 2, nullable = false)
 	@DecimalMin(value = "0.00", message = "Payment must be greater than or equal to 0.00")
@@ -60,12 +60,12 @@ public class OrderDetail implements Serializable {
 	public OrderDetail() {}
 
 	public OrderDetail(
-			Product product, Order order, int quantity, BigDecimal payment, UUID couponId, BigDecimal discount) {
+			Product product, Order order, int quantity, BigDecimal payment, UUID couponCode, BigDecimal discount) {
 		this.product = product;
 		this.quantity = quantity;
 		this.payment = payment;
 		this.order = order;
-		this.couponId = couponId;
+		this.couponCode = couponCode;
 		this.discount = discount;
 	}
 
@@ -78,13 +78,13 @@ public class OrderDetail implements Serializable {
 				&& quantity == that.quantity
 				&& Objects.equals(order, that.order)
 				&& Objects.equals(product, that.product)
-				&& Objects.equals(couponId, that.couponId)
+				&& Objects.equals(couponCode, that.couponCode)
 				&& Objects.equals(payment, that.payment)
 				&& Objects.equals(discount, that.discount);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderDetailId, order, product, quantity, couponId, payment, discount);
+		return Objects.hash(orderDetailId, order, product, quantity, couponCode, payment, discount);
 	}
 }

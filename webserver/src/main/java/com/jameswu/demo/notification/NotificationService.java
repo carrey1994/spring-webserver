@@ -6,7 +6,10 @@ import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
+	private final RabbitAdmin rabbitAdmin;
 	private final List<NotificationQueue<?, ? extends AbstractMail>> notificationQueues;
 	private final Map<QueueTag, NotificationQueue<?, ? extends AbstractMail>> queueMap = new HashMap<>();
-
-	private final RabbitAdmin rabbitAdmin;
+	private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
 	@Autowired
 	public NotificationService(
@@ -37,7 +40,8 @@ public class NotificationService {
 
 	@SneakyThrows
 	public <T> void putQueue(QueueTag queue, T payload) {
-		NotificationQueue notificationQueue = queueMap.get(queue);
-		notificationQueue.publish(payload);
+		Optional<NotificationQueue> notificationQueue = Optional.ofNullable(queueMap.get(queue));
+		notificationQueue.ifPresentOrElse(
+				mq -> mq.publish(payload), () -> logger.info("Queue not found: " + queue.name()));
 	}
 }

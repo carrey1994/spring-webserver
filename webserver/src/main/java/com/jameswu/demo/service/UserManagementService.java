@@ -1,6 +1,7 @@
 package com.jameswu.demo.service;
 
 import com.jameswu.demo.model.entity.ActiveToken;
+import com.jameswu.demo.model.entity.Coupon;
 import com.jameswu.demo.model.entity.GcProfileLevel;
 import com.jameswu.demo.model.entity.GcProfileTreeNode;
 import com.jameswu.demo.model.entity.GcUser;
@@ -8,14 +9,17 @@ import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
 import com.jameswu.demo.model.payload.RegisterPayload;
+import com.jameswu.demo.repository.CouponRepository;
 import com.jameswu.demo.repository.GcProfileLevelRepository;
 import com.jameswu.demo.repository.TokenRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.utils.GzTexts;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,21 +36,24 @@ public class UserManagementService {
 			UserRepository userRepository,
 			BCryptPasswordEncoder bCryptPasswordEncoder,
 			GcProfileLevelRepository gcProfileLevelRepository,
-			TokenRepository tokenRepository) {
+			TokenRepository tokenRepository,
+			CouponRepository couponRepository) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.gcProfileLevelRepository = gcProfileLevelRepository;
 		this.tokenRepository = tokenRepository;
+		this.couponRepository = couponRepository;
 	}
 
 	private final GcProfileLevelRepository gcProfileLevelRepository;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenRepository tokenRepository;
+	private final CouponRepository couponRepository;
 
 	@Transactional
 	public UserProfile register(RegisterPayload registerPayload) {
-		userRepository.findByUsername(registerPayload.username()).ifPresent(gcUser -> {
+		userRepository.findByUsernameIgnoreCase(registerPayload.username()).ifPresent(gcUser -> {
 			throw new IllegalArgumentException(GzTexts.USER_ALREADY_EXISTS);
 		});
 		if (registerPayload.isRecommenderExists()) {
@@ -84,8 +91,12 @@ public class UserManagementService {
 		if (!activeToken.validateToken()) {
 			throw new IllegalArgumentException("Active token invalid");
 		}
-		activeToken.getUser().setUserStatus(UserStatus.ACTIVE);
+		GcUser user = activeToken.getUser();
+		user.setUserStatus(UserStatus.ACTIVE);
 		tokenRepository.delete(activeToken);
+		Coupon newUserCouponGift =
+				Coupon.percentageCoupon(BigDecimal.valueOf(0.9), "new user coupon gift", user, UUID.randomUUID());
+		couponRepository.save(newUserCouponGift);
 		return userRepository.save(activeToken.getUser()).getProfile();
 	}
 

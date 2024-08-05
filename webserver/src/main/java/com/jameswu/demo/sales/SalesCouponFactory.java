@@ -12,7 +12,8 @@ public class SalesCouponFactory {
 	private CouponRepository couponRepository;
 
 	public void calculateDiscountByCoupon(OrderDetail orderDetail) {
-		var coupon = couponRepository.findById(orderDetail.getCouponId()).orElse(null);
+		var coupon =
+				couponRepository.findByCouponCode(orderDetail.getCouponCode()).orElse(null);
 		var productPrice = orderDetail.getProduct().getPrice();
 		if (coupon == null) {
 			orderDetail.setDiscount(BigDecimal.ZERO);
@@ -25,8 +26,8 @@ public class SalesCouponFactory {
 				orderDetail.setPayment(productPrice.min(coupon.getCashDiscount()));
 				break;
 			case PERCENTAGE_DISCOUNT:
-				orderDetail.setDiscount(productPrice.multiply(coupon.getOffDiscount()));
-				orderDetail.setPayment(productPrice.min(productPrice.multiply(coupon.getOffDiscount())));
+				orderDetail.setDiscount(productPrice.multiply(coupon.getPercentageDiscount()));
+				orderDetail.setPayment(productPrice.min(productPrice.multiply(coupon.getPercentageDiscount())));
 				break;
 			default:
 				break;

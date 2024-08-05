@@ -1,0 +1,11 @@
+route:
+  receiver: "team-email"
+  repeat_interval: 1m
+
+receivers:
+  - name: "team-email"
+    email_configs:
+      - to: "jameswu@this.is.mail.com"
+        from: "admin@this.is.mail.com"
+        smarthost: "host.docker.internal:1025"
+        require_tls: false

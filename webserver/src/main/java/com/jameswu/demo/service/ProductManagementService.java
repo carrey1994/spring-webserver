@@ -49,14 +49,14 @@ public class ProductManagementService {
 
 	@Transactional
 	public CommentResponse addComment(GcUser user, CommentPayload payload) {
-		productRepository
-				.findById(payload.productId())
-				.orElseThrow(() -> new IllegalArgumentException("Product not found"));
-		payload.checkIfDefault((id) -> commentRepository
-				.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Parent comment not found")));
-		var comment =
-				commentRepository.save(Comment.to(payload, user.getProfile().getNickname(), user.getUserId()));
-		return CommentResponse.from(comment);
+		productRepository.findById(payload.productId()).ifPresentOrElse(product -> {}, () -> {
+			throw new IllegalArgumentException("Product not found");
+		});
+		// check if default
+		payload.checkIfDefault((id) -> commentRepository.findById(id).ifPresentOrElse(comment -> {}, () -> {
+			throw new IllegalArgumentException("Parent comment not found");
+		}));
+		var comment = Comment.to(payload, user.getProfile().getNickname(), user.getUserId());
+		return CommentResponse.from(commentRepository.save(comment));
 	}
 }

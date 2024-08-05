@@ -8,10 +8,12 @@ do
     esac
 done
 
-docker-compose -f infra/docker/docker-compose.yml --profile webserver down
+echo "shutting down docker containers..."
+docker compose -f infra/docker/docker-compose.yml --profile webserver down
 
+echo "starting docker containers..."
 if [ "$WEBSERVER" = true ]; then
-    docker-compose -f infra/docker/docker-compose.yml --profile webserver up -d
+    docker compose -f infra/docker/docker-compose.yml --profile webserver up -d
 else
-    docker-compose -f infra/docker/docker-compose.yml up -d
+    docker compose -f infra/docker/docker-compose.yml up -d
 fi

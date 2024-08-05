@@ -1,11 +1,10 @@
 package com.jameswu.demo.model.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GcProfileLevel extends UserProfile implements Serializable {
@@ -25,5 +24,19 @@ public class GcProfileLevel extends UserProfile implements Serializable {
 				userProfile.getEnrollmentDate(),
 				userProfile.getRecommenderId());
 		this.level = level;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		GcProfileLevel that = (GcProfileLevel) o;
+		return level == that.level;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), level);
 	}
 }

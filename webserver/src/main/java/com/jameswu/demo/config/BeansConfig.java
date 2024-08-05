@@ -3,8 +3,11 @@ package com.jameswu.demo.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jameswu.demo.repository.UserRepository;
+import com.jameswu.demo.utils.InstantSerializer;
+import java.time.Instant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,8 +27,12 @@ public class BeansConfig {
 	@Bean
 	@Primary
 	public ObjectMapper objectMapper() {
-		ObjectMapper objectMapper =
-				JsonMapper.builder().addModule(new JavaTimeModule()).build();
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(Instant.class, new InstantSerializer());
+		ObjectMapper objectMapper = JsonMapper.builder()
+				.addModule(new JavaTimeModule())
+				.addModule(module)
+				.build();
 		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
 		return objectMapper;
 	}

@@ -1,6 +1,6 @@
 package com.jameswu.demo;
 
-import com.jameswu.demo.exception.RestControllerAdvice;
+import com.jameswu.demo.exception.GcControllerAdvice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -24,9 +24,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 			"com.jameswu.demo.filter",
 			"com.jameswu.demo.service",
 			"com.jameswu.demo.notification",
-			"com.jameswu.demo.repository"
+			"com.jameswu.demo.repository",
+			"com.jameswu.demo.aspect"
 		})
-@Import(RestControllerAdvice.class)
+@Import(GcControllerAdvice.class)
 @EnableJpaRepositories(basePackages = "com.jameswu.demo.repository")
 @EnableTransactionManagement
 @EnableAsync

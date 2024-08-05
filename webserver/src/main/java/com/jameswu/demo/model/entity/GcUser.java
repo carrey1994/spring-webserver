@@ -46,12 +46,12 @@ public class GcUser implements UserDetails {
 	@Column(name = "user_id")
 	private int userId;
 
-	@Column(nullable = false, unique = true)
+	@Column(name = "username", nullable = false, unique = true)
 	@Size(min = 8, max = 16)
 	@NotBlank
 	private String username;
 
-	@Column(nullable = false)
+	@Column(name = "password", nullable = false)
 	@NotBlank
 	private String password;
 

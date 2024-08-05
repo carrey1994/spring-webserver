@@ -54,7 +54,7 @@ public class JwtService {
 		Claims claims = Jwts.claims()
 				.add(PROFILE, user.getProfile())
 				.expiration(new Date(System.currentTimeMillis() + refreshTime))
-				.issuedAt(new Date((System.currentTimeMillis())))
+				.issuedAt(new Date())
 				.issuer(encryptedKey)
 				.build();
 
@@ -67,10 +67,6 @@ public class JwtService {
 		return newToken;
 	}
 
-	public UserProfile parseUserProfile(String token) {
-		return parsePayload(token, PROFILE, UserProfile.class);
-	}
-
 	public void removeToken(HttpServletRequest request) {
 		String token = trimBearerToken(request);
 		int userId = parsePayload(token, PROFILE, UserProfile.class).getUserId();
@@ -78,11 +74,13 @@ public class JwtService {
 		cacheService.removeIdFromUserCache(userId);
 	}
 
-	public void throwIfTokenNotFound(String accessToken) {
-		int userId = parsePayload(accessToken, PROFILE, UserProfile.class).getUserId();
+	public UserProfile throwIfTokenNotFound(String accessToken) {
+		UserProfile userProfile = parsePayload(accessToken, PROFILE, UserProfile.class);
+		int userId = userProfile.getUserId();
 		if (!redisService.isKeyExists(RedisKey.withUserPrefix(userId))) {
 			throw new GcException.TokenInvalidException();
 		}
+		return userProfile;
 	}
 
 	private SecretKey secretKey() {

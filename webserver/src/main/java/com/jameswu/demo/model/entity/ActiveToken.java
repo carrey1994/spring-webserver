@@ -1,7 +1,9 @@
 package com.jameswu.demo.model.entity;
 
+import com.jameswu.demo.notification.AuditEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +25,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditEntityListener.class)
 public class ActiveToken {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

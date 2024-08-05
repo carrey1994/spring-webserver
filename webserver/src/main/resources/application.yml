@@ -3,6 +3,8 @@ springdoc:
     path: /api/v1/api-docs
 
 spring:
+  application:
+    name: demo
   rabbitmq:
     host: localhost
     port: 5672
@@ -43,6 +45,23 @@ mail:
 jwt:
   encrypted-key: xVcqqzLRUSnYUKgAciPKnAqgrHGpDLmnEiuLXHeHqBiFHJpQ
   refresh-time: 600000
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
 
 init:
   users:

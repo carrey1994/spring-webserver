@@ -1,6 +1,5 @@
 package com.jameswu.demo.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jameswu.demo.model.payload.CommentPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,13 +11,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "comment")
 @Table(name = "comment")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,6 @@ public class Comment implements Serializable {
 	@Column(name = "parent_comment_id", updatable = false, insertable = false, nullable = false)
 	private int parentCommentId;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 	@Column(name = "created_time", nullable = false)
 	private Instant createdTime;
 
