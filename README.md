@@ -1,5 +1,6 @@
 The docker-ci-tester.sh is for test on CI instead of local.
-The .env file is encrypted and works with local-starter.sh to setup env variable for connecting cloud service, hence they are not public.
+The .local-env file is encrypted and works with local-starter.sh to setup env variable for connecting cloud service, hence they are not public.
+I uses supabase, redis cloud, and cloud amqp when developing on my local. 
 
 There are ways to launch the server on local.
 1. If Docker installed,
