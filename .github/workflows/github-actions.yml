@@ -25,6 +25,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Test api by docker
         run: |
+          rm -f .env
           ./docker-ci-tester.sh
 
 #  spotBugs:
