@@ -1,6 +1,7 @@
 package com.jameswu.demo.controller;
 
 import com.jameswu.demo.model.entity.UserProfile;
+import com.jameswu.demo.model.payload.LoginPayload;
 import com.jameswu.demo.model.payload.RegisterPayload;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.HealthService;
@@ -10,7 +11,7 @@ import io.jsonwebtoken.lang.Strings;
 import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/public")
+@AllArgsConstructor
 public class PublicController {
-
-	@Autowired
-	public PublicController(
-			HealthService healthService, GitProperties gitProperties, UserManagementService userManagementService1) {
-		this.healthService = healthService;
-		this.gitProperties = gitProperties;
-		this.userManagementService = userManagementService1;
-	}
 
 	private final HealthService healthService;
 	private final GitProperties gitProperties;
@@ -43,6 +37,11 @@ public class PublicController {
 	@PostMapping("activate")
 	public Result<UserProfile> active(@Param("token") String token) {
 		return Result.success(userManagementService.activeUser(token));
+	}
+
+	@PostMapping("login")
+	public Result<Map<String, String>> login(@Valid @RequestBody LoginPayload payload) {
+		return Result.success(userManagementService.login(payload));
 	}
 
 	@GetMapping("health")

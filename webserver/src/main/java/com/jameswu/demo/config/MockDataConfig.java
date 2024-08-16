@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,22 +26,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @ConfigurationProperties(prefix = "init")
 @Profile("!prod")
 @Data
+@AllArgsConstructor
 public class MockDataConfig {
-	@Autowired
-	public MockDataConfig(
-			UserRepository userRepository,
-			ProductRepository productRepository,
-			BCryptPasswordEncoder passwordEncoder,
-			List<InitUserData> users,
-			OrderRepository orderRepository,
-			OrderDetailRepository orderDetailRepository) {
-		this.userRepository = userRepository;
-		this.productRepository = productRepository;
-		this.orderRepository = orderRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.users = users;
-		this.orderDetailRepository = orderDetailRepository;
-	}
 
 	private UserRepository userRepository;
 	private ProductRepository productRepository;

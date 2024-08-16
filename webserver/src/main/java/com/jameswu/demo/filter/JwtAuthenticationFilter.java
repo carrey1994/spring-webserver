@@ -35,12 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		if (request.getServletPath().contains("/api/v1/login")) {
-			filterChain.doFilter(request, response);
-			return;
-		}
 
-		String accessToken = jwtService.trimBearerToken(request);
+		String accessToken = jwtService.formatBearerToken(request);
 		if (!request.getServletPath().contains("/api/v1/public") && accessToken != null) {
 			try {
 				authByValidToken(accessToken);

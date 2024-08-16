@@ -27,7 +27,7 @@ spring:
         format_sql: false
     hibernate:
       show-sql: false
-      ddl-auto: create-drop
+      ddl-auto: update
 
 redis:
   master:

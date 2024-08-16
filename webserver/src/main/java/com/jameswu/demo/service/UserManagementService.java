@@ -8,6 +8,7 @@ import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
+import com.jameswu.demo.model.payload.LoginPayload;
 import com.jameswu.demo.model.payload.RegisterPayload;
 import com.jameswu.demo.repository.CouponRepository;
 import com.jameswu.demo.repository.GcProfileLevelRepository;
@@ -21,35 +22,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class UserManagementService {
-
-	@Autowired
-	public UserManagementService(
-			UserRepository userRepository,
-			BCryptPasswordEncoder bCryptPasswordEncoder,
-			GcProfileLevelRepository gcProfileLevelRepository,
-			TokenRepository tokenRepository,
-			CouponRepository couponRepository) {
-		this.userRepository = userRepository;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-		this.gcProfileLevelRepository = gcProfileLevelRepository;
-		this.tokenRepository = tokenRepository;
-		this.couponRepository = couponRepository;
-	}
 
 	private final GcProfileLevelRepository gcProfileLevelRepository;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenRepository tokenRepository;
 	private final CouponRepository couponRepository;
+	private final JwtService jwtService;
+	private final AuthenticationManager authenticationManager;
 
 	@Transactional
 	public UserProfile register(RegisterPayload registerPayload) {
@@ -98,6 +91,13 @@ public class UserManagementService {
 				Coupon.percentageCoupon(BigDecimal.valueOf(0.9), "new user coupon gift", user, UUID.randomUUID());
 		couponRepository.save(newUserCouponGift);
 		return userRepository.save(activeToken.getUser()).getProfile();
+	}
+
+	public Map<String, String> login(LoginPayload payload) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(payload.username(), payload.password()));
+		String jwt = jwtService.generateToken((GcUser) authentication.getPrincipal());
+		return Map.of(GzTexts.ACCESS_TOKEN, jwt);
 	}
 
 	public Page<UserProfile> activeUsers(Pageable pageable) {

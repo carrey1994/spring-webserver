@@ -9,7 +9,7 @@ import com.jameswu.demo.service.OrderService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/order")
 @Validated
+@AllArgsConstructor
 public class OrderController {
 
-	@Autowired
 	private OrderService orderService;
 
 	@PostMapping("create")

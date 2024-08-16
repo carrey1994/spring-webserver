@@ -28,33 +28,7 @@ containers=("spring-redis-master" "spring-redis-slave" "spring-mailhog" "spring-
 for container in "${containers[@]}"; do
     check_service_health $container
 done
-echo "All containers are healthy."
-
-# Function to check if webserver is healthy
-check_service_ready() {
-    local max_wait_time=180
-    nohup java -jar webserver/target/webserver-0.0.1-SNAPSHOT.jar &> /dev/null &
-
-    while true; do
-        status_code=$(curl -s -o /dev/null -w "%{http_code}" $HEALTH_URL)
-        if [ $status_code -eq 200 ]; then
-            echo "Health check successful"
-            break
-        else
-            echo "Health check failed, status code: $status_code"
-            sleep 5  # Wait for 5 seconds before retrying
-            max_wait_time=$((max_wait_time-5))
-            echo "Remaining timeout: $max_wait_time"
-            if [ "$max_wait_time" -le 0 ]; then
-                echo "Timeout waiting for webserver to be ready."
-                exit 1
-            fi
-        fi
-    done
-}
-
-# Check if webserver is ready
-check_service_ready
+echo "The services are all healthy."
 
 # Run integration test
 ./mvnw test

@@ -12,29 +12,18 @@ import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.repository.UserProfileRepository;
 import com.jameswu.demo.utils.RedisKey;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class ProductManagementService {
 
 	private final ProductRepository productRepository;
 	private final RedisService redisService;
 	private final CommentRepository commentRepository;
 	private final UserProfileRepository userProfileRepository;
-
-	@Autowired
-	public ProductManagementService(
-			ProductRepository productRepository,
-			RedisService redisService,
-			CommentRepository commentRepository,
-			UserProfileRepository userProfileRepository) {
-		this.productRepository = productRepository;
-		this.redisService = redisService;
-		this.commentRepository = commentRepository;
-		this.userProfileRepository = userProfileRepository;
-	}
 
 	@Transactional
 	public Product add(ProductPayload payload) {

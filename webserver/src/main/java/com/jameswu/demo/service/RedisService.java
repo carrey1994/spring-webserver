@@ -8,21 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import lombok.AllArgsConstructor;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class RedisService {
-
-	@Autowired
-	public RedisService(RedissonClient redissonClient, CacheService cacheService, ObjectMapper objectMapper) {
-		this.redissonClient = redissonClient;
-		this.cacheService = cacheService;
-		this.objectMapper = objectMapper;
-	}
 
 	private final CacheService cacheService;
 	private final RedissonClient redissonClient;

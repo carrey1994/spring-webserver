@@ -8,10 +8,9 @@ import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/user")
-@Validated
+@AllArgsConstructor
 public class UserController {
-
-	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
 
 	private final UserService userService;
 

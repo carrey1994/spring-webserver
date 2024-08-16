@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Running cluster"
 DEFAULT=true;
-YAML_FOLDER="infra/kubernetes"
+YAML_FOLDER="infra/kubernetes/k3d"
 NAMESPACE=dev
 
 while getopts i flag

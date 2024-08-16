@@ -5,7 +5,7 @@ import com.jameswu.demo.model.entity.UserProfile;
 import com.jameswu.demo.model.response.Result;
 import com.jameswu.demo.service.UserManagementService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/user/management")
 @Validated
+@AllArgsConstructor
 public class UserManagementController {
 	private final UserManagementService userManagementService;
-
-	@Autowired
-	public UserManagementController(UserManagementService userManagementService) {
-		this.userManagementService = userManagementService;
-	}
 
 	@GetMapping("all")
 	public Result<List<UserProfile>> activeUsers(Pageable pageable) {
