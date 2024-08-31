@@ -17,12 +17,13 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtService {
 
 	@Value("${jwt.refresh-time}")
@@ -36,14 +37,7 @@ public class JwtService {
 	private final ObjectMapper objectMapper;
 	private final CacheService cacheService;
 
-	@Autowired
-	public JwtService(RedisService redisService, ObjectMapper objectMapper, CacheService cacheService) {
-		this.redisService = redisService;
-		this.objectMapper = objectMapper;
-		this.cacheService = cacheService;
-	}
-
-	public String trimBearerToken(HttpServletRequest request) {
+	public String formatBearerToken(HttpServletRequest request) {
 		String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		return Optional.ofNullable(authHeader)
 				.map(s -> s.replace(GzTexts.BEARER_PREFIX, GzTexts.EMPTY))
@@ -68,7 +62,7 @@ public class JwtService {
 	}
 
 	public void removeToken(HttpServletRequest request) {
-		String token = trimBearerToken(request);
+		String token = formatBearerToken(request);
 		int userId = parsePayload(token, PROFILE, UserProfile.class).getUserId();
 		redisService.deleteByKey(RedisKey.withUserPrefix(userId));
 		cacheService.removeIdFromUserCache(userId);

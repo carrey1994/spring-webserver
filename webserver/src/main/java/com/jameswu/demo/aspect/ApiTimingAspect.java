@@ -2,17 +2,17 @@ package com.jameswu.demo.aspect;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import lombok.AllArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@AllArgsConstructor
 public class ApiTimingAspect {
 
-	@Autowired
 	private MeterRegistry meterRegistry;
 
 	@Around("execution(* com.jameswu.demo.controller..*(..))")

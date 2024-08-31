@@ -9,6 +9,9 @@ on:
 jobs:
   jar:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - name: Setup maven
@@ -26,6 +29,12 @@ jobs:
       - name: Test api by docker
         run: |
           ./docker-ci-tester.sh
+      - name: Archive test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            webserver/target/surefire-reports/*.xml
 
   spotBugs:
     runs-on: ubuntu-latest

@@ -16,11 +16,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
 
 	private final OrderRepository orderRepository;
@@ -28,20 +29,6 @@ public class OrderService {
 	private final OrderDetailRepository orderDetailRepository;
 	private final RedisService redisService;
 	private final RabbitService rabbitService;
-
-	@Autowired
-	public OrderService(
-			OrderRepository orderRepository,
-			ProductRepository productRepository,
-			OrderDetailRepository orderDetailRepository,
-			RedisService redisService,
-			RabbitService rabbitService) {
-		this.orderRepository = orderRepository;
-		this.productRepository = productRepository;
-		this.orderDetailRepository = orderDetailRepository;
-		this.redisService = redisService;
-		this.rabbitService = rabbitService;
-	}
 
 	@Transactional
 	public Order createOrder(GcUser gcUser, List<OrderDetailPayload> orderDetails) {

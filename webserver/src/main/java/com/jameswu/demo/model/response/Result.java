@@ -4,23 +4,21 @@ import lombok.Data;
 
 @Data
 public class Result<T> {
-	protected final T message;
+	protected final T result;
+	protected String message;
 	protected int code;
 
-	public Result(T message, int code) {
-		this.message = message;
+	public Result(T result, int code, String message) {
+		this.result = result;
 		this.code = code;
+		this.message = message;
 	}
 
-	public static <T> Result<T> success(T message) {
-		return new Result<>(message, 200);
+	public static <T> Result<T> success(T result) {
+		return new Result<>(result, 200, null);
 	}
 
-	public static <T> Result<T> success(T message, int code) {
-		return new Result<>(message, code);
-	}
-
-	public static <T> Result<T> failure(T message, int code) {
-		return new Result<>(message, code);
+	public static <T> Result<T> failure(T result, int code, String message) {
+		return new Result<>(result, code, message);
 	}
 }

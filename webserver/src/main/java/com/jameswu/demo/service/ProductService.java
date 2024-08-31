@@ -8,29 +8,18 @@ import com.jameswu.demo.repository.CommentRepository;
 import com.jameswu.demo.repository.ProductRepository;
 import com.jameswu.demo.utils.RedisKey;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
 
 	private final ProductRepository productRepository;
 	private final RedisService redisService;
 	private final CacheService cacheService;
 	private final CommentRepository commentRepository;
-
-	@Autowired
-	public ProductService(
-			ProductRepository productRepository,
-			RedisService redisService,
-			CacheService cacheService,
-			CommentRepository commentRepository) {
-		this.productRepository = productRepository;
-		this.redisService = redisService;
-		this.cacheService = cacheService;
-		this.commentRepository = commentRepository;
-	}
 
 	public List<Product> all(Pageable pageable) {
 		return productRepository.findAll(pageable).getContent();

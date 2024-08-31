@@ -3,7 +3,7 @@ package com.jameswu.demo.config;
 import com.jameswu.demo.filter.JwtAuthenticationFilter;
 import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.service.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,25 +16,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtService jwtService;
-
-	@Autowired
-	public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtService jwtService) {
-		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-		this.jwtService = jwtService;
-	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		String[] publicRouter = new String[] {
 			"/",
-			"/api/v1/login",
-			"/api/v1/logout",
-			"/api/v1/health/**",
-			"/api/v1/api-docs/**",
 			"/api/v1/public/**",
+			"/api/v1/api-docs/**",
 			"/actuator/**",
 			"/*.svg",
 			"/index.html",
@@ -48,8 +40,6 @@ public class SecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(authz -> authz.requestMatchers(publicRouter)
 						.permitAll()
-						.requestMatchers("/api/v1/user/**")
-						.hasAnyRole(UserRole.ADMIN.name(), UserRole.USER.name())
 						.requestMatchers("/api/v1/user/management/**")
 						.hasAnyRole(UserRole.ADMIN.name())
 						.requestMatchers("/api/v1/product/management/**")

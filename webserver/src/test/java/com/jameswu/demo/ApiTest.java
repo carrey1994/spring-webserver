@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,12 +23,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class ApiTest {
 
-	private final String APPLICATION_JSON = "application/json";
-	private final String CONTENT_TYPE = "Content-Type";
-	private final ObjectMapper objectMapper = new ObjectMapper();
-
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	void loginApiTest() {
@@ -36,17 +36,17 @@ public class ApiTest {
 
 	@SneakyThrows
 	private String login() {
-		String responseBody = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")
+		String responseBody = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/public/login")
 						.content(parseJson(
 								Map.ofEntries(Map.entry("username", "TestUser7"), Map.entry("password", "TestUser7"))))
-						.contentType(APPLICATION_JSON))
+						.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(
-						MockMvcResultMatchers.jsonPath("$.message.access-token").isNotEmpty())
+						MockMvcResultMatchers.jsonPath("$.result.access-token").isNotEmpty())
 				.andReturn()
 				.getResponse()
 				.getContentAsString();
-		return JsonPath.read(responseBody, "$.message.access-token");
+		return JsonPath.read(responseBody, "$.result.access-token");
 	}
 
 	@SneakyThrows
@@ -58,7 +58,7 @@ public class ApiTest {
 						.header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + accessToken))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath(
-								"message.childrenProfiles[0].childrenProfiles[0].userProfile.userId")
+								"result.childrenProfiles[0].childrenProfiles[0].userProfile.userId")
 						.value(4));
 	}
 
@@ -68,12 +68,12 @@ public class ApiTest {
 		String accessToken = login();
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/public/register")
 						.content(parseJson(getNewUser(0, 65)))
-						.contentType(APPLICATION_JSON)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
 						.header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + accessToken))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.message.userId").isNotEmpty())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.message.recommenderId")
-						.value(1));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.result.userId").isNotEmpty())
+				.andExpect(
+						MockMvcResultMatchers.jsonPath("$.result.recommenderId").value(1));
 	}
 
 	@SneakyThrows
@@ -87,10 +87,10 @@ public class ApiTest {
 				Map.entry("quantity", 1));
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/product/management/add")
 						.content(parseJson(payload))
-						.contentType(APPLICATION_JSON)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
 						.header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + accessToken))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.message.productId").isNumber());
+				.andExpect(MockMvcResultMatchers.jsonPath("$.result.productId").isNumber());
 	}
 
 	@SneakyThrows
@@ -104,10 +104,10 @@ public class ApiTest {
 		var orderPayload = List.of(coupon);
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/order/create")
 						.content(parseJson(orderPayload))
-						.contentType(APPLICATION_JSON)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
 						.header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + accessToken))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.message.orderId").value(1));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.result.orderId").value(1));
 	}
 
 	@SneakyThrows
