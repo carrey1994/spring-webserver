@@ -46,6 +46,12 @@ jwt:
   encrypted-key: xVcqqzLRUSnYUKgAciPKnAqgrHGpDLmnEiuLXHeHqBiFHJpQ
   refresh-time: 600000
 
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
 management:
   server:
     port: 8091
