@@ -1,18 +1,15 @@
 package com.jameswu.demo.repository;
 
 import com.jameswu.demo.model.entity.GcProfileLevel;
-import com.jameswu.demo.model.entity.UserProfile;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GcProfileLevelRepository {
+public class EntityManagerHelper {
 	@Autowired
 	private EntityManager entityManager;
 
@@ -54,21 +51,10 @@ public class GcProfileLevelRepository {
 							userhierarchy;
 				""";
 
-		Query query = entityManager.createNativeQuery(sql);
+		Query query = entityManager.createNativeQuery(sql, "GcProfileLevelMapping");
 		query.setParameter("user_id", userId);
 		query.setParameter("level", level);
 
-		List<Object[]> resultList = query.getResultList();
-		return resultList.stream()
-				.map(result -> new GcProfileLevel(
-						new UserProfile(
-								(int) result[0],
-								(String) result[1],
-								(String) result[2],
-								(String) result[3],
-								(Instant) result[4],
-								(Integer) result[5]),
-						(int) result[6]))
-				.collect(Collectors.toList());
+		return (List<GcProfileLevel>) query.getResultList();
 	}
 }

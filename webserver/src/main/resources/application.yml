@@ -18,6 +18,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         batch_versioned_data: true
         order_inserts: true
         order_updates: true

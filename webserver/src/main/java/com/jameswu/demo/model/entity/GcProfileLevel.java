@@ -1,29 +1,26 @@
 package com.jameswu.demo.model.entity;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class GcProfileLevel extends UserProfile implements Serializable {
+@Getter
+public class GcProfileLevel implements Serializable {
+	private int userId;
+	private String email;
+	private String nickName;
+	private String address;
+	private Instant enrollmentDate;
+	private Integer recommenderId;
 	private int level;
 
 	public UserProfile toUserProfile() {
-		return new UserProfile(
-				getUserId(), getEmail(), getNickname(), getAddress(), getEnrollmentDate(), getRecommenderId());
-	}
-
-	public GcProfileLevel(UserProfile userProfile, int level) {
-		super(
-				userProfile.getUserId(),
-				userProfile.getEmail(),
-				userProfile.getNickname(),
-				userProfile.getAddress(),
-				userProfile.getEnrollmentDate(),
-				userProfile.getRecommenderId());
-		this.level = level;
+		return new UserProfile(userId, email, nickName, address, enrollmentDate, recommenderId);
 	}
 
 	@Override
