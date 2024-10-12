@@ -1,6 +1,6 @@
 package com.jameswu.demo.repository;
 
-import com.jameswu.demo.model.entity.GcProfileLevel;
+import com.jameswu.demo.model.resultmapping.GcProfileLevel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.List;

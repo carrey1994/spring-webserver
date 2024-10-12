@@ -4,6 +4,7 @@ import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jameswu.demo.annotation.Email;
+import com.jameswu.demo.model.resultmapping.GcProfileLevel;
 import jakarta.persistence.Column;
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
