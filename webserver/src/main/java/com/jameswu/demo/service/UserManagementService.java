@@ -2,7 +2,6 @@ package com.jameswu.demo.service;
 
 import com.jameswu.demo.model.entity.ActiveToken;
 import com.jameswu.demo.model.entity.Coupon;
-import com.jameswu.demo.model.entity.GcProfileLevel;
 import com.jameswu.demo.model.entity.GcProfileTreeNode;
 import com.jameswu.demo.model.entity.GcUser;
 import com.jameswu.demo.model.entity.UserProfile;
@@ -10,8 +9,9 @@ import com.jameswu.demo.model.enums.UserRole;
 import com.jameswu.demo.model.enums.UserStatus;
 import com.jameswu.demo.model.payload.LoginPayload;
 import com.jameswu.demo.model.payload.RegisterPayload;
+import com.jameswu.demo.model.resultmapping.GcProfileLevel;
 import com.jameswu.demo.repository.CouponRepository;
-import com.jameswu.demo.repository.GcProfileLevelRepository;
+import com.jameswu.demo.repository.EntityManagerHelper;
 import com.jameswu.demo.repository.TokenRepository;
 import com.jameswu.demo.repository.UserRepository;
 import com.jameswu.demo.utils.GzTexts;
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class UserManagementService {
 
-	private final GcProfileLevelRepository gcProfileLevelRepository;
+	private final EntityManagerHelper entityManagerHelper;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenRepository tokenRepository;
@@ -114,7 +114,7 @@ public class UserManagementService {
 	}
 
 	private GcProfileTreeNode queryByUserIdAndLevel(int userId, int level) {
-		List<GcProfileLevel> gcProfileLevelList = gcProfileLevelRepository.queryChildren(userId, level);
+		List<GcProfileLevel> gcProfileLevelList = entityManagerHelper.queryChildren(userId, level);
 		if (gcProfileLevelList.size() == 1) {
 			// no any child, return user only.
 			return new GcProfileTreeNode(gcProfileLevelList.get(0).toUserProfile(), new ArrayList<>());
@@ -124,12 +124,12 @@ public class UserManagementService {
 
 	private GcProfileTreeNode mappingChildren(List<GcProfileLevel> gcProfileLevelList, int userId) {
 		GcProfileLevel rootProfileLevel = gcProfileLevelList.stream()
-				.filter(profileLevel -> profileLevel.getUserId() == userId)
+				.filter(profileLevel -> profileLevel.userId() == userId)
 				.toList()
 				.get(0);
 		Map<Integer, List<GcProfileLevel>> collect = gcProfileLevelList.stream()
-				.filter(UserProfile::isRecommenderExists)
-				.collect(Collectors.groupingBy(GcProfileLevel::getRecommenderId));
+				.filter(u -> u.toUserProfile().isRecommenderExists())
+				.collect(Collectors.groupingBy(GcProfileLevel::recommenderId));
 		List<GcProfileTreeNode> children = collect.get(userId).stream()
 				.map(e -> new GcProfileTreeNode(e.toUserProfile(), new ArrayList<>()))
 				.toList();

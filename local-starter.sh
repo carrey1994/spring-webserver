@@ -19,7 +19,7 @@ SESSION_NAME="demo-webserver"
 # Java command to be executed
 JAVA_CMD="java -agentlib:jdwp=transport=dt_socket,address=5050,server=y,suspend=n \
         -jar -Dspring.profiles.active=supa \
-        webserver/target/webserver-0.0.1-SNAPSHOT.jar 2>&1 | tee webserver.log"
+        webserver/target/webserver-0.0.1-SNAPSHOT.jar"
 
 # Delete the session if it already exists
 tmux kill-session -t webserver-demo

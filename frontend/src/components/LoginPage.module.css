@@ -1,0 +1,153 @@
+/* src/LoginPage.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('https://example.com/your-background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+  }
+  
+  .left-side {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .right-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .button:hover {
+    background: #0056b3;
+  }
+  
+  .message {
+    text-align: center;
+    margin-top: 1rem;
+    color: #007bff;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .wrapper {
+      flex-direction: column;
+    }
+  
+    .left-side, .right-side {
+      flex: none;
+      width: 100%;
+    }
+  
+    .left-side {
+      padding: 1rem;
+    }
+  
+    .right-side {
+      padding: 1rem;
+    }
+  
+    .card {
+      max-width: 100%;
+      margin: 1rem;
+    }
+  
+    .header h1 {
+      font-size: 1.5rem;
+    }
+  
+    .form-group label {
+      font-size: 0.875rem;
+    }
+  
+    .form-group input {
+      font-size: 0.875rem;
+    }
+  
+    .button {
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header h1 {
+      font-size: 1.25rem;
+    }
+  
+    .form-group label {
+      font-size: 0.75rem;
+    }
+  
+    .form-group input {
+      font-size: 0.75rem;
+    }
+  
+    .button {
+      font-size: 0.75rem;
+    }
+  }
+  

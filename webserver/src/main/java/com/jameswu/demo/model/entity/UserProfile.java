@@ -4,11 +4,15 @@ import static com.jameswu.demo.utils.GzTexts.DEFAULT_RECOMMENDER_ID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jameswu.demo.annotation.Email;
+import com.jameswu.demo.model.resultmapping.GcProfileLevel;
 import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
@@ -19,6 +23,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@SqlResultSetMapping(
+		name = "GcProfileLevelMapping",
+		classes = {
+			@ConstructorResult(
+					targetClass = GcProfileLevel.class,
+					columns = {
+						@ColumnResult(name = "user_id", type = Integer.class),
+						@ColumnResult(name = "email", type = String.class),
+						@ColumnResult(name = "nickname", type = String.class),
+						@ColumnResult(name = "address", type = String.class),
+						@ColumnResult(name = "enrollment_date", type = Instant.class),
+						@ColumnResult(name = "recommender_id", type = Integer.class),
+						@ColumnResult(name = "level", type = Integer.class)
+					})
+		})
 @Entity(name = "user_profile")
 @Builder
 @Table
