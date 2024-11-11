@@ -5,54 +5,74 @@
 ![RabbitMQ](https://badgen.net/badge/RabbitMQ/latest/red)
 ![K3D](https://badgen.net/badge/k3d/latest/green)
 
+# Demo Project
+
 ## 🦊 **Purpose**
-This demo is for testing some tools.
+This demo project showcases the integration of various modern development tools and technologies, including Java, PostgreSQL, RabbitMQ, Kubernetes (k3d), and Terraform. It provides different deployment options from local development to containerized environments.
 
 ## 💻 **Prerequisites**
-1. install java17
-```install java17
+
+### Required Tools
+1. **Java 17**
+```bash
 brew install openjdk@17
 ```
-2. Install docker
-``` install docker
-brew install docker 
+
+2. **Docker**
+```bash
+brew install docker
 ```
 
-3. Install tmux *(Optional)*
-``` install tmux
+### Optional Tools
+3. **Tmux** - Terminal multiplexer for managing multiple terminal sessions
+```bash
 brew install tmux
 ```
 
-4. Install k3d *(Optional)*
-``` install k3d
+4. **K3D** - Lightweight wrapper to run k3s in Docker
+```bash
 brew install k3d
 ```
 
-5. Install terraform *(Optional)*
-``` install terraform
+5. **Terraform** - Infrastructure as Code tool
+```bash
 brew install terraform
 ```
 
-6. Install istioctl *(Optional)*
-``` install istioctl
+6. **Istioctl** - Service mesh control tool
+```bash
 brew install istioctl
 ```
 
-## ⚾️ **Play on local**
-1. Start all service(database, message queue...) <br />
+## 🚀 **Getting Started**
+
+### Local Development
+1. Start required services (database, message queue):
 ```bash
 ./docker-starter.sh
 ```
 
-2. Start webserver application by your IDE
+2. Launch the webserver application through your IDE
 
-## 🐳 **Scripts**
-1. `terrafrom-starter.sh` uses yaml file to launch the services.
-2. `docker-starter.sh` uses docker image to launch the services.
-3. `k3d-starter.sh` uses k3d to launch the services including ***webserver***, and it can use istio as well.
-4. `docker-ci-tester.sh` is for test on CI instead of local.
-5. `local-starter.sh` is for local development.
-6. `.env` is to connect Saas. Create your own env file after you have supabase and rabbitmsq service to use.
+### Environment Setup
+- Create a `.env` file based on the template for SaaS connections (Supabase and RabbitMQ)
+- Configure your environment variables according to your service credentials
+
+## 🛠 **Available Scripts**
+
+| Script | Description |
+|--------|-------------|
+| `terraform-starter.sh` | Deploys services using Infrastructure as Code (Terraform) |
+| `docker-starter.sh` | Launches services using Docker containers |
+| `k3d-starter.sh` | Deploys services on local Kubernetes cluster (includes webserver and optional Istio integration) |
+| `docker-ci-tester.sh` | Runs tests in CI environment |
+| `local-starter.sh` | Configures local development environment |
 
 ## 📦 **Architecture**
 ![Architecture](architecture.png)
+
+## 🔧 **Deployment Options**
+1. **Local Development**: Using `local-starter.sh` with direct IDE integration
+2. **Containerized**: Using Docker with `docker-starter.sh`
+3. **Kubernetes**: Using k3d with `k3d-starter.sh`
+4. **Infrastructure as Code**: Using Terraform with `terraform-starter.sh`
