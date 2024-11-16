@@ -1,0 +1,53 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.DS_Store
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Java ###
+.java-version
+
+### Frontend ###
+frontend/node_modules
+frontend/out
+frontend/.next/
+frontend/.swc/
+frontend/.*.env
+
+### Docker volume ###
+infra/docker/data
+
+### Terraform ###
+infra/terraform/.terraform
+infra/terraform/*.tfstate
+infra/terraform/*.tfstate.*
+infra/terraform/*.terraform.lock.*
